@@ -5,10 +5,10 @@
 [ext_resource path="res://baby.png" type="Texture" id=3]
 [ext_resource path="res://bin/crowd_nav.gdns" type="Script" id=4]
 
-[sub_resource type="BoxShape" id=2]
+[sub_resource type="BoxShape" id=1]
 extents = Vector3( 1, 1, 0.05 )
 
-[sub_resource type="QuadMesh" id=1]
+[sub_resource type="QuadMesh" id=2]
 size = Vector2( 12, 12 )
 
 [sub_resource type="CapsuleShape" id=3]
@@ -20,7 +20,7 @@ script = ExtResource( 4 )
 
 [node name="CollisionShape" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.97046, 0 )
-shape = SubResource( 2 )
+shape = SubResource( 1 )
 
 [node name="GUIPanel3D" type="RigidBody" parent="."]
 collision_layer = 2
@@ -44,7 +44,7 @@ texture = ExtResource( 3 )
 
 [node name="Quad" type="MeshInstance" parent="GUIPanel3D"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.97046, 0 )
-mesh = SubResource( 1 )
+mesh = SubResource( 2 )
 material/0 = ExtResource( 2 )
 
 [node name="Area" type="Area" parent="GUIPanel3D/Quad"]

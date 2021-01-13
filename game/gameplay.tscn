@@ -1,8 +1,9 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://bin/banner.gdns" type="Script" id=1]
 [ext_resource path="res://sunset_env.tres" type="Environment" id=2]
 [ext_resource path="res://follow_hill.gd" type="Script" id=3]
+[ext_resource path="res://baby_quad.tscn" type="PackedScene" id=4]
 [ext_resource path="res://peak_rotator.gd" type="Script" id=6]
 [ext_resource path="res://bin/arc_proc_hill.gdns" type="Script" id=18]
 
@@ -25,6 +26,8 @@ script = ExtResource( 1 )
 "Drag X To Angle" = 0.003
 "Turn Rate" = 2.0
 "Y Speed" = -30.0
+
+[node name="baby_quad" parent="hill/banner" instance=ExtResource( 4 )]
 
 [node name="target" type="Spatial" parent="hill"]
 script = ExtResource( 3 )
