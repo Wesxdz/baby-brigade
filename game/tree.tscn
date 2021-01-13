@@ -92,7 +92,7 @@ height = 3.56625
 "obstacle",
 ]]
 collision_layer = 4
-collision_mask = 4
+collision_mask = 2
 
 [node name="tree" type="MeshInstance" parent="."]
 mesh = SubResource( 2 )

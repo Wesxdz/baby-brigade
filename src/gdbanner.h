@@ -6,6 +6,9 @@
 
 namespace godot {
 
+/*
+ * Player interface for crowd position manipulation
+ */
 class GDBanner : public Spatial {
 	GODOT_CLASS(GDBanner, Spatial)
 
@@ -19,6 +22,9 @@ private:
     
     RichTextLabel* distanceLabel;
     float ySpeed;
+
+    // Formation (starting with just a circle)
+    float formationRadius;
 
 public:
 	static void _register_methods();

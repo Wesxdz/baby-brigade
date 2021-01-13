@@ -9,7 +9,6 @@
 [ext_resource path="res://audio/hit_tree.wav" type="AudioStream" id=16]
 [ext_resource path="res://bin/arc_proc_hill.gdns" type="Script" id=18]
 
-
 [node name="gameplay" type="Spatial"]
 
 [node name="hill" type="Spatial" parent="."]
@@ -23,16 +22,15 @@ amplitude = 20.0
 "Spawn Distance" = 400.0
 "Despawn Distance" = 400.0
 
-[node name="sled" type="Spatial" parent="hill"]
+[node name="banner" type="Spatial" parent="hill"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0 )
 script = ExtResource( 1 )
-"Drag X To Angle" = 0.004
-"Turn Rate" = 3.0
-"Y Speed" = -40.0
+"Turn Rate" = 2.0
+"Y Speed" = -50.0
 
 [node name="target" type="Spatial" parent="hill"]
 script = ExtResource( 3 )
-sled = NodePath("../sled")
+banner = NodePath("../banner")
 
 [node name="peak_rotator" type="Spatial" parent="hill/target"]
 script = ExtResource( 6 )

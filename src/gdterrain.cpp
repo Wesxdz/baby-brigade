@@ -92,17 +92,16 @@ void GDArcProcHill::create_y_arc(Vector3 pos, float degrees, float radius)
 
 void GDArcProcHill::_enter_tree()
 {
-    target = Object::cast_to<Spatial>(get_node("/root/nodes/gameplay/hill/sled"));
+    target = Object::cast_to<Spatial>(get_node("/root/nodes/gameplay/hill/banner"));
     snowMaterial = ResourceLoader::get_singleton()->load("res://arc_test.tres");
     tree_prefab = ResourceLoader::get_singleton()->load("res://tree.tscn");
-    snowman_prefab = ResourceLoader::get_singleton()->load("res://snowman_doll.tscn");
     // TODO: just clone an arc prefab and add noise :) 
     create_arc(Vector3(0, 0, 0), 360.0f, hill_radius, 0.0f);
 }
 
 void GDArcProcHill::_process(float delta)
 {
-    Node* node = get_node_or_null("/root/nodes/gameplay/hill/sled");
+    Node* node = get_node_or_null("/root/nodes/gameplay/hill/banner");
     if (node)
     {
         if (arcs.front().pos.distance_to(target->get_translation()) > despawnDistance)
@@ -218,21 +217,11 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
             tree->rotate_y(-radians);
             tree->set_translation(vert);
             float size = 1.0f + (1.0f + noise/amplitude) * 2.0f;
+            // Random rotation
+            // rotate_y(360.0f * static_cast <float> (rand()) / static_cast <float> (RAND_MAX));
             tree->set_scale(Vector3(size, size, size));
             props.push_back(tree);
         }
-        // if (((int)(noise * 5000)) % 5000 == 1)
-        // {
-        //     Spatial* snowman = Object::cast_to<Spatial>(snowman_prefab->instance());
-        //     snowman->rotate_z(-Math_PI/2.0);
-        //     snowman->rotate_y(-radians);
-        //     Spatial* doll = Object::cast_to<Spatial>(snowman->get_child(0));
-        //     doll->rotate_y(360.0f * static_cast <float> (rand()) / static_cast <float> (RAND_MAX));
-        //     snowman->set_translation(vert);
-        //     float size = 1.0f;
-        //     snowman->set_scale(Vector3(size, size, size));
-        //     props.push_back(snowman);
-        // }
         arc_progress += degrees_per_quad;
         if (arc_progress > degrees) arc_progress = 0.0f;
     }

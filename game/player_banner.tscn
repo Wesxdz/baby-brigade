@@ -1,7 +1,6 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://prototype.gd" type="Script" id=1]
-[ext_resource path="res://ui/baby.tscn" type="PackedScene" id=2]
 
 [sub_resource type="CapsuleShape" id=1]
 radius = 5.0
@@ -18,56 +17,5 @@ collision_mask = 4
 [node name="axe" type="CollisionShape" parent="interact"]
 shape = SubResource( 1 )
 
-[node name="GUIPanel3D" parent="." instance=ExtResource( 2 )]
-
-[node name="GUIPanel3D2" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.87982, -6.2362, -0.271338 )
-
-[node name="GUIPanel3D4" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.19291, -6.2362, -15.7747 )
-
-[node name="GUIPanel3D5" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.19291, -6.2362, -15.7747 )
-
-[node name="GUIPanel3D3" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.00428, 0, -8.36507 )
-
-[node name="GUIPanel3D6" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 3.8984, 0, -4.60463 )
-
-[node name="GUIPanel3D7" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -6.90719, 0, 3.90837 )
-
-[node name="GUIPanel3D9" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -13.6474, 3.8147e-06, -11.2936 )
-
-[node name="GUIPanel3D10" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -4.06604, 3.8147e-06, -19.192 )
-
-[node name="GUIPanel3D11" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 7.69971, 3.8147e-06, -18.1254 )
-
-[node name="GUIPanel3D12" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 12.9873, 3.8147e-06, -7.68333 )
-
-[node name="GUIPanel3D13" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -5.355, 3.8147e-06, -2.92858 )
-
-[node name="GUIPanel3D14" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -21.3961, 3.8147e-06, 0.997323 )
-
-[node name="GUIPanel3D15" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5476, 3.8147e-06, 5.63774 )
-
-[node name="GUIPanel3D16" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -24.0112, 0, -5.69573 )
-
-[node name="GUIPanel3D17" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -19.2265, -3.8147e-06, -7.96524 )
-
-[node name="GUIPanel3D18" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -19.2265, -3.8147e-06, -7.96524 )
-
-[node name="GUIPanel3D8" parent="." instance=ExtResource( 2 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -11.1092, 0, -1.49417 )
+[node name="CSGSphere" type="CSGSphere" parent="."]
 [connection signal="body_entered" from="interact" to="." method="_on_interact_body_entered"]

@@ -40,15 +40,17 @@ void GDBanner::_init()
     yPos = get_translation().y;
     radius = 70.0f;
 
+    formationRadius = 10.0f;
+
     meterConversion = 0.05f;
 
     Ref<PackedScene> puppet = ResourceLoader::get_singleton()->load("res://player_banner.tscn");
     add_child(puppet->instance());
 
     // properties
-    // angle = 0.0f;
-    // dragXToAngle = 0.0f;
-    // ySpeed = 0.0f;
+    angle = 0.0f;
+    dragXToAngle = 0.0f;
+    ySpeed = 0.0f;
 }
 
 void GDBanner::_enter_tree()
