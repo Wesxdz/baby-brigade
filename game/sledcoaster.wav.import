@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/sledcoaster.wav-4b87300d4315b5986aee58922ac43388.sample"
+
+[deps]
+
+source_file="res://sledcoaster.wav"
+dest_files=[ "res://.import/sledcoaster.wav-4b87300d4315b5986aee58922ac43388.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

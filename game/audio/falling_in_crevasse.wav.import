@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/falling_in_crevasse.wav-2d8eb27ef02b4933217c5db27280402f.sample"
+
+[deps]
+
+source_file="res://audio/falling_in_crevasse.wav"
+dest_files=[ "res://.import/falling_in_crevasse.wav-2d8eb27ef02b4933217c5db27280402f.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

@@ -1,0 +1,1 @@
+/home/aeri/android-ndk-r22/ndk-build NDK_PROJECT_PATH=. APP_BUILD_SCRIPT=Android.mk APP_PLATFORM=android-21 NDK_LIBS_OUT=./sledcoaster/bin

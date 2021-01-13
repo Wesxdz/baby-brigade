@@ -1,0 +1,15 @@
+[gd_resource type="ShaderMaterial" load_steps=2 format=2]
+
+[ext_resource path="res://snow.shader" type="Shader" id=1]
+
+[resource]
+shader = ExtResource( 1 )
+shader_param/base_height = 2.0
+shader_param/noise_height = 2.0
+shader_param/noise_density = 4.0
+shader_param/snow_color = Vector3( 0.5, 0.8, 1 )
+shader_param/compressed_color = Vector3( 0.4, 0.1, 0.5 )
+shader_param/displacement_pos = null
+shader_param/displacement_radius = null
+shader_param/next_sample_index = null
+shader_param/displacement_sample_root_size = null

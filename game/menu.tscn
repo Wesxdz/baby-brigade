@@ -1,0 +1,254 @@
+[gd_scene load_steps=24 format=2]
+
+[ext_resource path="res://sledtitle.wav" type="AudioStream" id=1]
+[ext_resource path="res://menu/menu_logo_back.png" type="Texture" id=2]
+[ext_resource path="res://trans_love.tres" type="StyleBox" id=3]
+[ext_resource path="res://menu/menu_checkers.png" type="Texture" id=4]
+[ext_resource path="res://menu/menu_logo_front.png" type="Texture" id=5]
+[ext_resource path="res://audio/start_game.wav" type="AudioStream" id=6]
+[ext_resource path="res://menu/menu_shadow.png" type="Texture" id=7]
+[ext_resource path="res://scroll.shader" type="Shader" id=8]
+[ext_resource path="res://start_game.gd" type="Script" id=9]
+[ext_resource path="res://hill_name_gen.gd" type="Script" id=10]
+[ext_resource path="res://TenStamps.ttf" type="DynamicFontData" id=11]
+[ext_resource path="res://new_hill.tres" type="Theme" id=12]
+[ext_resource path="res://Digital-Patreon-Wordmark_WhiteOnBlack-Sm.jpg" type="Texture" id=13]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 1, 1, 1, 0 )
+
+[sub_resource type="StyleBoxEmpty" id=2]
+
+[sub_resource type="StyleBoxEmpty" id=3]
+
+[sub_resource type="Theme" id=4]
+
+[sub_resource type="StyleBoxFlat" id=5]
+bg_color = Color( 0.85098, 0.741176, 0.784314, 0.501961 )
+
+[sub_resource type="StyleBoxFlat" id=6]
+bg_color = Color( 0.670588, 0.866667, 0.392157, 0.501961 )
+
+[sub_resource type="DynamicFont" id=7]
+font_data = ExtResource( 11 )
+
+[sub_resource type="Theme" id=8]
+default_font = SubResource( 7 )
+
+[sub_resource type="CanvasItemMaterial" id=9]
+
+[sub_resource type="ShaderMaterial" id=10]
+shader = ExtResource( 8 )
+shader_param/scroll_x_speed = 0.083
+shader_param/scroll_y_speed = 0.054
+shader_param/repeat_uv_count = 12
+shader_param/repeating_tiles = ExtResource( 4 )
+
+[node name="menu" type="Control"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="start" type="Panel" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+custom_styles/panel = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="foreground" type="Panel" parent="start"]
+anchor_left = 0.25
+anchor_top = 0.2
+anchor_right = 0.75
+anchor_bottom = 0.7
+margin_left = -16.2354
+margin_top = 0.720139
+margin_right = 23.7646
+margin_bottom = 40.7202
+mouse_filter = 1
+mouse_default_cursor_shape = 2
+custom_styles/panel = SubResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="logo" type="Panel" parent="start/foreground"]
+margin_left = 115.709
+margin_top = 183.435
+margin_right = 155.708
+margin_bottom = 223.435
+custom_styles/panel = SubResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="shadow" type="TextureRect" parent="start/foreground/logo"]
+anchor_left = 0.5
+anchor_top = 0.448
+anchor_right = 0.5
+anchor_bottom = 0.465
+margin_left = -53.1951
+margin_top = 70.0
+margin_right = 42.8049
+margin_bottom = 57.6411
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource( 7 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="logo_back" type="TextureRect" parent="start/foreground/logo"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -81.9275
+margin_top = -55.873
+margin_right = 81.0725
+margin_bottom = 62.127
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource( 2 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="logo_front" type="TextureRect" parent="start/foreground/logo"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -78.4286
+margin_top = -50.9181
+margin_right = 75.5714
+margin_bottom = 57.0819
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="start_game_sfx" type="AudioStreamPlayer" parent="start/foreground"]
+stream = ExtResource( 6 )
+
+[node name="start_game" type="Control" parent="start/foreground"]
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+margin_left = -41.0
+margin_top = -61.0
+margin_right = 1.0
+margin_bottom = -19.0
+mouse_default_cursor_shape = 2
+theme = SubResource( 4 )
+script = ExtResource( 9 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="course" type="Button" parent="start/foreground"]
+margin_left = -33.3272
+margin_top = 275.941
+margin_right = 266.673
+margin_bottom = 375.941
+mouse_default_cursor_shape = 2
+custom_styles/hover = SubResource( 5 )
+custom_styles/pressed = SubResource( 6 )
+custom_styles/focus = ExtResource( 3 )
+custom_styles/disabled = ExtResource( 3 )
+custom_styles/normal = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="name" type="RichTextLabel" parent="start/foreground/course"]
+margin_left = 34.0
+margin_top = 43.0
+margin_right = 251.0
+margin_bottom = 187.0
+rect_clip_content = false
+mouse_filter = 2
+theme = SubResource( 8 )
+text = "orange
+land"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="new_tag" type="RichTextLabel" parent="start/foreground/course"]
+margin_left = 18.2704
+margin_top = 21.3214
+margin_right = 196.27
+margin_bottom = 165.321
+rect_clip_content = false
+mouse_filter = 2
+theme = ExtResource( 12 )
+custom_colors/default_color = Color( 0.0862745, 0.658824, 1, 1 )
+custom_colors/selection_color = Color( 0, 0, 0, 1 )
+text = "NEW"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="hill_name_gen" type="Node" parent="start/foreground"]
+script = ExtResource( 10 )
+
+[node name="title_ost" type="AudioStreamPlayer" parent="start/foreground"]
+stream = ExtResource( 1 )
+autoplay = true
+
+[node name="patreon" type="Button" parent="start/foreground"]
+visible = false
+margin_left = 3.7525
+margin_top = 522.323
+margin_right = 1215.75
+margin_bottom = 1128.32
+rect_scale = Vector2( 0.2, 0.2 )
+icon = ExtResource( 13 )
+flat = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="RichTextLabel" type="RichTextLabel" parent="start/foreground"]
+visible = false
+margin_left = -11.831
+margin_top = 405.041
+margin_right = 260.169
+margin_bottom = 522.041
+text = "Sledcoaster is created with open source software (Godot, Blender, Aseprite) and is itself open source under GPLv3. We believe in a future of mobile games liberated from ads and designed for gameplay over monetization."
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="canvas" type="CanvasLayer" parent="start"]
+layer = -10
+
+[node name="background" type="Panel" parent="start/canvas"]
+material = SubResource( 9 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_clip_content = true
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="checkers" type="Panel" parent="start/canvas/background"]
+material = SubResource( 10 )
+margin_left = -411.37
+margin_top = -178.743
+margin_right = 868.63
+margin_bottom = 1101.26
+rect_rotation = -135.0
+rect_pivot_offset = Vector2( 640, 640 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+[connection signal="pressed" from="start/foreground/course" to="start/foreground/start_game" method="_on_course_pressed"]

@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://follow_hill.gd" type="Script" id=1]
+[ext_resource path="res://peak_rotator.gd" type="Script" id=2]
+
+[node name="target" type="Spatial"]
+script = ExtResource( 1 )
+
+[node name="peak_rotator" type="Spatial" parent="."]
+script = ExtResource( 2 )
+
+[node name="cam" type="Camera" parent="peak_rotator"]
+transform = Transform( 0.99931, -0.0105872, 0.0356146, 0.010594, 0.999944, 0, -0.0356126, 0.0003773, 0.999366, 0, -14.9924, 238.153 )
+fov = 41.7
+near = 1.0
+far = 10000.0

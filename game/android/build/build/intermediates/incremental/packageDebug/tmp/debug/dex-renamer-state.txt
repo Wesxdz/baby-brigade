@@ -1,0 +1,4 @@
+#Sun Dec 27 15:33:29 CST 2020
+base.0=/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/build/intermediates/dex/debug/mergeDexDebug/out/classes.dex
+path.0=classes.dex
+renamed.0=classes.dex

@@ -1,0 +1,130 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="org.godotengine.sledcoaster64"
+4    android:installLocation="auto"
+5    android:versionCode="1"
+6    android:versionName="1.0" >
+7
+8    <uses-sdk
+9        android:minSdkVersion="18"
+9-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml
+10        android:targetSdkVersion="29" />
+10-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml
+11
+12    <!-- Adding custom text to the manifest is fine, but do it outside the custom USER and APPLICATION BEGIN/END comments, -->
+13    <!-- as that gets rewritten. -->
+14
+15    <supports-screens
+15-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:12:5-16:40
+16        android:largeScreens="true"
+16-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:15:9-36
+17        android:normalScreens="true"
+17-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:14:9-37
+18        android:smallScreens="true"
+18-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:13:9-36
+19        android:xlargeScreens="true" />
+19-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:16:9-37
+20
+21    <!-- glEsVersion is modified by the exporter, changing this value here has no effect. -->
+22    <uses-feature
+22-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:19:5-21:35
+23        android:glEsVersion="0x00020000"
+23-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:20:9-41
+24        android:required="true" />
+24-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:21:9-32
+25
+26    <instrumentation
+26-->[godot-lib.release.aar] /home/aeri/.gradle/caches/transforms-2/files-2.1/2f29423de5771cd0c2f475b364e10860/godot-lib.release/AndroidManifest.xml:11:5-15:57
+27        android:name=".GodotInstrumentation"
+27-->[godot-lib.release.aar] /home/aeri/.gradle/caches/transforms-2/files-2.1/2f29423de5771cd0c2f475b364e10860/godot-lib.release/AndroidManifest.xml:12:9-45
+28        android:icon="@mipmap/icon"
+28-->[godot-lib.release.aar] /home/aeri/.gradle/caches/transforms-2/files-2.1/2f29423de5771cd0c2f475b364e10860/godot-lib.release/AndroidManifest.xml:13:9-36
+29        android:label="@string/godot_project_name_string"
+29-->[godot-lib.release.aar] /home/aeri/.gradle/caches/transforms-2/files-2.1/2f29423de5771cd0c2f475b364e10860/godot-lib.release/AndroidManifest.xml:14:9-58
+30        android:targetPackage="org.godotengine.godot" /> <!-- Custom user permissions XML added by add-ons. It's recommended to add them from the export preset, though. -->
+30-->[godot-lib.release.aar] /home/aeri/.gradle/caches/transforms-2/files-2.1/2f29423de5771cd0c2f475b364e10860/godot-lib.release/AndroidManifest.xml:15:9-54
+31    <!-- CHUNK_USER_PERMISSIONS_BEGIN -->
+32    <!-- CHUNK_USER_PERMISSIONS_END -->
+33    <!-- Any tag in this line after android:icon will be erased when doing custom builds. -->
+34    <!-- If you want to add tags manually, do before it. -->
+35    <!-- WARNING: This should stay on a single line until the parsing code is improved. See GH-32414. -->
+36    <application
+36-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:30:5-68:19
+37        android:allowBackup="false"
+37-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:30:68-95
+38        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+38-->[androidx.core:core:1.0.0] /home/aeri/.gradle/caches/transforms-2/files-2.1/947833f03979c6d84fcd9a8feba7ce42/core-1.0.0/AndroidManifest.xml:22:18-86
+39        android:icon="@mipmap/icon"
+39-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:30:136-163
+40        android:label="@string/godot_project_name_string"
+40-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:30:18-67
+41        android:requestLegacyExternalStorage="true" >
+41-->[godot-lib.release.aar] /home/aeri/.gradle/caches/transforms-2/files-2.1/2f29423de5771cd0c2f475b364e10860/godot-lib.release/AndroidManifest.xml:18:18-61
+42
+43        <!-- The following metadata values are replaced when Godot exports, modifying them here has no effect. -->
+44        <!-- Do these changes in the export preset. Adding new ones is fine. -->
+45
+46
+47        <!-- XR mode metadata. This is modified by the exporter based on the selected xr mode. DO NOT CHANGE the values here. -->
+48        <meta-data
+48-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:36:9-38:54
+49            android:name="xr_mode_metadata_name"
+49-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:37:13-49
+50            android:value="xr_mode_metadata_value" />
+50-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:38:13-51
+51
+52        <!-- Metadata populated at export time and used by Godot to figure out which plugins must be enabled. -->
+53        <meta-data
+53-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:41:9-43:44
+54            android:name="plugins"
+54-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:42:13-35
+55            android:value="plugins_value" />
+55-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:43:13-42
+56
+57        <activity
+57-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:45:9-62:20
+58            android:name="com.godot.game.GodotApp"
+58-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:46:13-37
+59            android:configChanges="orientation|keyboardHidden|screenSize|smallestScreenSize|density|keyboard|navigation|screenLayout|uiMode"
+59-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:51:13-141
+60            android:label="@string/godot_project_name_string"
+60-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:47:13-62
+61            android:launchMode="singleTask"
+61-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:49:13-44
+62            android:resizeableActivity="false"
+62-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:52:13-47
+63            android:screenOrientation="landscape"
+63-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:50:13-50
+64            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen" >
+64-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:48:13-77
+65
+66            <!-- Focus awareness metadata is updated at export time if the user enables it in the 'Xr Features' section. -->
+67            <meta-data
+67-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:56:13-88
+68                android:name="com.oculus.vr.focusaware"
+68-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:56:24-63
+69                android:value="false" />
+69-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:56:64-85
+70
+71            <intent-filter>
+71-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:58:13-61:29
+72                <action android:name="android.intent.action.MAIN" />
+72-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:59:17-69
+72-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:59:25-66
+73
+74                <category android:name="android.intent.category.LAUNCHER" />
+74-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:60:17-77
+74-->/home/aeri/projects/sledcoaster-64/sledcoaster/android/build/AndroidManifest.xml:60:27-74
+75            </intent-filter>
+76        </activity>
+77
+78        <!-- Custom application XML added by add-ons. -->
+79        <!-- CHUNK_APPLICATION_BEGIN -->
+80        <!-- CHUNK_APPLICATION_END -->
+81
+82        <service android:name="org.godotengine.godot.GodotDownloaderService" />
+82-->[godot-lib.release.aar] /home/aeri/.gradle/caches/transforms-2/files-2.1/2f29423de5771cd0c2f475b364e10860/godot-lib.release/AndroidManifest.xml:19:9-80
+82-->[godot-lib.release.aar] /home/aeri/.gradle/caches/transforms-2/files-2.1/2f29423de5771cd0c2f475b364e10860/godot-lib.release/AndroidManifest.xml:19:18-77
+83    </application>
+84
+85</manifest>
