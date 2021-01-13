@@ -1,12 +1,8 @@
-[gd_scene load_steps=23 format=2]
+[gd_scene load_steps=21 format=2]
 
-[ext_resource path="res://sledtitle.wav" type="AudioStream" id=1]
-[ext_resource path="res://menu/menu_logo_back.png" type="Texture" id=2]
-[ext_resource path="res://trans_love.tres" type="StyleBox" id=3]
 [ext_resource path="res://menu/menu_checkers.png" type="Texture" id=4]
-[ext_resource path="res://menu/menu_logo_front.png" type="Texture" id=5]
+[ext_resource path="res://logo.png" type="Texture" id=5]
 [ext_resource path="res://audio/start_game.wav" type="AudioStream" id=6]
-[ext_resource path="res://menu/menu_shadow.png" type="Texture" id=7]
 [ext_resource path="res://scroll.shader" type="Shader" id=8]
 [ext_resource path="res://start_game.gd" type="Script" id=9]
 [ext_resource path="res://hill_name_gen.gd" type="Script" id=10]
@@ -18,15 +14,17 @@ bg_color = Color( 1, 1, 1, 0 )
 
 [sub_resource type="StyleBoxEmpty" id=2]
 
-[sub_resource type="StyleBoxEmpty" id=3]
-
 [sub_resource type="Theme" id=4]
 
-[sub_resource type="StyleBoxFlat" id=5]
-bg_color = Color( 0.85098, 0.741176, 0.784314, 0.501961 )
+[sub_resource type="StyleBoxEmpty" id=11]
 
-[sub_resource type="StyleBoxFlat" id=6]
-bg_color = Color( 0.670588, 0.866667, 0.392157, 0.501961 )
+[sub_resource type="StyleBoxEmpty" id=12]
+
+[sub_resource type="StyleBoxEmpty" id=13]
+
+[sub_resource type="StyleBoxEmpty" id=14]
+
+[sub_resource type="StyleBoxEmpty" id=15]
 
 [sub_resource type="DynamicFont" id=7]
 font_data = ExtResource( 11 )
@@ -75,57 +73,15 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="logo" type="Panel" parent="start/foreground"]
-margin_left = 115.709
-margin_top = 183.435
-margin_right = 155.708
-margin_bottom = 223.435
-custom_styles/panel = SubResource( 3 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="shadow" type="TextureRect" parent="start/foreground/logo"]
-anchor_left = 0.5
-anchor_top = 0.448
-anchor_right = 0.5
-anchor_bottom = 0.465
-margin_left = -53.1951
-margin_top = 70.0
-margin_right = 42.8049
-margin_bottom = 57.6411
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource( 7 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="logo_back" type="TextureRect" parent="start/foreground/logo"]
+[node name="logo" type="TextureRect" parent="start/foreground"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-margin_left = -81.9275
-margin_top = -55.873
-margin_right = 81.0725
-margin_bottom = 62.127
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource( 2 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="logo_front" type="TextureRect" parent="start/foreground/logo"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -78.4286
-margin_top = -50.9181
-margin_right = 75.5714
-margin_bottom = 57.0819
+margin_left = -59.0
+margin_top = -26.0
+margin_right = 59.0
+margin_bottom = 26.0
 grow_horizontal = 2
 grow_vertical = 2
 texture = ExtResource( 5 )
@@ -153,16 +109,16 @@ __meta__ = {
 }
 
 [node name="course" type="Button" parent="start/foreground"]
-margin_left = -33.3272
-margin_top = 275.941
-margin_right = 266.673
-margin_bottom = 375.941
+margin_left = 15.2823
+margin_top = 213.173
+margin_right = 315.283
+margin_bottom = 313.173
 mouse_default_cursor_shape = 2
-custom_styles/hover = SubResource( 5 )
-custom_styles/pressed = SubResource( 6 )
-custom_styles/focus = ExtResource( 3 )
-custom_styles/disabled = ExtResource( 3 )
-custom_styles/normal = ExtResource( 3 )
+custom_styles/hover = SubResource( 11 )
+custom_styles/pressed = SubResource( 12 )
+custom_styles/focus = SubResource( 13 )
+custom_styles/disabled = SubResource( 14 )
+custom_styles/normal = SubResource( 15 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -182,6 +138,7 @@ __meta__ = {
 }
 
 [node name="new_tag" type="RichTextLabel" parent="start/foreground/course"]
+visible = false
 margin_left = 18.2704
 margin_top = 21.3214
 margin_right = 196.27
@@ -189,7 +146,7 @@ margin_bottom = 165.321
 rect_clip_content = false
 mouse_filter = 2
 theme = ExtResource( 12 )
-custom_colors/default_color = Color( 0.0862745, 0.658824, 1, 1 )
+custom_colors/default_color = Color( 0, 0.647059, 0.745098, 1 )
 custom_colors/selection_color = Color( 0, 0, 0, 1 )
 text = "NEW"
 __meta__ = {
@@ -198,10 +155,6 @@ __meta__ = {
 
 [node name="hill_name_gen" type="Node" parent="start/foreground"]
 script = ExtResource( 10 )
-
-[node name="title_ost" type="AudioStreamPlayer" parent="start/foreground"]
-stream = ExtResource( 1 )
-autoplay = true
 
 [node name="canvas" type="CanvasLayer" parent="start"]
 layer = -10
@@ -217,10 +170,10 @@ __meta__ = {
 
 [node name="checkers" type="Panel" parent="start/canvas/background"]
 material = SubResource( 10 )
-margin_left = -411.37
-margin_top = -178.743
-margin_right = 868.63
-margin_bottom = 1101.26
+margin_left = -406.944
+margin_top = -180.878
+margin_right = 873.056
+margin_bottom = 1099.12
 rect_rotation = -135.0
 rect_pivot_offset = Vector2( 640, 640 )
 __meta__ = {

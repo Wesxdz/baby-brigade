@@ -7,7 +7,7 @@
 namespace godot {
 
 /*
- * Player interface for crowd position manipulation
+ * Formation behavior for crowd management
  */
 class GDBanner : public Spatial {
 	GODOT_CLASS(GDBanner, Spatial)

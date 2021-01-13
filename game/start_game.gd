@@ -26,7 +26,7 @@ func _process(delta):
 func begin_game():
 	print("Begin game!")
 	indicate_start = false
-	$"../title_ost".stop()
+#	$"../title_ost".stop()
 	$"/root/nodes/box/ui/menu/start".visible = false
 	$"../../canvas/background".visible = false
 	$"/root/nodes/box/ui".add_child(hud_prefab.instance())
@@ -34,7 +34,7 @@ func begin_game():
 	
 func restart_menu():
 	$"../hill_name_gen".gen_random_mountain_name()
-	$"/root/start_menu/title".play()
+#	$"/root/start_menu/title".play()
 	ready_to_start = false
 	gameplay = null
 	thread.start(self, "load_gameplay", "ok")

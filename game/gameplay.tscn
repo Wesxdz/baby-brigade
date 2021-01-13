@@ -1,12 +1,9 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=6 format=2]
 
 [ext_resource path="res://bin/banner.gdns" type="Script" id=1]
 [ext_resource path="res://sunset_env.tres" type="Environment" id=2]
 [ext_resource path="res://follow_hill.gd" type="Script" id=3]
-[ext_resource path="res://sledcoaster.wav" type="AudioStream" id=5]
 [ext_resource path="res://peak_rotator.gd" type="Script" id=6]
-[ext_resource path="res://audio/cleared_crevasse.wav" type="AudioStream" id=15]
-[ext_resource path="res://audio/hit_tree.wav" type="AudioStream" id=16]
 [ext_resource path="res://bin/arc_proc_hill.gdns" type="Script" id=18]
 
 [node name="gameplay" type="Spatial"]
@@ -25,8 +22,9 @@ amplitude = 20.0
 [node name="banner" type="Spatial" parent="hill"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0 )
 script = ExtResource( 1 )
+"Drag X To Angle" = 0.003
 "Turn Rate" = 2.0
-"Y Speed" = -50.0
+"Y Speed" = -30.0
 
 [node name="target" type="Spatial" parent="hill"]
 script = ExtResource( 3 )
@@ -40,14 +38,3 @@ transform = Transform( 1, 0, 0, 0, 0.5, -0.866025, 0, 0.866025, 0.5, 0, -460, 20
 fov = 25.0
 near = 1.0
 far = 10000.0
-
-[node name="ost" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 5 )
-volume_db = -10.0
-
-[node name="reward" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 15 )
-
-[node name="fail" type="AudioStreamPlayer" parent="."]
-stream = ExtResource( 16 )
-volume_db = -10.0
