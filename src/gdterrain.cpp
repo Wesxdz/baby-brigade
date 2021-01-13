@@ -230,18 +230,18 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
         indices.append(quad + verts_per_layer);
         indices.append(quad + 1);
         indices.append(quad);
-        for (int i = 0; i < 3; i++)
-        {
-            normals.append((vertices[quad + verts_per_layer] + vertices[quad + 1] + vertices[quad])/3.0f);
-        }
+        // for (int i = 0; i < 3; i++)
+        // {
+        //     normals.append((vertices[quad + verts_per_layer] + vertices[quad + 1] + vertices[quad])/3.0f);
+        // }
 
         indices.append(quad + verts_per_layer);
         indices.append(quad + 1 + verts_per_layer);
         indices.append(quad + 1);
-        for (int i = 0; i < 3; i++)
-        {
-            normals.append((vertices[quad + verts_per_layer] + vertices[quad + 1 + verts_per_layer] + vertices[quad + 1])/3.0f);
-        }
+        // for (int i = 0; i < 3; i++)
+        // {
+        //     normals.append((vertices[quad + verts_per_layer] + vertices[quad + 1 + verts_per_layer] + vertices[quad + 1])/3.0f);
+        // }
     }
     for (size_t x = 0; x < indices.size(); x++)
     {
@@ -251,7 +251,7 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
         uvs.append(Vector2(cell, 0.0f));
     }
     arrays[ArrayMesh::ARRAY_VERTEX] = faces;
-    arrays[ArrayMesh::ARRAY_NORMAL] = normals;
+    // arrays[ArrayMesh::ARRAY_NORMAL] = normals;
     arrays[ArrayMesh::ARRAY_TEX_UV]= uvs;
     // arrays[ArrayMesh::ARRAY_INDEX] = indices;
     mesh->add_surface_from_arrays(Mesh::PRIMITIVE_TRIANGLES, arrays);
