@@ -1,4 +1,4 @@
-[gd_scene load_steps=24 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://sledtitle.wav" type="AudioStream" id=1]
 [ext_resource path="res://menu/menu_logo_back.png" type="Texture" id=2]
@@ -12,7 +12,6 @@
 [ext_resource path="res://hill_name_gen.gd" type="Script" id=10]
 [ext_resource path="res://TenStamps.ttf" type="DynamicFontData" id=11]
 [ext_resource path="res://new_hill.tres" type="Theme" id=12]
-[ext_resource path="res://Digital-Patreon-Wordmark_WhiteOnBlack-Sm.jpg" type="Texture" id=13]
 
 [sub_resource type="StyleBoxFlat" id=1]
 bg_color = Color( 1, 1, 1, 0 )
@@ -203,30 +202,6 @@ script = ExtResource( 10 )
 [node name="title_ost" type="AudioStreamPlayer" parent="start/foreground"]
 stream = ExtResource( 1 )
 autoplay = true
-
-[node name="patreon" type="Button" parent="start/foreground"]
-visible = false
-margin_left = 3.7525
-margin_top = 522.323
-margin_right = 1215.75
-margin_bottom = 1128.32
-rect_scale = Vector2( 0.2, 0.2 )
-icon = ExtResource( 13 )
-flat = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="RichTextLabel" type="RichTextLabel" parent="start/foreground"]
-visible = false
-margin_left = -11.831
-margin_top = 405.041
-margin_right = 260.169
-margin_bottom = 522.041
-text = "Sledcoaster is created with open source software (Godot, Blender, Aseprite) and is itself open source under GPLv3. We believe in a future of mobile games liberated from ads and designed for gameplay over monetization."
-__meta__ = {
-"_edit_use_anchors_": false
-}
 
 [node name="canvas" type="CanvasLayer" parent="start"]
 layer = -10

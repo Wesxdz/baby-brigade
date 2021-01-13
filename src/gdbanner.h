@@ -6,8 +6,8 @@
 
 namespace godot {
 
-class GDSled : public Spatial {
-	GODOT_CLASS(GDSled, Spatial)
+class GDBanner : public Spatial {
+	GODOT_CLASS(GDBanner, Spatial)
 
 private:
     float radius;
@@ -19,13 +19,12 @@ private:
     
     RichTextLabel* distanceLabel;
     float ySpeed;
-    // TODO: Custom physics design for jumping
 
 public:
 	static void _register_methods();
 
-	GDSled();
-	~GDSled();
+	GDBanner();
+	~GDBanner();
 
 	void _init();
     void _enter_tree();

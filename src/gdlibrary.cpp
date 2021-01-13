@@ -1,6 +1,6 @@
 #include "gdexample.h"
 #include "gdterrain.h"
-#include "gdsled.h"
+#include "gdbanner.h"
 
 extern "C" void GDN_EXPORT godot_gdnative_init(godot_gdnative_init_options *o) {
 	godot::Godot::gdnative_init(o);
@@ -15,5 +15,5 @@ extern "C" void GDN_EXPORT godot_nativescript_init(void *handle) {
 
 	godot::register_class<godot::GDExample>();
 	godot::register_class<godot::GDArcProcHill>();
-	godot::register_class<godot::GDSled>();
+	godot::register_class<godot::GDBanner>();
 }

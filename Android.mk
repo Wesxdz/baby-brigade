@@ -24,7 +24,7 @@ LOCAL_SRC_FILES := \
 src/gdlibrary.cpp \
 src/gdexample.cpp \
 src/gdterrain.cpp \
-src/gdsled.cpp \
+src/gdbanner.cpp \
 
 LOCAL_C_INCLUDES := \
 godot-cpp/godot_headers \

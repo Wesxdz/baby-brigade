@@ -15,18 +15,13 @@ _global_script_class_icons={
 
 [application]
 
-config/name="Sledcoaster 64"
+config/name="Baby Brigade"
 run/main_scene="res://load_entry.tscn"
 boot_splash/image="res://loading.png"
 boot_splash/fullsize=false
 boot_splash/use_filter=false
 boot_splash/bg_color=Color( 0, 0, 0, 1 )
 config/icon="res://menu/menu_christmas present.png"
-
-[autoload]
-
-ghost_system="*res://ghost_in_the_machine.gd"
-saved_hills="*res://saved_hills.gd"
 
 [compression]
 

@@ -1,6 +1,6 @@
 [gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://bin/sled.gdns" type="Script" id=1]
+[ext_resource path="res://bin/banner.gdns" type="Script" id=1]
 [ext_resource path="res://sunset_env.tres" type="Environment" id=2]
 [ext_resource path="res://follow_hill.gd" type="Script" id=3]
 [ext_resource path="res://sledcoaster.wav" type="AudioStream" id=5]
@@ -8,6 +8,7 @@
 [ext_resource path="res://audio/cleared_crevasse.wav" type="AudioStream" id=15]
 [ext_resource path="res://audio/hit_tree.wav" type="AudioStream" id=16]
 [ext_resource path="res://bin/arc_proc_hill.gdns" type="Script" id=18]
+
 
 [node name="gameplay" type="Spatial"]
 

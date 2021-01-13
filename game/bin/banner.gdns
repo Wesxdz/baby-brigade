@@ -4,5 +4,5 @@
 
 [resource]
 resource_name = "GDSled"
-class_name = "GDSled"
+class_name = "GDBanner"
 library = ExtResource( 1 )
