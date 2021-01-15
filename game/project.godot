@@ -83,10 +83,6 @@ roll_left={
  ]
 }
 
-[physics]
-
-3d/physics_engine="Bullet"
-
 [rendering]
 
 threads/thread_model=2

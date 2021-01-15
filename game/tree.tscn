@@ -1,10 +1,13 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://outline.tres" type="Material" id=1]
 [ext_resource path="res://tree_trunk.material" type="Material" id=2]
 [ext_resource path="res://underside.material" type="Material" id=3]
+[ext_resource path="res://tree.gd" type="Script" id=4]
 [ext_resource path="res://tree_dark.material" type="Material" id=5]
 [ext_resource path="res://tree_light.material" type="Material" id=6]
+[ext_resource path="res://bin/boid_affector.gdns" type="Script" id=7]
+[ext_resource path="res://tree_repel.tres" type="Curve" id=8]
 
 [sub_resource type="SpatialMaterial" id=1]
 resource_name = "snow"
@@ -85,14 +88,18 @@ params_cull_mode = 2
 albedo_color = Color( 0.906332, 0.906332, 0.906332, 1 )
 
 [sub_resource type="CapsuleShape" id=4]
-radius = 0.7
+radius = 2.13645
 height = 3.56625
 
-[node name="tree" type="KinematicBody" groups=[
+[node name="tree" type="RigidBody" groups=[
 "obstacle",
 ]]
 collision_layer = 4
-collision_mask = 2
+collision_mask = 2147483650
+mode = 3
+contacts_reported = 1
+contact_monitor = true
+script = ExtResource( 4 )
 
 [node name="tree" type="MeshInstance" parent="."]
 mesh = SubResource( 2 )
@@ -116,3 +123,10 @@ material/4 = null
 [node name="collision" type="CollisionShape" parent="."]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 2.39447, 0 )
 shape = SubResource( 4 )
+
+[node name="boid_repel" type="Spatial" parent="."]
+script = ExtResource( 7 )
+strength = 12000.0
+curve = ExtResource( 8 )
+body = NodePath("..")
+[connection signal="body_entered" from="." to="." method="_on_tree_body_entered"]

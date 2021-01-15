@@ -18,4 +18,6 @@ extern "C" void GDN_EXPORT godot_nativescript_init(void *handle) {
 	godot::register_class<godot::GDArcProcHill>();
 	godot::register_class<godot::GDBanner>();
 	godot::register_class<godot::GDCrowdNav>();
+	godot::register_class<godot::GDBoidField>();
+	godot::register_class<godot::GDBoidAffector>();
 }
