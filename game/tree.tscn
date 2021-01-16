@@ -126,6 +126,7 @@ shape = SubResource( 4 )
 
 [node name="boid_repel" type="Spatial" parent="."]
 script = ExtResource( 7 )
+radius = 2.5
 strength = 12000.0
 curve = ExtResource( 8 )
 body = NodePath("..")

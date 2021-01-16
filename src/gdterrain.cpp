@@ -6,6 +6,8 @@
 #include <PhysicsServer.hpp>
 #include <World.hpp>
 
+#include "gdcrowdnav.h"
+
 #include <stdlib.h>
 #include <string>
 #include <time.h>
@@ -220,6 +222,7 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
             // Random rotation
             // rotate_y(360.0f * static_cast <float> (rand()) / static_cast <float> (RAND_MAX));
             tree->set_scale(Vector3(size, size, size));
+            Object::cast_to<GDBoidAffector>(tree->get_node("boid_repel"))->radius *= size;
             props.push_back(tree);
         }
         arc_progress += degrees_per_quad;

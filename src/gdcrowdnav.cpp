@@ -31,7 +31,7 @@ void GDCrowdNav::_physics_process(float delta)
     Spatial* banner = Object::cast_to<Spatial>(get_node("/root/nodes/gameplay/hill/banner"));
     target = banner->get_global_transform().origin;
     Vector3 toTarget = target - get_global_transform().origin;
-    add_central_force(toTarget.normalized() * delta * 5000.0f);
+    // add_central_force(toTarget.normalized() * delta * 5000.0f);
     if (field->accumulatedForces.count(get_rid()))
     {
         add_central_force(field->accumulatedForces[get_rid()] * delta);
@@ -93,7 +93,10 @@ void GDBoidAffector::_enter_tree()
 {
     field = Object::cast_to<GDBoidField>(get_node("/root/nodes/gameplay/boid_field"));
     field->boids.push_back(this);
-    body = Object::cast_to<RigidBody>(get_node(bodyNode))->get_rid();
+    if (!bodyNode.is_empty())
+    {
+        body = Object::cast_to<RigidBody>(get_node(bodyNode))->get_rid();
+    }
 }
 
 #include <algorithm>
@@ -109,7 +112,7 @@ void GDBoidField::Step()
     for (GDBoidAffector* boid : boids)
     {
         auto physics = PhysicsServer::get_singleton();
-        if (physics->body_get_mode(boid->body) != PhysicsServer::BodyMode::BODY_MODE_RIGID) return;
+        if (boid->bodyNode.is_empty() || physics->body_get_mode(boid->body) != PhysicsServer::BodyMode::BODY_MODE_RIGID) return;
         Vector3 pos = boid->get_global_transform().origin;
         for (GDBoidAffector* other : boids) // TODO: Spatial partitioning
         {
