@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=2]
+[gd_scene load_steps=20 format=2]
 
 [ext_resource path="res://TenStamps.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://exit_gameplay.gd" type="Script" id=2]
@@ -10,6 +10,12 @@
 [ext_resource path="res://menu/replay.png" type="Texture" id=8]
 [ext_resource path="res://resource_counter.gd" type="Script" id=9]
 [ext_resource path="res://mockup.png" type="Texture" id=10]
+[ext_resource path="res://amazon-box.png" type="Texture" id=11]
+[ext_resource path="res://spawn_item.gd" type="Script" id=12]
+
+[sub_resource type="StyleBoxFlat" id=1]
+bg_color = Color( 0.690196, 0.196078, 0.160784, 1 )
+corner_detail = 1
 
 [sub_resource type="StyleBoxEmpty" id=2]
 
@@ -37,6 +43,28 @@ margin_bottom = 91.3415
 rect_clip_content = false
 custom_fonts/normal_font = ExtResource( 5 )
 custom_colors/default_color = Color( 0.529412, 0.207843, 0.333333, 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="recipe" type="Panel" parent="."]
+margin_left = 352.092
+margin_top = 203.704
+margin_right = 392.092
+margin_bottom = 243.704
+custom_styles/panel = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="babybox" type="TextureButton" parent="recipe"]
+margin_left = 2.0
+margin_top = 2.0
+margin_right = 38.0
+margin_bottom = 38.0
+mouse_default_cursor_shape = 2
+texture_normal = ExtResource( 11 )
+script = ExtResource( 12 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -128,5 +156,6 @@ __meta__ = {
 [node name="drop_attractor" type="Sprite" parent="."]
 position = Vector2( 24.6185, 28.0942 )
 texture = ExtResource( 4 )
+[connection signal="button_down" from="recipe/babybox" to="recipe/babybox" method="_on_babybox_button_down"]
 [connection signal="pressed" from="end_panel/box/exit" to="end_panel/box/exit" method="_on_exit_pressed"]
 [connection signal="pressed" from="end_panel/box/replay" to="end_panel/box/replay" method="_on_replay_pressed"]

@@ -22,7 +22,7 @@ environment = ExtResource( 2 )
 script = ExtResource( 18 )
 amplitude = 20.0
 "Spawn Distance" = 400.0
-"Despawn Distance" = 400.0
+"Despawn Distance" = 450.0
 
 [node name="baby" parent="hill" instance=ExtResource( 4 )]
 
@@ -76,7 +76,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0 )
 script = ExtResource( 1 )
 "Drag X To Angle" = 0.003
 "Turn Rate" = 2.0
-"Y Speed" = -30.0
+"Y Speed" = -50.0
 
 [node name="target" type="Spatial" parent="hill"]
 script = ExtResource( 3 )
