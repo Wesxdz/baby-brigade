@@ -1,4 +1,4 @@
-[gd_scene load_steps=13 format=2]
+[gd_scene load_steps=12 format=2]
 
 [ext_resource path="res://outline.tres" type="Material" id=1]
 [ext_resource path="res://tree_trunk.material" type="Material" id=2]
@@ -6,8 +6,7 @@
 [ext_resource path="res://tree.gd" type="Script" id=4]
 [ext_resource path="res://tree_dark.material" type="Material" id=5]
 [ext_resource path="res://tree_light.material" type="Material" id=6]
-[ext_resource path="res://bin/boid_affector.gdns" type="Script" id=7]
-[ext_resource path="res://tree_repel.tres" type="Curve" id=8]
+[ext_resource path="res://tree_boid_repel.tscn" type="PackedScene" id=7]
 
 [sub_resource type="SpatialMaterial" id=1]
 resource_name = "snow"
@@ -124,10 +123,5 @@ material/4 = null
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, 2.39447, 0 )
 shape = SubResource( 4 )
 
-[node name="boid_repel" type="Spatial" parent="."]
-script = ExtResource( 7 )
-radius = 2.5
-strength = 12000.0
-curve = ExtResource( 8 )
-body = NodePath("..")
+[node name="boid_repel" parent="." instance=ExtResource( 7 )]
 [connection signal="body_entered" from="." to="." method="_on_tree_body_entered"]

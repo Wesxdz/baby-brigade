@@ -22,7 +22,7 @@ environment = ExtResource( 2 )
 script = ExtResource( 18 )
 amplitude = 20.0
 "Spawn Distance" = 400.0
-"Despawn Distance" = 450.0
+"Despawn Distance" = 400.0
 
 [node name="baby" parent="hill" instance=ExtResource( 4 )]
 
@@ -87,6 +87,7 @@ script = ExtResource( 6 )
 
 [node name="cam" type="Camera" parent="hill/target/peak_rotator"]
 transform = Transform( 1, 0, 0, 0, 0.5, -0.866025, 0, 0.866025, 0.5, 0, -400, 200 )
-fov = 25.0
+keep_aspect = 0
+fov = 15.0
 near = 1.0
 far = 10000.0

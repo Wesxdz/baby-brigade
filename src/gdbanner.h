@@ -19,6 +19,7 @@ private:
     float turnRate;
     float yPos;
     float meterConversion;
+    bool spinEnabled;
     
     RichTextLabel* distanceLabel;
     float ySpeed;
@@ -37,6 +38,10 @@ public:
     void _input(InputEvent* event);
 	void _process(float delta);
     void _physics_process(float delta);
+    float get_y_pos();
+    float get_radius();
+    float get_angle();
+    void set_spin_enabled(bool enabled);
 };
 
 }

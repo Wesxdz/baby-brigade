@@ -24,14 +24,19 @@ func _process(delta):
 	if indicate_start:
 		if ready_to_start:
 			begin_game()
+
+func _input(event):
+	if event is InputEventMouseButton:
+		if event.pressed:
+			begin_game()
 	
 func begin_game():
 	print("Begin game!")
 	indicate_start = false
 #	$"../title_ost".stop()
-	$"/root/nodes/box/ui/menu/start".visible = false
+	$"/root/nodes/menu/start".visible = false
 	$"../../canvas/background".visible = false
-	$"/root/nodes/box/ui".add_child(hud_prefab.instance())
+	$"/root/nodes".add_child(hud_prefab.instance())
 	$"/root/nodes".add_child(gameplay)
 	
 func restart_menu():

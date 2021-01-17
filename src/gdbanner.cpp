@@ -13,12 +13,37 @@
 
 using namespace godot;
 
+float GDBanner::get_y_pos()
+{
+    return yPos;
+}
+
+float GDBanner::get_radius()
+{
+    return radius;
+}
+
+float GDBanner::get_angle()
+{
+    return angle;
+}
+
+void GDBanner::set_spin_enabled(bool enabled)
+{
+    spinEnabled = enabled;
+}
+
 void GDBanner::_register_methods() 
 {
     register_method("_input", &GDBanner::_input);
     register_method("_enter_tree", &GDBanner::_enter_tree);
     register_method("_process", &GDBanner::_process);
     register_method("_physics_process", &GDBanner::_physics_process);
+    
+    register_method("get_y_pos", &GDBanner::get_y_pos);
+    register_method("get_angle", &GDBanner::get_angle);
+    register_method("get_radius", &GDBanner::get_radius);
+    register_method("set_spin_enabled", &GDBanner::set_spin_enabled);
 
     register_property<GDBanner, float>("Angle", &GDBanner::angle, 0.0f);
     register_property<GDBanner, float>("Drag X To Angle", &GDBanner::dragXToAngle, 0.1f);
@@ -37,6 +62,7 @@ GDBanner::~GDBanner()
 
 void GDBanner::_init() 
 {
+    spinEnabled = true;
     yPos = get_translation().y;
     radius = 70.0f;
 
@@ -55,13 +81,16 @@ void GDBanner::_init()
 
 void GDBanner::_enter_tree()
 {
-    distanceLabel = Object::cast_to<RichTextLabel>(get_node("/root/nodes/box/ui/hud/distance"));
+    distanceLabel = Object::cast_to<RichTextLabel>(get_node("/root/nodes/hud/distance"));
 }
 
 void GDBanner::_process(float delta) 
 {
     Input* input = Input::get_singleton();
-    angle += delta * turnRate * (input->get_action_strength("turn_right") - input->get_action_strength("turn_left"));
+    if (spinEnabled)
+    {
+        angle += delta * turnRate * (input->get_action_strength("turn_right") - input->get_action_strength("turn_left"));
+    }
     distanceLabel->set_text(godot::String::num_int64((int64_t)(std::abs(get_translation().y) * meterConversion)));
     // distanceLabel->set_text(std::to_string(floor(std::abs(get_translation().y) * meterConversion)).c_str());
 }
@@ -82,9 +111,12 @@ void GDBanner::_physics_process(float delta)
 
 void GDBanner::_input(InputEvent* event)
 {
-    auto dragTouch = Object::cast_to<InputEventScreenDrag>(event);
-    if (dragTouch)
+    if (spinEnabled)
     {
-        angle += dragTouch->get_relative().x * dragXToAngle;
+        auto dragTouch = Object::cast_to<InputEventScreenDrag>(event);
+        if (dragTouch)
+        {
+            angle += dragTouch->get_relative().x * dragXToAngle;
+        }
     }
 }

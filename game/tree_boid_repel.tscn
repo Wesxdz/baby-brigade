@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://bin/boid_affector.gdns" type="Script" id=1]
+[ext_resource path="res://tree_repel.tres" type="Curve" id=2]
+
+[node name="boid_repel" type="Spatial"]
+script = ExtResource( 1 )
+radius = 2.5
+strength = 12000.0
+curve = ExtResource( 2 )
+body = NodePath("..")

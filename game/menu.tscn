@@ -109,6 +109,7 @@ __meta__ = {
 }
 
 [node name="course" type="Button" parent="start/foreground"]
+visible = false
 margin_left = 15.2823
 margin_top = 213.173
 margin_right = 315.283

@@ -108,6 +108,7 @@ roll_left={
 
 [rendering]
 
+quality/driver/driver_name="GLES2"
 threads/thread_model=2
 vram_compression/import_etc=true
 quality/filters/use_nearest_mipmap_filter=true
