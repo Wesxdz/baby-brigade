@@ -6,7 +6,7 @@ on:
 # Global Settings
 env:
   PROJECT_FOLDER: ./
-  TARGET_PATH: sledcoaster\bin\win64\
+  TARGET_PATH: game\bin\win64\
   TARGET_NAME: libgdexample
 
 jobs:

@@ -8,9 +8,11 @@ var gameplay_prefab = preload("res://gameplay.tscn")
 var hud_prefab = preload("res://hud.tscn")
 
 func _ready():
-	thread = Thread.new()
-	print("Load gameplay")
-	thread.start(self, "load_gameplay", "ok")
+#	thread = Thread.new()
+#	print("Load gameplay")
+#	thread.start(self, "load_gameplay", "ok")
+	gameplay = gameplay_prefab.instance()
+	gameplay_loaded()
 	
 func start_game():
 	$"../start_game_sfx".play()
@@ -47,11 +49,11 @@ func load_gameplay(data):
 	
 func gameplay_loaded():
 	print("Gameplay loaded!")
-	thread.wait_to_finish()
+#	thread.wait_to_finish()
 	ready_to_start = true
 
-func _exit_tree():
-	thread.wait_to_finish()
+#func _exit_tree():
+#	thread.wait_to_finish()
 
 func restart():
 	gameplay = gameplay.instance()
