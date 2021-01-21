@@ -95,8 +95,10 @@ void GDArcProcHill::create_y_arc(Vector3 pos, float degrees, float radius)
 void GDArcProcHill::_enter_tree()
 {
     target = Object::cast_to<Spatial>(get_node("/root/nodes/gameplay/hill/banner"));
-    snowMaterial = ResourceLoader::get_singleton()->load("res://arc_test.tres");
-    tree_prefab = ResourceLoader::get_singleton()->load("res://tree.tscn");
+    auto res = ResourceLoader::get_singleton();
+    snowMaterial = res->load("res://arc_test.tres");
+    tree_prefab = res->load("res://tree.tscn");
+    coin_prefab = res->load("res://coin.tscn");
     // TODO: just clone an arc prefab and add noise :) 
     create_arc(Vector3(0, 0, 0), 360.0f, hill_radius, 0.0f);
 }
@@ -212,7 +214,7 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
         Vector3 vert = Vector3(x + noise * x_circle, y, z + noise * z_circle);
         vertices.append(vert);
         // normals.append(Vector3(0, 1, 0));
-        if (((int)(noise * 10000)) % 400 == 1)
+        if (((int)(noise * 10000)) % 600 == 1)
         {
             Spatial* tree = Object::cast_to<Spatial>(tree_prefab->instance());
             tree->rotate_z(-Math_PI/2.0);
@@ -224,6 +226,14 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
             tree->set_scale(Vector3(size, size, size));
             Object::cast_to<GDBoidAffector>(tree->get_node("boid_repel"))->radius *= size;
             props.push_back(tree);
+        }
+            if (((int)(noise * 15000)) % 800 == 1)
+        {
+            Spatial* coin = Object::cast_to<Spatial>(coin_prefab->instance());
+            coin->rotate_z(-Math_PI/2.0);
+            coin->rotate_y(-radians);
+            coin->set_translation(vert);
+            props.push_back(coin);
         }
         arc_progress += degrees_per_quad;
         if (arc_progress > degrees) arc_progress = 0.0f;

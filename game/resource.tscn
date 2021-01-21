@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://asmrcoin.png" type="Texture" id=1]
+[ext_resource path="res://TenStamps.ttf" type="DynamicFontData" id=2]
+
+[sub_resource type="StyleBoxEmpty" id=9]
+
+[sub_resource type="DynamicFont" id=10]
+font_data = ExtResource( 2 )
+
+[node name="resource" type="Panel"]
+margin_left = 15.5854
+margin_top = 17.2614
+margin_right = 111.586
+margin_bottom = 49.2614
+custom_styles/panel = SubResource( 9 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="icon" type="TextureRect" parent="."]
+texture = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="count" type="RichTextLabel" parent="."]
+margin_left = 30.4447
+margin_top = 7.11457
+margin_right = 87.4446
+margin_bottom = 27.1146
+rect_clip_content = false
+custom_fonts/normal_font = SubResource( 10 )
+custom_colors/default_color = Color( 0.490196, 0.176471, 0.627451, 1 )
+text = "000"
+__meta__ = {
+"_edit_use_anchors_": false
+}

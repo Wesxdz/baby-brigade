@@ -1,6 +1,6 @@
 extends Spatial
 
-var drop = preload("res://drop.tscn")
+var drop = preload("res://resource_drop.tscn")
 
 func _on_interact_body_entered(body):
 	pass

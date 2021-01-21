@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/sfx - Track 07 (Miner Mine Rock).wav-df51101219ac9fbece7c5a92f2a9cf54.sample"
+
+[deps]
+
+source_file="res://audio/sfx - Track 07 (Miner Mine Rock).wav"
+dest_files=[ "res://.import/sfx - Track 07 (Miner Mine Rock).wav-df51101219ac9fbece7c5a92f2a9cf54.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

@@ -96,6 +96,7 @@ void GDBoidAffector::_enter_tree()
     if (!bodyNode.is_empty())
     {
         body = Object::cast_to<RigidBody>(get_node(bodyNode))->get_rid();
+        // Godot::print(std::to_string(body.get_id()).c_str());
     }
 }
 
@@ -109,10 +110,11 @@ void GDBoidAffector::_exit_tree()
 void GDBoidField::Step()
 {
     accumulatedForces.clear();
-    for (GDBoidAffector* boid : boids)
+    auto physics = PhysicsServer::get_singleton();
+    for (size_t i = 0; i < boids.size(); i++)
     {
-        auto physics = PhysicsServer::get_singleton();
-        if (boid->bodyNode.is_empty() || physics->body_get_mode(boid->body) != PhysicsServer::BodyMode::BODY_MODE_RIGID) return;
+        GDBoidAffector* boid = boids[i];
+        if (boid->bodyNode.is_empty() || physics->body_get_mode(boid->body) != PhysicsServer::BodyMode::BODY_MODE_RIGID) continue;
         Vector3 pos = boid->get_global_transform().origin;
         for (GDBoidAffector* other : boids) // TODO: Spatial partitioning
         {

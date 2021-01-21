@@ -8,6 +8,8 @@ var spawn_offset = -0.4
 var angle_offset = spawn_offset
 var spawn_height = 0.0
 var height_offset = spawn_height
+var ground
+var baby_prefab = preload("res://baby.tscn")
 
 func _on_babybox_button_down():
 	isDragging = true
@@ -27,6 +29,11 @@ func _input(event):
 				get_node("/root/nodes/gameplay/hill/banner").set_spin_enabled(true)
 				angle_offset = spawn_offset 
 				height_offset = spawn_height
+				$"../purchase".play()
+				for i in range(0, 10):
+					var baby = baby_prefab.instance()
+					get_node("/root/nodes/gameplay/hill").add_child(baby)
+					baby.set_translation(ground.position + ground.normal * i)
 				drop.queue_free()
 		if event is InputEventMouseMotion:
 			angle_offset -= event.relative.x * 0.003
@@ -38,7 +45,7 @@ func _physics_process(delta):
 		var y_pos = banner.get_y_pos() + height_offset
 		var angle = banner.get_angle() + angle_offset
 		var rotation = Vector3(banner.get_radius() * cos(angle), y_pos, banner.get_radius() * sin(angle))
-		var ground = get_node("/root/nodes/gameplay/hill").get_world().get_direct_space_state().intersect_ray(rotation, Vector3(0.0, y_pos, 0.0))
+		ground = get_node("/root/nodes/gameplay/hill").get_world().get_direct_space_state().intersect_ray(rotation, Vector3(0.0, y_pos, 0.0))
 		if not ground.empty():
 			if ground.collider == null:
 				var rot_offset = rotation

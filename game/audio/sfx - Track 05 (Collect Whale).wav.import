@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/sfx - Track 05 (Collect Whale).wav-debe445181d91f1c43ac0a1a2e8d406d.sample"
+
+[deps]
+
+source_file="res://audio/sfx - Track 05 (Collect Whale).wav"
+dest_files=[ "res://.import/sfx - Track 05 (Collect Whale).wav-debe445181d91f1c43ac0a1a2e8d406d.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

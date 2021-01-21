@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/sfx - Track 04 (Collect Coin).wav-d3098c9ab1f1739d226f715138539a9a.sample"
+
+[deps]
+
+source_file="res://audio/sfx - Track 04 (Collect Coin).wav"
+dest_files=[ "res://.import/sfx - Track 04 (Collect Coin).wav-d3098c9ab1f1739d226f715138539a9a.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/sfx - Track 14 (Sqomb Attack).wav-f9c319db0742e7dfd504eca0040a6a0b.sample"
+
+[deps]
+
+source_file="res://audio/sfx - Track 14 (Sqomb Attack).wav"
+dest_files=[ "res://.import/sfx - Track 14 (Sqomb Attack).wav-f9c319db0742e7dfd504eca0040a6a0b.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

@@ -6,6 +6,7 @@ var ready_to_start = false
 var indicate_start = false
 var gameplay_prefab = preload("res://gameplay.tscn")
 var hud_prefab = preload("res://hud.tscn")
+var game_started = false
 
 func _ready():
 #	thread = Thread.new()
@@ -20,17 +21,19 @@ func start_game():
 	if ready_to_start:
 		begin_game()
 		
-func _process(delta):
-	if indicate_start:
-		if ready_to_start:
-			begin_game()
+#func _process(delta):
+#	if indicate_start:
+#		if ready_to_start:
+#			begin_game()
 
 func _input(event):
-	if event is InputEventMouseButton:
-		if event.pressed:
-			begin_game()
+	if not game_started:
+		if event is InputEventMouseButton:
+			if event.pressed:
+				begin_game()
 	
 func begin_game():
+	game_started = true
 	print("Begin game!")
 	indicate_start = false
 #	$"../title_ost".stop()

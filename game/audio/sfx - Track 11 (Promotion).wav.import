@@ -1,0 +1,21 @@
+[remap]
+
+importer="wav"
+type="AudioStreamSample"
+path="res://.import/sfx - Track 11 (Promotion).wav-bc2feb34370f0a277f0b42aa4f27eff8.sample"
+
+[deps]
+
+source_file="res://audio/sfx - Track 11 (Promotion).wav"
+dest_files=[ "res://.import/sfx - Track 11 (Promotion).wav-bc2feb34370f0a277f0b42aa4f27eff8.sample" ]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop=false
+compress/mode=0

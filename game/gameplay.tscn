@@ -3,7 +3,7 @@
 [ext_resource path="res://bin/banner.gdns" type="Script" id=1]
 [ext_resource path="res://sunset_env.tres" type="Environment" id=2]
 [ext_resource path="res://follow_hill.gd" type="Script" id=3]
-[ext_resource path="res://ui/baby.tscn" type="PackedScene" id=4]
+[ext_resource path="res://baby.tscn" type="PackedScene" id=4]
 [ext_resource path="res://bin/boid_field.gdns" type="Script" id=5]
 [ext_resource path="res://peak_rotator.gd" type="Script" id=6]
 [ext_resource path="res://bin/arc_proc_hill.gdns" type="Script" id=18]
@@ -25,51 +25,6 @@ amplitude = 20.0
 "Despawn Distance" = 400.0
 
 [node name="baby" parent="hill" instance=ExtResource( 4 )]
-
-[node name="baby2" parent="hill" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 9.1436, 0, 8.57554 )
-
-[node name="baby3" parent="hill" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -20.2243, 0, 0 )
-
-[node name="baby4" parent="hill" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -3.7648 )
-
-[node name="baby9" parent="hill" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -0.400316, 3.8147e-06, -8.98792 )
-
-[node name="baby10" parent="hill" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 5.32146, 3.8147e-06, -4.42557 )
-
-[node name="baby11" parent="hill" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 6.87346, 0, -11.5735 )
-
-[node name="baby12" parent="hill" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.625594, -7.62939e-06, -15.6389 )
-
-[node name="baby13" parent="hill" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.7601, -7.62939e-06, -2.4567 )
-
-[node name="baby14" parent="hill" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 1.27723, -1.14441e-05, 7.30148 )
-
-[node name="baby15" parent="hill" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 4.77867, -1.14441e-05, 4.88314 )
-
-[node name="baby16" parent="hill" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 13.7124, -1.14441e-05, -17.098 )
-
-[node name="baby5" parent="hill" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -10.146, 0, 4.85897 )
-
-[node name="baby6" parent="hill" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -12.9626, 0, -8.42076 )
-
-[node name="baby7" parent="hill" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.37111, -3.8147e-06, -12.5963 )
-
-[node name="baby8" parent="hill" instance=ExtResource( 4 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, -7.37111, -3.8147e-06, -12.5963 )
 
 [node name="banner" type="Spatial" parent="hill"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0 )

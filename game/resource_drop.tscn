@@ -1,0 +1,13 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://resource_drop.gd" type="Script" id=1]
+[ext_resource path="res://coin_drop.png" type="Texture" id=2]
+
+[node name="drop" type="RigidBody2D"]
+linear_velocity = Vector2( 50, -150 )
+script = ExtResource( 1 )
+interpolate_time = 3.0
+attractor_force = 1200.0
+
+[node name="pine" type="Sprite" parent="."]
+texture = ExtResource( 2 )

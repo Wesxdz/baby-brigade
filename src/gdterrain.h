@@ -35,6 +35,7 @@ private:
 	FastNoiseLite noiseGen;
 	Ref<Material> snowMaterial;
 	Ref<PackedScene> tree_prefab;
+	Ref<PackedScene> coin_prefab;
 	std::list<Arcsegment> arcs;
 	float nextArcY = -50.0f;
 	Spatial* target;
