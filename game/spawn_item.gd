@@ -10,6 +10,7 @@ var spawn_height = 0.0
 var height_offset = spawn_height
 var ground
 var baby_prefab = preload("res://baby.tscn")
+var smoke_fx = preload("res://smoke_fx.tscn")
 
 func _on_babybox_button_down():
 	isDragging = true
@@ -30,7 +31,11 @@ func _input(event):
 				angle_offset = spawn_offset 
 				height_offset = spawn_height
 				$"../purchase".play()
-				for i in range(0, 10):
+				var smoke = smoke_fx.instance()
+				smoke.position = get_viewport().get_camera().unproject_position(ground.position)
+				get_node("/root/nodes/hud").add_child(smoke)
+				smoke.emitting = true
+				for i in range(0, 1):
 					var baby = baby_prefab.instance()
 					get_node("/root/nodes/gameplay/hill").add_child(baby)
 					baby.set_translation(ground.position + ground.normal * i)

@@ -1,0 +1,43 @@
+[gd_scene load_steps=7 format=2]
+
+[ext_resource path="res://smoke.png" type="Texture" id=1]
+[ext_resource path="res://smoke_fx.gd" type="Script" id=2]
+
+[sub_resource type="CanvasItemMaterial" id=1]
+particles_animation = true
+particles_anim_h_frames = 4
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Curve" id=2]
+_data = [ Vector2( 0, 0.445455 ), 0.0, -0.735873, 0, 0, Vector2( 0.275459, 0.554545 ), 1.76977, 1.76977, 0, 0, Vector2( 1, 1 ), 2.48597, 0.0, 0, 0 ]
+
+[sub_resource type="Gradient" id=3]
+offsets = PoolRealArray( 0, 0.0520833, 0.454861, 0.746528 )
+colors = PoolColorArray( 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 )
+
+[sub_resource type="Curve" id=4]
+max_value = 200.0
+_data = [ Vector2( 0, 0 ), 0.0, 0.0, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
+
+[node name="smoke_fx" type="CPUParticles2D"]
+material = SubResource( 1 )
+emitting = false
+amount = 4
+one_shot = true
+explosiveness = 0.9
+texture = ExtResource( 1 )
+emission_shape = 1
+emission_sphere_radius = 10.0
+direction = Vector2( 0, -1 )
+spread = 49.39
+gravity = Vector2( 0, -200 )
+initial_velocity = 116.96
+initial_velocity_random = 1.0
+angular_velocity = 155.8
+scale_amount = 2.0
+scale_amount_curve = SubResource( 2 )
+color_ramp = SubResource( 3 )
+anim_speed = 1.5
+anim_speed_curve = SubResource( 4 )
+script = ExtResource( 2 )

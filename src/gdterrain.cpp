@@ -227,14 +227,14 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
             Object::cast_to<GDBoidAffector>(tree->get_node("boid_repel"))->radius *= size;
             props.push_back(tree);
         }
-            if (((int)(noise * 15000)) % 800 == 1)
-        {
-            Spatial* coin = Object::cast_to<Spatial>(coin_prefab->instance());
-            coin->rotate_z(-Math_PI/2.0);
-            coin->rotate_y(-radians);
-            coin->set_translation(vert);
-            props.push_back(coin);
-        }
+        //     if (((int)(noise * 15000)) % 800 == 1)
+        // {
+        //     Spatial* coin = Object::cast_to<Spatial>(coin_prefab->instance());
+        //     coin->rotate_z(-Math_PI/2.0);
+        //     coin->rotate_y(-radians);
+        //     coin->set_translation(vert);
+        //     props.push_back(coin);
+        // }
         arc_progress += degrees_per_quad;
         if (arc_progress > degrees) arc_progress = 0.0f;
     }

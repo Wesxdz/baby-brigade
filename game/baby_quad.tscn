@@ -1,17 +1,18 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://baby_quad_mat.tres" type="Material" id=1]
 [ext_resource path="res://baby_quad.gd" type="Script" id=2]
 [ext_resource path="res://baby-shadow.png" type="Texture" id=3]
+[ext_resource path="res://lumberjack-walk.tres" type="Material" id=4]
 
-[sub_resource type="QuadMesh" id=2]
+[sub_resource type="QuadMesh" id=1]
 size = Vector2( 11, 11 )
 
-[sub_resource type="QuadMesh" id=3]
+[sub_resource type="QuadMesh" id=2]
 resource_local_to_scene = true
 size = Vector2( 11, 11 )
 
-[sub_resource type="SpatialMaterial" id=4]
+[sub_resource type="SpatialMaterial" id=3]
 flags_transparent = true
 flags_unshaded = true
 params_billboard_mode = 1
@@ -20,11 +21,18 @@ albedo_texture = ExtResource( 3 )
 [node name="baby_quad" type="MeshInstance"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.14962, 0 )
 material_override = ExtResource( 1 )
-mesh = SubResource( 2 )
+mesh = SubResource( 1 )
 material/0 = null
 script = ExtResource( 2 )
 
+[node name="career" type="MeshInstance" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.01 )
+visible = false
+material_override = ExtResource( 4 )
+mesh = SubResource( 1 )
+material/0 = null
+
 [node name="shadow" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0669785, -0.107386 )
-mesh = SubResource( 3 )
-material/0 = SubResource( 4 )
+mesh = SubResource( 2 )
+material/0 = SubResource( 3 )

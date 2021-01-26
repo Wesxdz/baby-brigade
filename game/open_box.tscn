@@ -1,22 +1,16 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=2 format=2]
 
-[ext_resource path="res://smoke_mat.tres" type="Material" id=1]
+[sub_resource type="SpatialMaterial" id=1]
 
-[sub_resource type="ParticlesMaterial" id=1]
+[node name="open_box" type="CPUParticles"]
+material_override = SubResource( 1 )
+emitting = false
+amount = 4
+lifetime = 0.5
+one_shot = true
 emission_shape = 2
 emission_box_extents = Vector3( 8, 8, 8 )
 direction = Vector3( 0, 1, 0 )
 gravity = Vector3( 0, 0, 0 )
 initial_velocity = 10.0
 initial_velocity_random = 1.0
-
-[sub_resource type="QuadMesh" id=2]
-material = ExtResource( 1 )
-size = Vector2( 11, 11 )
-
-[node name="open_box" type="Particles"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0.159558, -0.0706779, 0.109792 )
-amount = 4
-lifetime = 0.5
-process_material = SubResource( 1 )
-draw_pass_1 = SubResource( 2 )

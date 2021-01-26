@@ -7,6 +7,6 @@
 [resource]
 resource_local_to_scene = true
 shader = ExtResource( 2 )
-shader_param/v_map = 0.5
+shader_param/v_map = 0.4
 shader_param/image = ExtResource( 3 )
 shader_param/palette = ExtResource( 1 )

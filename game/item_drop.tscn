@@ -1,6 +1,6 @@
 [gd_scene load_steps=7 format=2]
 
-[ext_resource path="res://amazon-box.png" type="Texture" id=1]
+[ext_resource path="res://babybox.png" type="Texture" id=1]
 [ext_resource path="res://fall_mat.tres" type="Material" id=2]
 [ext_resource path="res://fall_path.tscn" type="PackedScene" id=3]
 

@@ -10,13 +10,16 @@ ground_horizon_color = Color( 0.490196, 0.176471, 0.627451, 1 )
 ground_curve = 0.3091
 
 [resource]
-background_mode = 2
+background_mode = 1
 background_sky = SubResource( 1 )
+background_color = Color( 0.0617981, 0.878906, 0.725698, 1 )
 fog_color = Color( 1, 1, 1, 1 )
 fog_depth_begin = 400.0
 fog_depth_end = 700.0
 ssao_radius = 39.73
 ssao_intensity = 128.0
-dof_blur_far_distance = 500.0
+dof_blur_far_distance = 600.0
 dof_blur_far_transition = 100.0
+dof_blur_near_distance = 420.0
+dof_blur_near_transition = 50.0
 glow_intensity = 6.72

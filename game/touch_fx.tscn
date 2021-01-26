@@ -1,0 +1,41 @@
+[gd_scene load_steps=5 format=2]
+
+[ext_resource path="res://shine_spritesheet.png" type="Texture" id=1]
+
+[sub_resource type="CanvasItemMaterial" id=1]
+blend_mode = 1
+light_mode = 1
+particles_animation = true
+particles_anim_h_frames = 8
+particles_anim_v_frames = 1
+particles_anim_loop = false
+
+[sub_resource type="Gradient" id=2]
+offsets = PoolRealArray( 0.00347222, 0.217014, 0.427083, 1 )
+colors = PoolColorArray( 1, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 )
+
+[sub_resource type="Curve" id=3]
+_data = [ Vector2( 0, 0.463636 ), 0.0, 1.4, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
+
+[node name="shine" type="CPUParticles2D"]
+modulate = Color( 0.988235, 0.937255, 0.552941, 1 )
+light_mask = -2147483647
+material = SubResource( 1 )
+amount = 5
+local_coords = false
+texture = ExtResource( 1 )
+emission_shape = 1
+emission_sphere_radius = 1.0
+spread = 180.0
+gravity = Vector2( 0, 0 )
+initial_velocity = 150.0
+angular_velocity = -18.88
+angular_velocity_random = 1.0
+damping = 84.59
+angle = 0.4
+angle_random = 1.0
+scale_amount = 6.0
+color_ramp = SubResource( 2 )
+anim_speed = 0.3
+anim_speed_random = 0.1
+anim_speed_curve = SubResource( 3 )

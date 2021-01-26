@@ -1,4 +1,4 @@
-[gd_scene load_steps=27 format=2]
+[gd_scene load_steps=49 format=2]
 
 [ext_resource path="res://TenStamps.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://exit_gameplay.gd" type="Script" id=2]
@@ -17,10 +17,21 @@
 [ext_resource path="res://audio/sfx - Track 05 (Collect Whale).wav" type="AudioStream" id=15]
 [ext_resource path="res://resource.gd" type="Script" id=16]
 [ext_resource path="res://audio/sfx - Track 09 (Buy Amazon Box).wav" type="AudioStream" id=17]
+[ext_resource path="res://mobile_fx.gd" type="Script" id=18]
+[ext_resource path="res://circle-large.png" type="Texture" id=19]
+[ext_resource path="res://inventory_dot.png" type="Texture" id=20]
+[ext_resource path="res://babybox.png" type="Texture" id=21]
+[ext_resource path="res://background.gd" type="Script" id=22]
+[ext_resource path="res://smoke-palette.png" type="Texture" id=23]
+[ext_resource path="res://metaballs/assets/textures/gradient_linear.png" type="Texture" id=24]
+[ext_resource path="res://metaballs/assets/shaders/metaball.shader" type="Shader" id=25]
+[ext_resource path="res://metaballs_viewport.gd" type="Script" id=26]
+[ext_resource path="res://metaballs/assets/textures/fire_gradient.png" type="Texture" id=27]
+[ext_resource path="res://matrix_navigation.gd" type="Script" id=28]
+[ext_resource path="res://circle-med.png" type="Texture" id=29]
+[ext_resource path="res://asmr/pop-short.wav" type="AudioStream" id=30]
 
-[sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0.690196, 0.196078, 0.160784, 1 )
-corner_detail = 1
+[sub_resource type="StyleBoxEmpty" id=1]
 
 [sub_resource type="StyleBoxEmpty" id=2]
 
@@ -30,20 +41,49 @@ corner_detail = 1
 
 [sub_resource type="StyleBoxEmpty" id=5]
 
-[sub_resource type="StyleBoxEmpty" id=6]
-
-[sub_resource type="StyleBoxFlat" id=7]
+[sub_resource type="StyleBoxFlat" id=6]
 bg_color = Color( 0.121569, 0.0627451, 0.164706, 1 )
 corner_detail = 1
+
+[sub_resource type="StyleBoxEmpty" id=7]
 
 [sub_resource type="StyleBoxEmpty" id=8]
 
 [sub_resource type="DynamicFont" id=9]
 font_data = ExtResource( 1 )
 
+[sub_resource type="StyleBoxEmpty" id=10]
+
+[sub_resource type="Curve" id=11]
+_data = [ Vector2( 0, 0.318182 ), 0.0, 3.24134, 0, 0, Vector2( 0.447412, 0.754545 ), 0.0, 0.0, 0, 0, Vector2( 0.786311, 0.563636 ), 1.81515, 1.81515, 0, 0, Vector2( 1, 0 ), 0.0, 0.0, 0, 0 ]
+
+[sub_resource type="Gradient" id=12]
+offsets = PoolRealArray( 0, 0.789552, 1 )
+colors = PoolColorArray( 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0 )
+
+[sub_resource type="ShaderMaterial" id=13]
+shader = ExtResource( 25 )
+shader_param/gradient = ExtResource( 23 )
+
+[sub_resource type="ViewportTexture" id=14]
+viewport_path = NodePath("smoke/viewport")
+
+[sub_resource type="ShaderMaterial" id=15]
+shader = ExtResource( 25 )
+shader_param/gradient = ExtResource( 27 )
+
+[sub_resource type="ViewportTexture" id=16]
+viewport_path = NodePath("select/viewport")
+
+[sub_resource type="StyleBoxEmpty" id=17]
+
+[sub_resource type="AudioStreamRandomPitch" id=18]
+audio_stream = ExtResource( 30 )
+
 [node name="hud" type="Control"]
-margin_right = 393.0
-margin_bottom = 786.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 1
 script = ExtResource( 13 )
 __meta__ = {
 "_edit_use_anchors_": false
@@ -63,25 +103,22 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="recipe" type="Panel" parent="."]
+[node name="recipe" type="TextureRect" parent="."]
+visible = false
 anchor_left = 1.0
-anchor_top = 0.5
+anchor_top = 0.3
 anchor_right = 1.0
-anchor_bottom = 0.5
-margin_left = -40.0
-margin_bottom = 40.0
+anchor_bottom = 0.3
+margin_right = 16.0
 grow_horizontal = 0
 rect_pivot_offset = Vector2( 40, 20 )
-custom_styles/panel = SubResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
+texture = ExtResource( 19 )
 
 [node name="babybox" type="TextureButton" parent="recipe"]
-margin_left = 2.0
-margin_top = 2.0
-margin_right = 38.0
-margin_bottom = 38.0
+margin_left = 14.9381
+margin_top = 21.1913
+margin_right = 36.9381
+margin_bottom = 43.1913
 mouse_default_cursor_shape = 2
 texture_normal = ExtResource( 11 )
 expand = true
@@ -103,7 +140,7 @@ margin_left = -64.0
 margin_top = -64.0
 margin_right = 64.0
 margin_bottom = 64.0
-custom_styles/panel = SubResource( 2 )
+custom_styles/panel = SubResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -131,10 +168,10 @@ __meta__ = {
 margin_right = 36.0
 margin_bottom = 36.0
 mouse_default_cursor_shape = 2
-custom_styles/hover = SubResource( 3 )
-custom_styles/pressed = SubResource( 4 )
-custom_styles/focus = SubResource( 5 )
-custom_styles/normal = SubResource( 6 )
+custom_styles/hover = SubResource( 2 )
+custom_styles/pressed = SubResource( 3 )
+custom_styles/focus = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )
 icon = ExtResource( 7 )
 script = ExtResource( 2 )
 __meta__ = {
@@ -146,10 +183,10 @@ margin_left = 40.0
 margin_right = 76.0
 margin_bottom = 36.0
 mouse_default_cursor_shape = 2
-custom_styles/hover = SubResource( 3 )
-custom_styles/pressed = SubResource( 4 )
-custom_styles/focus = SubResource( 5 )
-custom_styles/normal = SubResource( 6 )
+custom_styles/hover = SubResource( 2 )
+custom_styles/pressed = SubResource( 3 )
+custom_styles/focus = SubResource( 4 )
+custom_styles/normal = SubResource( 5 )
 icon = ExtResource( 8 )
 script = ExtResource( 3 )
 __meta__ = {
@@ -157,15 +194,28 @@ __meta__ = {
 }
 
 [node name="top" type="Panel" parent="."]
+visible = false
 anchor_right = 1.0
-margin_right = 3.05176e-05
-margin_bottom = 64.0
+margin_left = -0.667419
+margin_top = -0.667427
+margin_right = -0.667389
+margin_bottom = 63.3326
+size_flags_horizontal = 2
+custom_styles/panel = SubResource( 6 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="left" type="Panel" parent="top"]
+anchor_right = 0.4
+anchor_bottom = 1.0
+grow_horizontal = 0
 custom_styles/panel = SubResource( 7 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="asmrcoin" type="Panel" parent="top"]
+[node name="asmrcoin" type="Panel" parent="top/left"]
 margin_left = 8.153
 margin_top = 20.0
 margin_right = 104.154
@@ -176,14 +226,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="icon" type="TextureRect" parent="top/asmrcoin"]
+[node name="icon" type="TextureRect" parent="top/left/asmrcoin"]
 rect_pivot_offset = Vector2( 16, 16 )
 texture = ExtResource( 4 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="count" type="RichTextLabel" parent="top/asmrcoin"]
+[node name="count" type="RichTextLabel" parent="top/left/asmrcoin"]
 margin_left = 30.4447
 margin_top = 7.11457
 margin_right = 87.4446
@@ -196,10 +246,10 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="collect" type="AudioStreamPlayer" parent="top/asmrcoin"]
+[node name="collect" type="AudioStreamPlayer" parent="top/left/asmrcoin"]
 stream = ExtResource( 15 )
 
-[node name="pinewood" type="Panel" parent="top"]
+[node name="pinewood" type="Panel" parent="top/left"]
 margin_left = 87.423
 margin_top = 8.0
 margin_right = 183.424
@@ -209,17 +259,17 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="icon" type="TextureRect" parent="top/pinewood"]
+[node name="icon" type="TextureRect" parent="top/left/pinewood"]
 texture = ExtResource( 9 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="count" type="RichTextLabel" parent="top/pinewood"]
-margin_left = 30.4447
-margin_top = 7.11457
-margin_right = 87.4446
-margin_bottom = 27.1146
+[node name="count" type="RichTextLabel" parent="top/left/pinewood"]
+margin_left = 31.1939
+margin_top = 6.36542
+margin_right = 88.1938
+margin_bottom = 26.3654
 rect_clip_content = false
 custom_fonts/normal_font = SubResource( 9 )
 custom_colors/default_color = Color( 0.756863, 0.4, 0.160784, 1 )
@@ -228,10 +278,21 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="moonstone" type="Panel" parent="top"]
-margin_left = 214.531
+[node name="right" type="Panel" parent="top"]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_left = -180.0
+rect_pivot_offset = Vector2( 180, 32 )
+custom_styles/panel = SubResource( 10 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="moonstone" type="Panel" parent="top/right"]
+margin_left = 12.1244
 margin_top = 8.0
-margin_right = 310.532
+margin_right = 108.125
 margin_bottom = 40.0
 rect_pivot_offset = Vector2( 48.6145, 12.0236 )
 custom_styles/panel = SubResource( 8 )
@@ -239,13 +300,13 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="icon" type="TextureRect" parent="top/moonstone"]
+[node name="icon" type="TextureRect" parent="top/right/moonstone"]
 texture = ExtResource( 10 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="count" type="RichTextLabel" parent="top/moonstone"]
+[node name="count" type="RichTextLabel" parent="top/right/moonstone"]
 margin_left = 30.4447
 margin_top = 7.11457
 margin_right = 87.4446
@@ -258,23 +319,23 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="redwhales" type="Panel" parent="top"]
-margin_left = 297.439
+[node name="redwhales" type="Panel" parent="top/right"]
+margin_left = 95.0323
 margin_top = 20.0
-margin_right = 393.44
+margin_right = 191.033
 margin_bottom = 52.0
 custom_styles/panel = SubResource( 8 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="icon" type="TextureRect" parent="top/redwhales"]
+[node name="icon" type="TextureRect" parent="top/right/redwhales"]
 texture = ExtResource( 14 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="count" type="RichTextLabel" parent="top/redwhales"]
+[node name="count" type="RichTextLabel" parent="top/right/redwhales"]
 margin_left = 30.4447
 margin_top = 7.11457
 margin_right = 87.4446
@@ -286,6 +347,247 @@ text = "000"
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="fx" type="Node" parent="."]
+script = ExtResource( 18 )
+
+[node name="smoke" type="Control" parent="."]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="viewport" type="Viewport" parent="smoke"]
+size = Vector2( 393, 786 )
+render_target_v_flip = true
+script = ExtResource( 26 )
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="smoke/viewport"]
+position = Vector2( 196, 393 )
+emitting = false
+amount = 128
+texture = ExtResource( 24 )
+emission_shape = 4
+emission_points = PoolVector2Array( 0, 0 )
+emission_normals = PoolVector2Array( 0, 1 )
+emission_colors = PoolColorArray(  )
+spread = 180.0
+gravity = Vector2( 0, -100 )
+initial_velocity = 1000.0
+initial_velocity_random = 1.0
+tangential_accel = 10.0
+tangential_accel_random = 0.2
+scale_amount = 0.3
+scale_amount_random = 0.2
+scale_amount_curve = SubResource( 11 )
+color_ramp = SubResource( 12 )
+
+[node name="background" type="ColorRect" parent="smoke"]
+anchor_top = 0.7
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -0.200012
+mouse_filter = 2
+color = Color( 0.121569, 0.0627451, 0.164706, 1 )
+script = ExtResource( 22 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="render" type="TextureRect" parent="smoke"]
+material = SubResource( 13 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = SubResource( 14 )
+expand = true
+stretch_mode = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="select" type="Control" parent="."]
+visible = false
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="viewport" type="Viewport" parent="select"]
+size = Vector2( 393, 786 )
+render_target_v_flip = true
+script = ExtResource( 26 )
+
+[node name="CPUParticles2D" type="CPUParticles2D" parent="select/viewport"]
+position = Vector2( 100, 200 )
+amount = 15
+texture = ExtResource( 24 )
+emission_shape = 4
+emission_points = PoolVector2Array( 0, 0 )
+emission_normals = PoolVector2Array( 0, 1 )
+emission_colors = PoolColorArray(  )
+spread = 180.0
+gravity = Vector2( 0, 0 )
+initial_velocity = 10.0
+initial_velocity_random = 1.0
+tangential_accel = 10.0
+tangential_accel_random = 0.2
+scale_amount = 0.3
+scale_amount_random = 0.2
+color_ramp = SubResource( 12 )
+
+[node name="render" type="TextureRect" parent="select"]
+material = SubResource( 15 )
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = SubResource( 16 )
+expand = true
+stretch_mode = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="canvas" type="CanvasLayer" parent="."]
+layer = 10
+
+[node name="matrix" type="Control" parent="canvas"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="work" type="Control" parent="canvas/matrix"]
+anchor_top = 0.7
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = -0.200012
+mouse_filter = 1
+
+[node name="zone" type="Panel" parent="canvas/matrix/work"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+margin_top = 0.793701
+margin_bottom = 0.793701
+rect_clip_content = true
+mouse_filter = 1
+custom_styles/panel = SubResource( 17 )
+script = ExtResource( 28 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="selection" type="TextureRect" parent="canvas/matrix/work/zone"]
+anchor_left = 0.5
+anchor_top = 0.4
+anchor_right = 0.5
+anchor_bottom = 0.4
+margin_left = -16.0
+margin_top = -16.7937
+margin_right = 16.0
+margin_bottom = 15.2063
+rect_pivot_offset = Vector2( 16, 16 )
+mouse_filter = 2
+mouse_default_cursor_shape = 2
+texture = ExtResource( 29 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="items" type="GridContainer" parent="canvas/matrix/work/zone"]
+anchor_left = 0.5
+anchor_right = 0.5
+margin_left = -16.0
+margin_top = 78.2362
+margin_right = 176.0
+margin_bottom = 142.236
+custom_constants/vseparation = 0
+custom_constants/hseparation = 0
+columns = 6
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="item" type="TextureRect" parent="canvas/matrix/work/zone/items"]
+margin_right = 32.0
+margin_bottom = 32.0
+rect_pivot_offset = Vector2( 16, 16 )
+texture = ExtResource( 21 )
+
+[node name="item2" type="TextureRect" parent="canvas/matrix/work/zone/items"]
+margin_left = 32.0
+margin_right = 64.0
+margin_bottom = 32.0
+rect_pivot_offset = Vector2( 16, 16 )
+texture = ExtResource( 4 )
+
+[node name="item3" type="TextureRect" parent="canvas/matrix/work/zone/items"]
+margin_left = 64.0
+margin_right = 96.0
+margin_bottom = 32.0
+rect_pivot_offset = Vector2( 16, 16 )
+texture = ExtResource( 9 )
+
+[node name="item4" type="TextureRect" parent="canvas/matrix/work/zone/items"]
+margin_left = 96.0
+margin_right = 128.0
+margin_bottom = 32.0
+rect_pivot_offset = Vector2( 16, 16 )
+texture = ExtResource( 20 )
+
+[node name="item5" type="TextureRect" parent="canvas/matrix/work/zone/items"]
+margin_left = 128.0
+margin_right = 160.0
+margin_bottom = 32.0
+rect_pivot_offset = Vector2( 16, 16 )
+texture = ExtResource( 20 )
+
+[node name="item6" type="TextureRect" parent="canvas/matrix/work/zone/items"]
+margin_left = 160.0
+margin_right = 192.0
+margin_bottom = 32.0
+rect_pivot_offset = Vector2( 16, 16 )
+texture = ExtResource( 20 )
+
+[node name="item7" type="TextureRect" parent="canvas/matrix/work/zone/items"]
+margin_top = 32.0
+margin_right = 32.0
+margin_bottom = 64.0
+rect_pivot_offset = Vector2( 16, 16 )
+texture = ExtResource( 20 )
+
+[node name="item8" type="TextureRect" parent="canvas/matrix/work/zone/items"]
+margin_left = 32.0
+margin_top = 32.0
+margin_right = 64.0
+margin_bottom = 64.0
+rect_pivot_offset = Vector2( 16, 16 )
+texture = ExtResource( 20 )
+
+[node name="item9" type="TextureRect" parent="canvas/matrix/work/zone/items"]
+margin_left = 64.0
+margin_top = 32.0
+margin_right = 96.0
+margin_bottom = 64.0
+rect_pivot_offset = Vector2( 16, 16 )
+texture = ExtResource( 20 )
+
+[node name="items_target" type="Control" parent="canvas/matrix/work/zone"]
+margin_left = 180.5
+margin_top = 77.606
+margin_right = 180.5
+margin_bottom = 77.606
+
+[node name="pop" type="AudioStreamPlayer" parent="canvas/matrix/work/zone"]
+stream = SubResource( 18 )
+volume_db = -10.0
+pitch_scale = 1.3
 [connection signal="button_down" from="recipe/babybox" to="recipe/babybox" method="_on_babybox_button_down"]
 [connection signal="pressed" from="end_panel/box/exit" to="end_panel/box/exit" method="_on_exit_pressed"]
 [connection signal="pressed" from="end_panel/box/replay" to="end_panel/box/replay" method="_on_replay_pressed"]

@@ -21,8 +21,8 @@ environment = ExtResource( 2 )
 [node name="terrain" type="Spatial" parent="hill"]
 script = ExtResource( 18 )
 amplitude = 20.0
-"Spawn Distance" = 400.0
-"Despawn Distance" = 400.0
+"Spawn Distance" = 200.0
+"Despawn Distance" = 600.0
 
 [node name="baby" parent="hill" instance=ExtResource( 4 )]
 
@@ -41,7 +41,7 @@ banner = NodePath("../banner")
 script = ExtResource( 6 )
 
 [node name="cam" type="Camera" parent="hill/target/peak_rotator"]
-transform = Transform( 1, 0, 0, 0, 0.5, -0.866025, 0, 0.866025, 0.5, 0, -400, 200 )
+transform = Transform( 1, 0, 0, 0, 0.553014, -0.833172, 0, 0.833172, 0.553014, -0.0707245, -373.474, 199.989 )
 keep_aspect = 0
 fov = 15.0
 near = 1.0
