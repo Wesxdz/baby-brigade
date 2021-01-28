@@ -1,4 +1,4 @@
-[gd_scene load_steps=49 format=2]
+[gd_scene load_steps=51 format=2]
 
 [ext_resource path="res://TenStamps.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://exit_gameplay.gd" type="Script" id=2]
@@ -21,7 +21,7 @@
 [ext_resource path="res://circle-large.png" type="Texture" id=19]
 [ext_resource path="res://inventory_dot.png" type="Texture" id=20]
 [ext_resource path="res://babybox.png" type="Texture" id=21]
-[ext_resource path="res://background.gd" type="Script" id=22]
+[ext_resource path="res://sword.png" type="Texture" id=22]
 [ext_resource path="res://smoke-palette.png" type="Texture" id=23]
 [ext_resource path="res://metaballs/assets/textures/gradient_linear.png" type="Texture" id=24]
 [ext_resource path="res://metaballs/assets/shaders/metaball.shader" type="Shader" id=25]
@@ -30,6 +30,8 @@
 [ext_resource path="res://matrix_navigation.gd" type="Script" id=28]
 [ext_resource path="res://circle-med.png" type="Texture" id=29]
 [ext_resource path="res://asmr/pop-short.wav" type="AudioStream" id=30]
+[ext_resource path="res://pick.png" type="Texture" id=31]
+[ext_resource path="res://axe.png" type="Texture" id=32]
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
@@ -365,6 +367,7 @@ render_target_v_flip = true
 script = ExtResource( 26 )
 
 [node name="CPUParticles2D" type="CPUParticles2D" parent="smoke/viewport"]
+visible = false
 position = Vector2( 196, 393 )
 emitting = false
 amount = 128
@@ -391,7 +394,6 @@ anchor_bottom = 1.0
 margin_top = -0.200012
 mouse_filter = 2
 color = Color( 0.121569, 0.0627451, 0.164706, 1 )
-script = ExtResource( 22 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -469,6 +471,9 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 margin_top = -0.200012
 mouse_filter = 1
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="zone" type="Panel" parent="canvas/matrix/work"]
 anchor_right = 1.0
@@ -496,6 +501,22 @@ rect_pivot_offset = Vector2( 16, 16 )
 mouse_filter = 2
 mouse_default_cursor_shape = 2
 texture = ExtResource( 29 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="items_target" type="Control" parent="canvas/matrix/work/zone"]
+anchor_left = 0.5
+anchor_top = 0.4
+anchor_right = 0.5
+anchor_bottom = 0.4
+margin_left = -16.0
+margin_top = -16.7937
+margin_right = 16.0
+margin_bottom = 15.2063
+rect_pivot_offset = Vector2( 16, 16 )
+mouse_filter = 2
+mouse_default_cursor_shape = 2
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -560,7 +581,7 @@ margin_top = 32.0
 margin_right = 32.0
 margin_bottom = 64.0
 rect_pivot_offset = Vector2( 16, 16 )
-texture = ExtResource( 20 )
+texture = ExtResource( 32 )
 
 [node name="item8" type="TextureRect" parent="canvas/matrix/work/zone/items"]
 margin_left = 32.0
@@ -568,7 +589,7 @@ margin_top = 32.0
 margin_right = 64.0
 margin_bottom = 64.0
 rect_pivot_offset = Vector2( 16, 16 )
-texture = ExtResource( 20 )
+texture = ExtResource( 31 )
 
 [node name="item9" type="TextureRect" parent="canvas/matrix/work/zone/items"]
 margin_left = 64.0
@@ -576,13 +597,7 @@ margin_top = 32.0
 margin_right = 96.0
 margin_bottom = 64.0
 rect_pivot_offset = Vector2( 16, 16 )
-texture = ExtResource( 20 )
-
-[node name="items_target" type="Control" parent="canvas/matrix/work/zone"]
-margin_left = 180.5
-margin_top = 77.606
-margin_right = 180.5
-margin_bottom = 77.606
+texture = ExtResource( 22 )
 
 [node name="pop" type="AudioStreamPlayer" parent="canvas/matrix/work/zone"]
 stream = SubResource( 18 )

@@ -42,10 +42,11 @@ void GDCrowdNav::_physics_process(float delta)
 
 void GDCrowdNav::_integrate_forces(PhysicsDirectBodyState* state)
 {
-    Spatial* banner = Object::cast_to<Spatial>(get_node("/root/nodes/gameplay/hill/banner"));
+    // Spatial* banner = Object::cast_to<Spatial>(get_node("/root/nodes/gameplay/hill/banner"));
     Vector3 pos = state->get_transform().origin;
-    Vector2 orbit = Vector2(pos.x, pos.z).normalized() * 70.0f;
+    Vector2 orbit = Vector2(pos.x, pos.z) + (Vector2(pos.x, pos.z).normalized() * 70.0f);
     Vector3 rotation(orbit.x, pos.y, orbit.y);
+    look_at(Vector3(0.0f, 1.0f, 1.0f), rotation);
     int64_t terrainOnly = 0b00000001;
     Dictionary ground = get_world()->get_direct_space_state()->intersect_ray(rotation, Vector3(0.0f, pos.y, 0.0f), Array(), terrainOnly);
     if (ground.size() > 0)
@@ -54,7 +55,7 @@ void GDCrowdNav::_integrate_forces(PhysicsDirectBodyState* state)
         set_translation(Vector3(groundPos.x, pos.y, groundPos.z));
         // Godot::print(std::to_string(yPos).c_str());
     }
-    set_rotation(banner->get_rotation());
+    // set_rotation(banner->get_rotation());
 }
 
 void GDBoidAffector::set_behavior(int b)

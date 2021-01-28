@@ -12,6 +12,7 @@ func _enter_tree():
 	get_node("/root").connect("size_changed", self, "resize")
 
 func resize():
+	print("resize")
 	set_size(get_node("/root").size)
 	var snap = max(1.0, round(get_rect().size.length()/start_size.length())) + 1
 	hud_scale = Vector2(snap, snap)
