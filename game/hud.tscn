@@ -1,4 +1,4 @@
-[gd_scene load_steps=51 format=2]
+[gd_scene load_steps=66 format=2]
 
 [ext_resource path="res://TenStamps.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://exit_gameplay.gd" type="Script" id=2]
@@ -10,16 +10,12 @@
 [ext_resource path="res://menu/replay.png" type="Texture" id=8]
 [ext_resource path="res://pinewood.png" type="Texture" id=9]
 [ext_resource path="res://moonstone.png" type="Texture" id=10]
-[ext_resource path="res://amazon-box.png" type="Texture" id=11]
-[ext_resource path="res://spawn_item.gd" type="Script" id=12]
 [ext_resource path="res://hud.gd" type="Script" id=13]
 [ext_resource path="res://redwhale.png" type="Texture" id=14]
 [ext_resource path="res://audio/sfx - Track 05 (Collect Whale).wav" type="AudioStream" id=15]
 [ext_resource path="res://resource.gd" type="Script" id=16]
-[ext_resource path="res://audio/sfx - Track 09 (Buy Amazon Box).wav" type="AudioStream" id=17]
 [ext_resource path="res://mobile_fx.gd" type="Script" id=18]
-[ext_resource path="res://circle-large.png" type="Texture" id=19]
-[ext_resource path="res://inventory_dot.png" type="Texture" id=20]
+[ext_resource path="res://stone_axe.png" type="Texture" id=20]
 [ext_resource path="res://babybox.png" type="Texture" id=21]
 [ext_resource path="res://sword.png" type="Texture" id=22]
 [ext_resource path="res://smoke-palette.png" type="Texture" id=23]
@@ -32,6 +28,23 @@
 [ext_resource path="res://asmr/pop-short.wav" type="AudioStream" id=30]
 [ext_resource path="res://pick.png" type="Texture" id=31]
 [ext_resource path="res://axe.png" type="Texture" id=32]
+[ext_resource path="res://stone_pick.png" type="Texture" id=33]
+[ext_resource path="res://stone_sword.png" type="Texture" id=34]
+[ext_resource path="res://ui_rounded_rect.png" type="Texture" id=35]
+[ext_resource path="res://edge.png" type="Texture" id=36]
+[ext_resource path="res://item_selector.gd" type="Script" id=37]
+[ext_resource path="res://storage.gd" type="Script" id=39]
+[ext_resource path="res://item_data.gd" type="Script" id=40]
+[ext_resource path="res://items/babybox.tres" type="Resource" id=41]
+[ext_resource path="res://items/asmrcoin.tres" type="Resource" id=42]
+[ext_resource path="res://items/pinewood.tres" type="Resource" id=43]
+[ext_resource path="res://items/moonstone.tres" type="Resource" id=44]
+[ext_resource path="res://items/wood_pick.tres" type="Resource" id=45]
+[ext_resource path="res://items/wood_sword.tres" type="Resource" id=46]
+[ext_resource path="res://items/stone_sword.tres" type="Resource" id=47]
+[ext_resource path="res://items/wood_axe.tres" type="Resource" id=48]
+[ext_resource path="res://items/stone_pick.tres" type="Resource" id=49]
+[ext_resource path="res://items/stone_axe.tres" type="Resource" id=50]
 
 [sub_resource type="StyleBoxEmpty" id=1]
 
@@ -77,9 +90,15 @@ shader_param/gradient = ExtResource( 27 )
 [sub_resource type="ViewportTexture" id=16]
 viewport_path = NodePath("select/viewport")
 
-[sub_resource type="StyleBoxEmpty" id=17]
+[sub_resource type="CanvasItemMaterial" id=17]
+light_mode = 1
 
-[sub_resource type="AudioStreamRandomPitch" id=18]
+[sub_resource type="DynamicFont" id=18]
+font_data = ExtResource( 1 )
+
+[sub_resource type="StyleBoxEmpty" id=19]
+
+[sub_resource type="AudioStreamRandomPitch" id=20]
 audio_stream = ExtResource( 30 )
 
 [node name="hud" type="Control"]
@@ -104,33 +123,6 @@ text = "000"
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="recipe" type="TextureRect" parent="."]
-visible = false
-anchor_left = 1.0
-anchor_top = 0.3
-anchor_right = 1.0
-anchor_bottom = 0.3
-margin_right = 16.0
-grow_horizontal = 0
-rect_pivot_offset = Vector2( 40, 20 )
-texture = ExtResource( 19 )
-
-[node name="babybox" type="TextureButton" parent="recipe"]
-margin_left = 14.9381
-margin_top = 21.1913
-margin_right = 36.9381
-margin_bottom = 43.1913
-mouse_default_cursor_shape = 2
-texture_normal = ExtResource( 11 )
-expand = true
-script = ExtResource( 12 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="purchase" type="AudioStreamPlayer" parent="recipe"]
-stream = ExtResource( 17 )
 
 [node name="end_panel" type="Panel" parent="."]
 visible = false
@@ -281,6 +273,7 @@ __meta__ = {
 }
 
 [node name="right" type="Panel" parent="top"]
+visible = false
 anchor_left = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -388,6 +381,7 @@ scale_amount_curve = SubResource( 11 )
 color_ramp = SubResource( 12 )
 
 [node name="background" type="ColorRect" parent="smoke"]
+self_modulate = Color( 1, 1, 1, 0.909804 )
 anchor_top = 0.7
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -460,6 +454,10 @@ layer = 10
 [node name="matrix" type="Control" parent="canvas"]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = -0.235977
+margin_top = -0.471924
+margin_right = -0.235962
+margin_bottom = -0.471924
 mouse_filter = 1
 __meta__ = {
 "_edit_use_anchors_": false
@@ -475,18 +473,92 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="popup" type="CanvasLayer" parent="canvas/matrix/work"]
+layer = 20
+
+[node name="center" type="Control" parent="canvas/matrix/work/popup"]
+anchor_left = 0.5
+anchor_top = 0.82
+anchor_right = 0.5
+anchor_bottom = 0.85
+margin_bottom = -14.4
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="storage" type="NinePatchRect" parent="canvas/matrix/work/popup/center"]
+self_modulate = Color( 0.65098, 0.521569, 0.623529, 1 )
+margin_top = -50.0
+margin_right = 44.0
+margin_bottom = -18.0
+texture = ExtResource( 35 )
+patch_margin_left = 16
+patch_margin_top = 16
+patch_margin_right = 16
+patch_margin_bottom = 16
+script = ExtResource( 39 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="cost" type="RichTextLabel" parent="canvas/matrix/work/popup/center/storage"]
+self_modulate = Color( 0.290196, 0.188235, 0.321569, 1 )
+material = SubResource( 17 )
+anchor_right = 1.0
+margin_left = 3.0
+margin_top = 8.0
+margin_right = 3.0
+margin_bottom = 24.0
+rect_clip_content = false
+custom_fonts/normal_font = SubResource( 18 )
+bbcode_enabled = true
+bbcode_text = "[center]0[/center]"
+text = "0"
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="popup" type="TextureRect" parent="canvas/matrix/work/popup/center/storage"]
+modulate = Color( 0.65098, 0.521569, 0.623529, 1 )
+margin_left = 15.8533
+margin_top = 32.4228
+margin_right = 55.8533
+margin_bottom = 72.4228
+texture = ExtResource( 36 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="recipe" type="Control" parent="canvas/matrix/work/popup"]
+anchor_top = 0.7
+anchor_bottom = 0.7
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="work" type="Panel" parent="canvas/matrix/work"]
+anchor_right = 1.0
+anchor_bottom = 1.0
+rect_clip_content = true
+mouse_filter = 1
+custom_styles/panel = SubResource( 19 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
 [node name="zone" type="Panel" parent="canvas/matrix/work"]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_top = 0.793701
-margin_bottom = 0.793701
 rect_clip_content = true
 mouse_filter = 1
-custom_styles/panel = SubResource( 17 )
+custom_styles/panel = SubResource( 19 )
 script = ExtResource( 28 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="purchase" type="AudioStreamPlayer" parent="canvas/matrix/work/zone"]
+stream = ExtResource( 15 )
 
 [node name="selection" type="TextureRect" parent="canvas/matrix/work/zone"]
 anchor_left = 0.5
@@ -521,16 +593,14 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="items" type="GridContainer" parent="canvas/matrix/work/zone"]
+[node name="items" type="Control" parent="canvas/matrix/work/zone"]
 anchor_left = 0.5
+anchor_top = 0.4
 anchor_right = 0.5
-margin_left = -16.0
-margin_top = 78.2362
-margin_right = 176.0
-margin_bottom = 142.236
-custom_constants/vseparation = 0
-custom_constants/hseparation = 0
-columns = 6
+anchor_bottom = 0.4
+mouse_filter = 2
+mouse_default_cursor_shape = 2
+script = ExtResource( 40 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -539,57 +609,117 @@ __meta__ = {
 margin_right = 32.0
 margin_bottom = 32.0
 rect_pivot_offset = Vector2( 16, 16 )
+mouse_default_cursor_shape = 2
 texture = ExtResource( 21 )
+script = ExtResource( 37 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+item = ExtResource( 41 )
 
 [node name="item2" type="TextureRect" parent="canvas/matrix/work/zone/items"]
 margin_left = 32.0
 margin_right = 64.0
 margin_bottom = 32.0
 rect_pivot_offset = Vector2( 16, 16 )
+mouse_default_cursor_shape = 2
 texture = ExtResource( 4 )
+script = ExtResource( 37 )
+item = ExtResource( 42 )
 
 [node name="item3" type="TextureRect" parent="canvas/matrix/work/zone/items"]
 margin_left = 64.0
 margin_right = 96.0
 margin_bottom = 32.0
 rect_pivot_offset = Vector2( 16, 16 )
+mouse_default_cursor_shape = 2
 texture = ExtResource( 9 )
+script = ExtResource( 37 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+item = ExtResource( 43 )
 
 [node name="item4" type="TextureRect" parent="canvas/matrix/work/zone/items"]
 margin_left = 96.0
 margin_right = 128.0
 margin_bottom = 32.0
 rect_pivot_offset = Vector2( 16, 16 )
-texture = ExtResource( 20 )
+mouse_default_cursor_shape = 2
+texture = ExtResource( 10 )
+script = ExtResource( 37 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+item = ExtResource( 44 )
 
 [node name="item5" type="TextureRect" parent="canvas/matrix/work/zone/items"]
-margin_left = 128.0
-margin_right = 160.0
-margin_bottom = 32.0
+modulate = Color( 0, 0, 0, 1 )
+margin_left = 96.0
+margin_top = 32.0
+margin_right = 128.0
+margin_bottom = 64.0
 rect_pivot_offset = Vector2( 16, 16 )
+mouse_default_cursor_shape = 2
 texture = ExtResource( 20 )
+script = ExtResource( 37 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+item = ExtResource( 50 )
 
 [node name="item6" type="TextureRect" parent="canvas/matrix/work/zone/items"]
-margin_left = 160.0
-margin_right = 192.0
-margin_bottom = 32.0
+margin_left = 96.0
+margin_top = 64.0
+margin_right = 128.0
+margin_bottom = 96.0
 rect_pivot_offset = Vector2( 16, 16 )
-texture = ExtResource( 20 )
+mouse_default_cursor_shape = 2
+texture = ExtResource( 33 )
+script = ExtResource( 37 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+item = ExtResource( 49 )
+
+[node name="item10" type="TextureRect" parent="canvas/matrix/work/zone/items"]
+margin_left = 96.0
+margin_top = 96.0
+margin_right = 128.0
+margin_bottom = 128.0
+rect_pivot_offset = Vector2( 16, 16 )
+mouse_default_cursor_shape = 2
+texture = ExtResource( 34 )
+script = ExtResource( 37 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+item = ExtResource( 47 )
 
 [node name="item7" type="TextureRect" parent="canvas/matrix/work/zone/items"]
-margin_top = 32.0
-margin_right = 32.0
-margin_bottom = 64.0
+margin_left = 64.0
+margin_top = 96.0
+margin_right = 96.0
+margin_bottom = 128.0
 rect_pivot_offset = Vector2( 16, 16 )
-texture = ExtResource( 32 )
+mouse_default_cursor_shape = 2
+texture = ExtResource( 22 )
+script = ExtResource( 37 )
+item = ExtResource( 46 )
 
 [node name="item8" type="TextureRect" parent="canvas/matrix/work/zone/items"]
-margin_left = 32.0
-margin_top = 32.0
-margin_right = 64.0
-margin_bottom = 64.0
+margin_left = 64.0
+margin_top = 64.0
+margin_right = 96.0
+margin_bottom = 96.0
 rect_pivot_offset = Vector2( 16, 16 )
+mouse_default_cursor_shape = 2
 texture = ExtResource( 31 )
+script = ExtResource( 37 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+item = ExtResource( 45 )
 
 [node name="item9" type="TextureRect" parent="canvas/matrix/work/zone/items"]
 margin_left = 64.0
@@ -597,12 +727,29 @@ margin_top = 32.0
 margin_right = 96.0
 margin_bottom = 64.0
 rect_pivot_offset = Vector2( 16, 16 )
-texture = ExtResource( 22 )
+mouse_default_cursor_shape = 2
+texture = ExtResource( 32 )
+script = ExtResource( 37 )
+item = ExtResource( 48 )
+
+[node name="new" type="RichTextLabel" parent="canvas/matrix/work/zone/items/item9"]
+visible = false
+material = SubResource( 17 )
+margin_left = 23.593
+margin_top = -0.846069
+margin_right = 123.593
+margin_bottom = 31.1539
+rect_clip_content = false
+custom_fonts/normal_font = SubResource( 18 )
+custom_colors/default_color = Color( 0.0509804, 1, 0.843137, 1 )
+text = "!"
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="pop" type="AudioStreamPlayer" parent="canvas/matrix/work/zone"]
-stream = SubResource( 18 )
-volume_db = -10.0
+stream = SubResource( 20 )
+volume_db = 10.0
 pitch_scale = 1.3
-[connection signal="button_down" from="recipe/babybox" to="recipe/babybox" method="_on_babybox_button_down"]
 [connection signal="pressed" from="end_panel/box/exit" to="end_panel/box/exit" method="_on_exit_pressed"]
 [connection signal="pressed" from="end_panel/box/replay" to="end_panel/box/replay" method="_on_replay_pressed"]

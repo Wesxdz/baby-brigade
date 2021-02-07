@@ -26,6 +26,8 @@ src/gdexample.cpp \
 src/gdterrain.cpp \
 src/gdbanner.cpp \
 src/gdcrowdnav.cpp \
+src/gdinventory.cpp \
+src/gdbaby.cpp \
 
 LOCAL_C_INCLUDES := \
 godot-cpp/godot_headers \

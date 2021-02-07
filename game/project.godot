@@ -8,9 +8,14 @@
 
 config_version=4
 
-_global_script_classes=[  ]
+_global_script_classes=[ {
+"base": "Resource",
+"class": "ItemData",
+"language": "GDScript",
+"path": "res://ItemData.gd"
+} ]
 _global_script_class_icons={
-
+"ItemData": ""
 }
 
 [application]
@@ -23,6 +28,11 @@ boot_splash/use_filter=false
 boot_splash/bg_color=Color( 0, 0, 0, 1 )
 config/icon="res://swig.png"
 
+[autoload]
+
+pixel="*res://pixel_scaler.tscn"
+inventory="*res://inventory.tscn"
+
 [compression]
 
 formats/zstd/compression_level=20
@@ -33,8 +43,8 @@ settings/stdout/print_fps=true
 
 [display]
 
-window/size/width=393
-window/size/height=786
+window/size/width=320
+window/size/height=480
 window/handheld/orientation="portrait"
 window/shading/force_vertex_shading.mobile=true
 

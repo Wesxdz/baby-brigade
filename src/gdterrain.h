@@ -36,12 +36,15 @@ private:
 	Ref<Material> snowMaterial;
 	Ref<PackedScene> tree_prefab;
 	Ref<PackedScene> coin_prefab;
+	Ref<PackedScene> demon_prefab;
+	Ref<PackedScene> enemy_banner_prefab;
 	std::list<Arcsegment> arcs;
 	float nextArcY = -50.0f;
 	Spatial* target;
 	float despawnDistance = 300.0f;
 	float spawnDistance = 200.0f;
 	std::vector<Spatial*> props;
+	int enemySpawnGroup = 1;
 
 public:
 

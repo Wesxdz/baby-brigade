@@ -1,0 +1,70 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://baby_repel.tres" type="Curve" id=1]
+[ext_resource path="res://demon.png" type="Texture" id=2]
+[ext_resource path="res://bin/boid_affector.gdns" type="Script" id=3]
+[ext_resource path="res://bin/crowd_nav.gdns" type="Script" id=4]
+[ext_resource path="res://shadow003.png" type="Texture" id=5]
+[ext_resource path="res://shadow.tscn" type="PackedScene" id=6]
+
+[sub_resource type="SpatialMaterial" id=1]
+resource_local_to_scene = true
+flags_transparent = true
+flags_unshaded = true
+albedo_texture = ExtResource( 5 )
+
+[sub_resource type="QuadMesh" id=2]
+resource_local_to_scene = true
+size = Vector2( 11, 11 )
+
+[sub_resource type="SphereShape" id=3]
+radius = 5.0
+
+[sub_resource type="SpatialMaterial" id=4]
+flags_transparent = true
+flags_unshaded = true
+albedo_texture = ExtResource( 2 )
+
+[sub_resource type="QuadMesh" id=5]
+size = Vector2( 11, 11 )
+
+[node name="demon" type="RigidBody"]
+collision_layer = 2
+collision_mask = 12
+gravity_scale = 0.0
+can_sleep = false
+linear_damp = 1.0
+angular_damp = 1.0
+script = ExtResource( 4 )
+height = 0.0
+fall_velocity = 0.5
+layer = 16
+
+[node name="shadow" parent="." instance=ExtResource( 6 )]
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+
+[node name="Area" type="Area" parent="."]
+collision_layer = 2
+collision_mask = 8
+
+[node name="body" type="CollisionShape" parent="Area"]
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 4.66747, 0 )
+shape = SubResource( 3 )
+
+[node name="bean" type="Spatial" parent="."]
+
+[node name="baby_quad" type="MeshInstance" parent="bean"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.14962, 0 )
+material_override = SubResource( 4 )
+mesh = SubResource( 5 )
+material/0 = null
+
+[node name="boid_repel" type="Spatial" parent="."]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.40227, 0 )
+script = ExtResource( 3 )
+radius = 10.0
+strength = 2000.0
+curve = ExtResource( 1 )
+body = NodePath("..")
+affect_layers = 17

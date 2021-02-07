@@ -1,35 +1,20 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=9 format=2]
 
-[ext_resource path="res://baby_repel.tres" type="Curve" id=1]
+[ext_resource path="res://boid_repel.tscn" type="PackedScene" id=1]
 [ext_resource path="res://baby_quad.tscn" type="PackedScene" id=2]
-[ext_resource path="res://bin/boid_affector.gdns" type="Script" id=3]
 [ext_resource path="res://bin/crowd_nav.gdns" type="Script" id=4]
-[ext_resource path="res://palette_remap.shader" type="Shader" id=5]
-[ext_resource path="res://baby-quad004.png" type="Texture" id=6]
-[ext_resource path="res://baby-palette.png" type="Texture" id=7]
-[ext_resource path="res://baby-quad002.png" type="Texture" id=8]
-[ext_resource path="res://baby-quad003.png" type="Texture" id=9]
-[ext_resource path="res://baby-quad001.png" type="Texture" id=10]
+[ext_resource path="res://shadow003.png" type="Texture" id=5]
+[ext_resource path="res://shadow.tscn" type="PackedScene" id=6]
 
-[sub_resource type="AnimatedTexture" id=1]
+[sub_resource type="SpatialMaterial" id=1]
 resource_local_to_scene = true
-flags = 16
-frames = 4
-fps = 8.0
-frame_0/texture = ExtResource( 10 )
-frame_1/texture = ExtResource( 8 )
-frame_1/delay_sec = 0.0
-frame_2/texture = ExtResource( 9 )
-frame_2/delay_sec = 0.0
-frame_3/texture = ExtResource( 6 )
-frame_3/delay_sec = 0.0
+flags_transparent = true
+flags_unshaded = true
+albedo_texture = ExtResource( 5 )
 
-[sub_resource type="ShaderMaterial" id=2]
+[sub_resource type="QuadMesh" id=2]
 resource_local_to_scene = true
-shader = ExtResource( 5 )
-shader_param/v_map = 0.4
-shader_param/image = SubResource( 1 )
-shader_param/palette = ExtResource( 7 )
+size = Vector2( 11, 11 )
 
 [sub_resource type="SphereShape" id=3]
 radius = 5.0
@@ -40,23 +25,29 @@ collision_mask = 12
 gravity_scale = 0.0
 can_sleep = false
 linear_damp = 1.0
+angular_damp = 1.0
 script = ExtResource( 4 )
+height = 1.0
+fall_velocity = 0.5
+layer = 1
+
+[node name="shadow" parent="." instance=ExtResource( 6 )]
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
 
 [node name="baby_quad" parent="." instance=ExtResource( 2 )]
-material_override = SubResource( 2 )
 
-[node name="boid_repel" type="Spatial" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.40227, 0 )
-script = ExtResource( 3 )
-radius = 4.0
-strength = 500.0
-curve = ExtResource( 1 )
-body = NodePath("..")
+[node name="boid_repel" parent="." instance=ExtResource( 1 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.40227, -0.235667 )
+radius = 10.0
+strength = 2000.0
 
-[node name="Area" type="Area" parent="."]
+[node name="area" type="Area" parent="." groups=[
+"baby",
+]]
 collision_layer = 2
 collision_mask = 8
 
-[node name="body" type="CollisionShape" parent="Area"]
+[node name="body" type="CollisionShape" parent="area"]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 4.66747, 0 )
 shape = SubResource( 3 )

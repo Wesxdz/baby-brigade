@@ -2,6 +2,7 @@
 #include "gdterrain.h"
 #include "gdbanner.h"
 #include "gdcrowdnav.h"
+#include "gdinventory.h"
 
 extern "C" void GDN_EXPORT godot_gdnative_init(godot_gdnative_init_options *o) {
 	godot::Godot::gdnative_init(o);
@@ -20,4 +21,6 @@ extern "C" void GDN_EXPORT godot_nativescript_init(void *handle) {
 	godot::register_class<godot::GDCrowdNav>();
 	godot::register_class<godot::GDBoidField>();
 	godot::register_class<godot::GDBoidAffector>();
+	godot::register_class<godot::GDInventory>();
+	godot::register_class<godot::GDTwistController>();
 }

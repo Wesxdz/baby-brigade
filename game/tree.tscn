@@ -126,8 +126,8 @@ shape = SubResource( 4 )
 
 [node name="boid_repel" type="Spatial" parent="."]
 script = ExtResource( 7 )
-radius = 2.5
-strength = 20000.0
+radius = 5.0
+strength = 0.0
 curve = ExtResource( 8 )
-body = NodePath("..")
+affect_layers = 21
 [connection signal="body_entered" from="." to="." method="_on_tree_body_entered"]

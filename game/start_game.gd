@@ -38,7 +38,6 @@ func begin_game():
 	indicate_start = false
 #	$"../title_ost".stop()
 	$"/root/nodes/menu/start".visible = false
-	$"../../canvas/background".visible = false
 	$"/root/nodes".add_child(hud_prefab.instance())
 	$"/root/nodes".add_child(gameplay)
 	
@@ -49,7 +48,6 @@ func restart_menu():
 	gameplay = null
 	thread.start(self, "load_gameplay", "ok")
 	$"/root/start_menu".visible = true
-	$"/root/start_menu/canvas/background".visible = true
 
 func load_gameplay(data):
 	gameplay = gameplay_prefab.instance()

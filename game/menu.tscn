@@ -1,45 +1,23 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=12 format=2]
 
-[ext_resource path="res://menu/menu_checkers.png" type="Texture" id=4]
+[ext_resource path="res://pixel_scale.gd" type="Script" id=1]
+[ext_resource path="res://baby-template.png" type="Texture" id=2]
+[ext_resource path="res://baby_candy.gd" type="Script" id=3]
+[ext_resource path="res://swig.png" type="Texture" id=4]
 [ext_resource path="res://logo.png" type="Texture" id=5]
 [ext_resource path="res://audio/start_game.wav" type="AudioStream" id=6]
-[ext_resource path="res://scroll.shader" type="Shader" id=8]
 [ext_resource path="res://start_game.gd" type="Script" id=9]
-[ext_resource path="res://hill_name_gen.gd" type="Script" id=10]
-[ext_resource path="res://TenStamps.ttf" type="DynamicFontData" id=11]
-[ext_resource path="res://new_hill.tres" type="Theme" id=12]
 
 [sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 1, 1, 1, 0 )
+bg_color = Color( 0.290196, 0.188235, 0.321569, 1 )
 
-[sub_resource type="StyleBoxEmpty" id=2]
+[sub_resource type="CanvasItemMaterial" id=2]
+blend_mode = 1
+light_mode = 1
 
-[sub_resource type="Theme" id=3]
+[sub_resource type="StyleBoxEmpty" id=3]
 
-[sub_resource type="StyleBoxEmpty" id=4]
-
-[sub_resource type="StyleBoxEmpty" id=5]
-
-[sub_resource type="StyleBoxEmpty" id=6]
-
-[sub_resource type="StyleBoxEmpty" id=7]
-
-[sub_resource type="StyleBoxEmpty" id=8]
-
-[sub_resource type="DynamicFont" id=9]
-font_data = ExtResource( 11 )
-
-[sub_resource type="Theme" id=10]
-default_font = SubResource( 9 )
-
-[sub_resource type="CanvasItemMaterial" id=11]
-
-[sub_resource type="ShaderMaterial" id=12]
-shader = ExtResource( 8 )
-shader_param/scroll_x_speed = 0.083
-shader_param/scroll_y_speed = 0.054
-shader_param/repeat_uv_count = 12
-shader_param/repeating_tiles = ExtResource( 4 )
+[sub_resource type="Theme" id=4]
 
 [node name="menu" type="Control"]
 anchor_right = 1.0
@@ -58,6 +36,25 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
+[node name="baby_candy" type="CPUParticles2D" parent="start"]
+material = SubResource( 2 )
+position = Vector2( 0, -32 )
+amount = 128
+lifetime = 20.0
+local_coords = false
+texture = ExtResource( 2 )
+emission_shape = 2
+emission_rect_extents = Vector2( 160, 1 )
+flag_align_y = true
+direction = Vector2( -1, 0 )
+spread = 180.0
+gravity = Vector2( 0, 30 )
+initial_velocity = 100.0
+color = Color( 1, 0, 0, 1 )
+hue_variation = 0.91
+hue_variation_random = 1.0
+script = ExtResource( 3 )
+
 [node name="foreground" type="Panel" parent="start"]
 anchor_left = 0.25
 anchor_top = 0.2
@@ -69,7 +66,25 @@ margin_right = 23.7646
 margin_bottom = 40.7202
 mouse_filter = 1
 mouse_default_cursor_shape = 2
-custom_styles/panel = SubResource( 2 )
+custom_styles/panel = SubResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="mother" type="TextureRect" parent="start/foreground"]
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+margin_left = -34.6465
+margin_top = -36.8663
+margin_right = 35.3536
+margin_bottom = 36.1337
+grow_horizontal = 2
+grow_vertical = 2
+rect_pivot_offset = Vector2( 35, 73 )
+texture = ExtResource( 4 )
+script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -80,12 +95,14 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 margin_left = -59.0
-margin_top = -26.0
+margin_top = 23.0804
 margin_right = 59.0
-margin_bottom = 26.0
+margin_bottom = 75.0804
 grow_horizontal = 2
 grow_vertical = 2
+rect_pivot_offset = Vector2( 59, 0 )
 texture = ExtResource( 5 )
+script = ExtResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -94,91 +111,13 @@ __meta__ = {
 stream = ExtResource( 6 )
 
 [node name="start_game" type="Control" parent="start/foreground"]
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
-anchor_bottom = 1.0
-margin_left = -41.0
-margin_top = -61.0
-margin_right = 1.0
-margin_bottom = -19.0
+margin_left = -100.0
+margin_top = -280.0
+margin_right = -100.0
+margin_bottom = -280.0
 mouse_default_cursor_shape = 2
-theme = SubResource( 3 )
+theme = SubResource( 4 )
 script = ExtResource( 9 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="course" type="Button" parent="start/foreground"]
-visible = false
-margin_left = 15.2823
-margin_top = 213.173
-margin_right = 315.283
-margin_bottom = 313.173
-mouse_default_cursor_shape = 2
-custom_styles/hover = SubResource( 4 )
-custom_styles/pressed = SubResource( 5 )
-custom_styles/focus = SubResource( 6 )
-custom_styles/disabled = SubResource( 7 )
-custom_styles/normal = SubResource( 8 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="name" type="RichTextLabel" parent="start/foreground/course"]
-margin_left = 34.0
-margin_top = 43.0
-margin_right = 251.0
-margin_bottom = 187.0
-rect_clip_content = false
-mouse_filter = 2
-theme = SubResource( 10 )
-text = "orange
-land"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="new_tag" type="RichTextLabel" parent="start/foreground/course"]
-visible = false
-margin_left = 18.2704
-margin_top = 21.3214
-margin_right = 196.27
-margin_bottom = 165.321
-rect_clip_content = false
-mouse_filter = 2
-theme = ExtResource( 12 )
-custom_colors/default_color = Color( 0, 0.647059, 0.745098, 1 )
-custom_colors/selection_color = Color( 0, 0, 0, 1 )
-text = "NEW"
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="hill_name_gen" type="Node" parent="start/foreground"]
-script = ExtResource( 10 )
-
-[node name="canvas" type="CanvasLayer" parent="start"]
-layer = -10
-
-[node name="background" type="Panel" parent="start/canvas"]
-material = SubResource( 11 )
-anchor_right = 1.0
-anchor_bottom = 1.0
-rect_clip_content = true
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="checkers" type="Panel" parent="start/canvas/background"]
-material = SubResource( 12 )
-margin_left = -406.944
-margin_top = -180.878
-margin_right = 873.056
-margin_bottom = 1099.12
-rect_rotation = -135.0
-rect_pivot_offset = Vector2( 640, 640 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-[connection signal="pressed" from="start/foreground/course" to="start/foreground/start_game" method="_on_course_pressed"]

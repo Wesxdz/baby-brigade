@@ -1,0 +1,27 @@
+[gd_scene load_steps=9 format=2]
+
+[ext_resource path="res://shadow003.png" type="Texture" id=1]
+[ext_resource path="res://shadow005.png" type="Texture" id=2]
+[ext_resource path="res://shadow004.png" type="Texture" id=3]
+[ext_resource path="res://shadow002.png" type="Texture" id=4]
+[ext_resource path="res://shadow.gd" type="Script" id=5]
+[ext_resource path="res://shadow001.png" type="Texture" id=6]
+
+[sub_resource type="SpatialMaterial" id=1]
+resource_local_to_scene = true
+flags_transparent = true
+flags_unshaded = true
+albedo_texture = ExtResource( 1 )
+
+[sub_resource type="QuadMesh" id=2]
+resource_local_to_scene = true
+size = Vector2( 11, 11 )
+
+[node name="shadow" type="MeshInstance"]
+transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, -0.000380039, 0 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
+material/0 = null
+script = ExtResource( 5 )
+shadows = [ ExtResource( 1 ), ExtResource( 3 ), ExtResource( 2 ), ExtResource( 3 ), ExtResource( 1 ), ExtResource( 4 ), ExtResource( 6 ) ]
+step = 3.5

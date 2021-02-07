@@ -1,0 +1,17 @@
+[gd_scene load_steps=12 format=2]
+
+[ext_resource path="res://bin/gdinventory.gdns" type="Script" id=1]
+[ext_resource path="res://items/wood_pick.tres" type="Resource" id=2]
+[ext_resource path="res://items/wood_sword.tres" type="Resource" id=3]
+[ext_resource path="res://items/stone_sword.tres" type="Resource" id=4]
+[ext_resource path="res://items/babybox.tres" type="Resource" id=5]
+[ext_resource path="res://items/asmrcoin.tres" type="Resource" id=6]
+[ext_resource path="res://items/pinewood.tres" type="Resource" id=7]
+[ext_resource path="res://items/moonstone.tres" type="Resource" id=8]
+[ext_resource path="res://items/wood_axe.tres" type="Resource" id=9]
+[ext_resource path="res://items/stone_pick.tres" type="Resource" id=10]
+[ext_resource path="res://items/stone_axe.tres" type="Resource" id=11]
+
+[node name="inventory" type="Node"]
+script = ExtResource( 1 )
+items = [ ExtResource( 5 ), ExtResource( 6 ), ExtResource( 7 ), ExtResource( 8 ), ExtResource( 9 ), ExtResource( 2 ), ExtResource( 3 ), ExtResource( 11 ), ExtResource( 10 ), ExtResource( 4 ) ]

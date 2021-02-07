@@ -7,16 +7,16 @@
 [sub_resource type="QuadMesh" id=1]
 size = Vector2( 12, 12 )
 
-[sub_resource type="QuadMesh" id=3]
+[sub_resource type="QuadMesh" id=2]
 material = ExtResource( 2 )
 size = Vector2( 8, 24 )
 
 [node name="drop" type="MeshInstance"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 33.1184, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 25.1184, 0 )
 material_override = ExtResource( 1 )
 mesh = SubResource( 1 )
 material/0 = null
 
 [node name="fall_path" parent="." instance=ExtResource( 3 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -13.3235, 0 )
-mesh = SubResource( 3 )
+mesh = SubResource( 2 )

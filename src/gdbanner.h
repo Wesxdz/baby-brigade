@@ -7,27 +7,25 @@
 namespace godot {
 
 /*
- * Formation behavior for crowd management
+ * Formation behavior and movement for crowds
  */
 class GDBanner : public Spatial {
 	GODOT_CLASS(GDBanner, Spatial)
 
 private:
     float radius;
-    float angle;
-    float dragXToAngle;
-    float turnRate;
-    float yPos;
     float meterConversion;
-    bool spinEnabled;
     
-    RichTextLabel* distanceLabel;
+    // RichTextLabel* distanceLabel;
     float ySpeed;
+    float rotateSpeed;
 
     // Formation (starting with just a circle)
     float formationRadius;
 
 public:
+    float yPos;
+    float angle;
 	static void _register_methods();
 
 	GDBanner();
@@ -35,12 +33,33 @@ public:
 
 	void _init();
     void _enter_tree();
-    void _input(InputEvent* event);
-	void _process(float delta);
     void _physics_process(float delta);
+    void set_y_pos(float p);
     float get_y_pos();
     float get_radius();
     float get_angle();
+    void set_y_speed(float s);
+    float get_y_speed();
+    void set_rotate_speed(float s);
+    float get_rotate_speed();
+};
+
+class GDTwistController : public Node
+{
+    GODOT_CLASS(GDTwistController, Node)
+private:
+    NodePath bannerPath;
+    GDBanner* banner;
+    bool spinEnabled;
+    float dragXToAngle;
+    float turnRate;
+
+public:
+	static void _register_methods();
+	void _init();
+    void _enter_tree();
+	void _process(float delta);
+    void _input(InputEvent* event);
     void set_spin_enabled(bool enabled);
 };
 
