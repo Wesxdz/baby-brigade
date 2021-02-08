@@ -12,8 +12,8 @@ func _on_drop_landed():
 	get_node("/root/nodes/hud/smoke/viewport").add_child(smoke)
 	var land = land_sfx.instance()
 	$"/root/inventory".add_child(land)
-	for i in range(0, 1):
+	for i in range(0, 10):
 		var baby = baby_prefab.instance()
-		baby.set_translation(spawn_pos + Vector3(spawn_pos.normalized().x, 0.0, spawn_pos.normalized().z) * i)
 		get_node("/root/nodes/gameplay/hill").add_child(baby)
+		baby.set_translation(spawn_pos + Vector3(spawn_pos.normalized().x, i, spawn_pos.normalized().z) )
 	get_parent().queue_free()

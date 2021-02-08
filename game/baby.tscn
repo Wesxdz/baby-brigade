@@ -24,7 +24,7 @@ collision_layer = 2
 collision_mask = 12
 gravity_scale = 0.0
 can_sleep = false
-linear_damp = 1.0
+linear_damp = 10.0
 angular_damp = 1.0
 script = ExtResource( 4 )
 height = 1.0
@@ -38,9 +38,10 @@ mesh = SubResource( 2 )
 [node name="baby_quad" parent="." instance=ExtResource( 2 )]
 
 [node name="boid_repel" parent="." instance=ExtResource( 1 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.40227, -0.235667 )
-radius = 10.0
-strength = 2000.0
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
+radius = 5.0
+strength = 3000.0
+behavior = 1
 
 [node name="area" type="Area" parent="." groups=[
 "baby",

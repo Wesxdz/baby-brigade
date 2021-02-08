@@ -11,7 +11,7 @@
 [ext_resource path="res://bin/arc_proc_hill.gdns" type="Script" id=18]
 
 [sub_resource type="Curve" id=1]
-_data = [ Vector2( 0, 0 ), 0.0, 1.4, 0, 0, Vector2( 1, 1 ), 0.0, 0.0, 0, 0 ]
+_data = [ Vector2( 0, 1 ), 0.0, -0.0487013, 0, 0, Vector2( 0.2, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.503333, 0.236364 ), -1.43182, -1.43182, 0, 0, Vector2( 1, 0.0454545 ), 0.0, 0.0, 0, 0 ]
 
 [node name="gameplay" type="Spatial"]
 
@@ -33,7 +33,7 @@ amplitude = 20.0
 [node name="banner" type="Spatial" parent="hill"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0 )
 script = ExtResource( 1 )
-"Y Speed" = -30.0
+"Y Speed" = -50.0
 
 [node name="controller" type="Node" parent="hill/banner"]
 script = ExtResource( 8 )
@@ -44,9 +44,8 @@ script = ExtResource( 8 )
 [node name="boid_attract" type="Spatial" parent="hill/banner"]
 script = ExtResource( 7 )
 radius = 100.0
-strength = 500.0
+strength = 3000.0
 curve = SubResource( 1 )
-behavior = 0
 affect_layers = 1
 
 [node name="target" type="Spatial" parent="hill"]

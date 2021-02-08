@@ -113,20 +113,12 @@ void GDCrowdNav::_integrate_forces(PhysicsDirectBodyState* state)
     if (ground.size() > 0)
     {
         Vector3 groundPos = ground["position"];
-        set_translation(Vector3(groundPos.x, pos.y, groundPos.z) + Vector3(orbit.normalized().x, 0.0f, orbit.normalized().y) * height);
+        Vector3 update_pos = Vector3(groundPos.x, pos.y, groundPos.z) + Vector3(orbit.normalized().x, 0.0f, orbit.normalized().y) * height;
+        Transform t = state->get_transform();
+        t.origin = update_pos;
+        state->set_transform(t);
         // Godot::print(std::to_string(yPos).c_str());
     }
-    // set_rotation(banner->get_rotation());
-}
-
-void GDBoidAffector::set_behavior(int b)
-{
-    behavior = (Behavior)b;
-}
-
-int GDBoidAffector::get_behavior()
-{
-    return (int)behavior;
 }
 
 void GDBoidAffector::_register_methods()
@@ -135,7 +127,7 @@ void GDBoidAffector::_register_methods()
     register_property<GDBoidAffector, float>("strength", &GDBoidAffector::strength, 1.0f);
     register_property<GDBoidAffector, Ref<Curve>>("curve", &GDBoidAffector::curve, Ref<Curve>());
     register_property<GDBoidAffector, NodePath>("body", &GDBoidAffector::bodyNode, NodePath());
-    register_property<GDBoidAffector, int>("behavior", &GDBoidAffector::set_behavior, &GDBoidAffector::get_behavior, (int)GDBoidAffector::Behavior::Repel, GODOT_METHOD_RPC_MODE_DISABLED, GODOT_PROPERTY_USAGE_DEFAULT, GODOT_PROPERTY_HINT_ENUM, "Attract, Repel");
+    register_property<GDBoidAffector, int>("behavior", &GDBoidAffector::behavior, 0);
     register_property<GDBoidAffector, uint32_t>("affect_layers", &GDBoidAffector::affect_layers, 0, GODOT_METHOD_RPC_MODE_DISABLED, GODOT_PROPERTY_USAGE_DEFAULT, GODOT_PROPERTY_HINT_FLAGS, "Baby, Obstacle, Item, Banner, Enemy");
     register_property<GDBoidAffector, int>("subgroup", &GDBoidAffector::subgroup, 0);
 
@@ -148,6 +140,7 @@ void GDBoidAffector::_init()
     radius = 20.0f;
     strength = 1.0f;
     subgroup = 0;
+    behavior = 0;
 }
 
 GDBoidAffector::GDBoidAffector()
@@ -199,8 +192,51 @@ void GDBoidField::Step()
                 float t = toAgent.length()/boid->radius;
                 if (t <= 1.0f)
                 {
-                    accumulatedForces[agent] += toAgent * boid->curve.ptr()->interpolate(1.0f - t) * boid->strength * (boid->behavior == GDBoidAffector::Behavior::Attract ? -1.0f : 1.0f);
+                    accumulatedForces[agent] += toAgent * boid->curve.ptr()->interpolate(1.0f - t) * boid->strength * (boid->behavior == 0 ? -1.0f : 1.0f);
                 }
+            }
+        }
+    }
+}
+
+void GDBoidField::StepOptimized()
+{
+    accumulatedForces.clear();
+    auto physics = PhysicsServer::get_singleton();
+    PointCloud<float> agentSearch;
+    for (RID agent : crowdAgents)
+    {
+        PhysicsDirectBodyState* agentState = physics->body_get_direct_state(agent);
+        if (agentState)
+        {
+            agentSearch.pts.push_back(agentState->get_transform().origin);
+        } else
+        {
+            agentSearch.pts.push_back(Vector3(-100000, 0, 0));
+        }
+    }
+    agent_kd_tree_t kdtree(3, agentSearch, KDTreeSingleIndexAdaptorParams(10));
+    kdtree.buildIndex();
+    for (GDBoidAffector* boid : boids)
+    {
+        std::vector<std::pair<size_t, float>> nearby;
+        SearchParams params;
+        auto origin = boid->get_global_transform().origin;
+        const float queryOrigin[3] = {origin.x, origin.y, origin.z};
+        size_t found = kdtree.radiusSearch(&queryOrigin[0], boid->radius * boid->radius, nearby, params);
+        for (size_t i = 0; i < found; i++)
+        {
+            size_t agentIndex = nearby[i].first;
+            RID agent = crowdAgents[agentIndex];
+            if (boid->body == agent) continue;
+            if ((!(boid->affect_layers & affected[agent])) || (boid->subgroup != 0 && boid->subgroup != subgroups[agent])) continue;
+
+            Vector3 otherPos = agentSearch.pts[agentIndex];
+            Vector3 toAgent = otherPos - origin;
+            float t = toAgent.length()/boid->radius;
+            if (t <= 1.0f)
+            {
+                accumulatedForces[agent] += toAgent * boid->curve.ptr()->interpolate(1.0f - t) * boid->strength * (boid->behavior == 0 ? -1.0f : 1.0f);
             }
         }
     }
@@ -218,5 +254,6 @@ void GDBoidField::_init()
 
 void GDBoidField::_physics_process(float delta)
 {
-    Step();
+    // Step();
+    StepOptimized();
 }
