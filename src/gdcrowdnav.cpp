@@ -229,8 +229,8 @@ void GDBoidField::StepOptimized()
             size_t agentIndex = nearby[i].first;
             RID agent = crowdAgents[agentIndex];
             if (boid->body == agent) continue;
-            if ((!(boid->affect_layers & affected[agent])) || (boid->subgroup != 0 && boid->subgroup != subgroups[agent])) continue;
-
+            if ((!(boid->affect_layers & affected[agent]))) continue;
+            if (boid->subgroup != 0 && boid->subgroup != subgroups[agent]) continue;
             Vector3 otherPos = agentSearch.pts[agentIndex];
             Vector3 toAgent = otherPos - origin;
             float t = toAgent.length()/boid->radius;
