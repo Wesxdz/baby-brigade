@@ -1,5 +1,4 @@
-#ifndef GDEXAMPLE_H
-#define GDEXAMPLE_H
+#pragma once
 
 #include <Godot.hpp>
 #include <Spatial.hpp>
@@ -16,17 +15,13 @@ enum Career
 	KNIGHT,
 };
 
-struct HealthComponent
-{
-	int health;
-};
-
 class GDCareer : public Resource
 {
 	GODOT_CLASS(GDCareer, Resource)
 private:
 
 public:
+	static void _register_methods();
 	Career type;
 	Array actions;
 
@@ -38,10 +33,11 @@ class GDAction : public Resource
 private:
 
 public:
+	static void _register_methods();
 	String name;
 	float cooldown;
 	float priority;
-	// Animation?
+	// Animation?\
 	Ref<PackedScene> fx;
 
 };
@@ -63,5 +59,3 @@ public:
 };
 
 }
-
-#endif

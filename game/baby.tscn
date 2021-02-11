@@ -1,10 +1,19 @@
-[gd_scene load_steps=9 format=2]
+[gd_scene load_steps=21 format=2]
 
 [ext_resource path="res://boid_repel.tscn" type="PackedScene" id=1]
 [ext_resource path="res://baby_quad.tscn" type="PackedScene" id=2]
+[ext_resource path="res://baby_despawn.tres" type="Animation" id=3]
 [ext_resource path="res://bin/crowd_nav.gdns" type="Script" id=4]
 [ext_resource path="res://shadow003.png" type="Texture" id=5]
 [ext_resource path="res://shadow.tscn" type="PackedScene" id=6]
+[ext_resource path="res://palette_remap.shader" type="Shader" id=7]
+[ext_resource path="res://baby-palette.png" type="Texture" id=8]
+[ext_resource path="res://baby-quad003.png" type="Texture" id=9]
+[ext_resource path="res://baby-quad002.png" type="Texture" id=10]
+[ext_resource path="res://baby-quad004.png" type="Texture" id=11]
+[ext_resource path="res://baby-quad001.png" type="Texture" id=12]
+[ext_resource path="res://combat.gd" type="Script" id=13]
+[ext_resource path="res://baby_resolver.gd" type="Script" id=14]
 
 [sub_resource type="SpatialMaterial" id=1]
 resource_local_to_scene = true
@@ -16,7 +25,33 @@ albedo_texture = ExtResource( 5 )
 resource_local_to_scene = true
 size = Vector2( 11, 11 )
 
-[sub_resource type="SphereShape" id=3]
+[sub_resource type="SpatialMaterial" id=3]
+resource_local_to_scene = true
+flags_transparent = true
+flags_unshaded = true
+uv1_triplanar_sharpness = 2.2974
+
+[sub_resource type="AnimatedTexture" id=4]
+resource_local_to_scene = true
+flags = 16
+frames = 4
+fps = 8.0
+frame_0/texture = ExtResource( 12 )
+frame_1/texture = ExtResource( 10 )
+frame_1/delay_sec = 0.0
+frame_2/texture = ExtResource( 9 )
+frame_2/delay_sec = 0.0
+frame_3/texture = ExtResource( 11 )
+frame_3/delay_sec = 0.0
+
+[sub_resource type="ShaderMaterial" id=5]
+resource_local_to_scene = true
+shader = ExtResource( 7 )
+shader_param/v_map = 0.4
+shader_param/image = SubResource( 4 )
+shader_param/palette = ExtResource( 8 )
+
+[sub_resource type="SphereShape" id=6]
 radius = 5.0
 
 [node name="baby" type="RigidBody"]
@@ -29,6 +64,7 @@ angular_damp = 1.0
 script = ExtResource( 4 )
 height = 1.0
 fall_velocity = 0.5
+fall_acceleration = -5.0
 layer = 1
 
 [node name="shadow" parent="." instance=ExtResource( 6 )]
@@ -37,18 +73,40 @@ mesh = SubResource( 2 )
 
 [node name="baby_quad" parent="." instance=ExtResource( 2 )]
 
+[node name="career" parent="baby_quad" index="0"]
+material_override = SubResource( 3 )
+
+[node name="baby_quad" parent="baby_quad" index="1"]
+material_override = SubResource( 5 )
+
 [node name="boid_repel" parent="." instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 radius = 5.0
 strength = 3000.0
 behavior = 1
 
-[node name="area" type="Area" parent="." groups=[
+[node name="combat" type="Area" parent="." groups=[
 "baby",
+"combat",
 ]]
 collision_layer = 2
 collision_mask = 8
+script = ExtResource( 13 )
+resolve = 5.0
 
-[node name="body" type="CollisionShape" parent="area"]
+[node name="body" type="CollisionShape" parent="combat"]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 4.66747, 0 )
-shape = SubResource( 3 )
+shape = SubResource( 6 )
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+root_node = NodePath("")
+autoplay = "resolver"
+anims/resolver = ExtResource( 3 )
+
+[node name="resolver" type="Node" parent="."]
+script = ExtResource( 14 )
+[connection signal="area_entered" from="combat" to="combat" method="_on_combat_area_entered"]
+[connection signal="evaluate" from="combat" to="resolver" method="_on_combat_evaluate"]
+[connection signal="lost" from="combat" to="resolver" method="_on_combat_lost"]
+
+[editable path="baby_quad"]

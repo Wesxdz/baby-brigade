@@ -1,4 +1,4 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=14 format=2]
 
 [ext_resource path="res://baby_repel.tres" type="Curve" id=1]
 [ext_resource path="res://demon.png" type="Texture" id=2]
@@ -6,6 +6,8 @@
 [ext_resource path="res://bin/crowd_nav.gdns" type="Script" id=4]
 [ext_resource path="res://shadow003.png" type="Texture" id=5]
 [ext_resource path="res://shadow.tscn" type="PackedScene" id=6]
+[ext_resource path="res://combat.gd" type="Script" id=7]
+[ext_resource path="res://enemy_resolver.gd" type="Script" id=8]
 
 [sub_resource type="SpatialMaterial" id=1]
 resource_local_to_scene = true
@@ -37,17 +39,23 @@ linear_damp = 10.0
 script = ExtResource( 4 )
 height = 0.0
 fall_velocity = 0.5
+fall_acceleration = -5.0
 layer = 16
+subgroup = null
 
 [node name="shadow" parent="." instance=ExtResource( 6 )]
 material_override = SubResource( 1 )
 mesh = SubResource( 2 )
 
-[node name="Area" type="Area" parent="."]
-collision_layer = 2
-collision_mask = 8
+[node name="combat" type="Area" parent="." groups=[
+"combat",
+]]
+collision_layer = 8
+collision_mask = 2
+script = ExtResource( 7 )
+resolve = 10.0
 
-[node name="body" type="CollisionShape" parent="Area"]
+[node name="body" type="CollisionShape" parent="combat"]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 4.66747, 0 )
 shape = SubResource( 3 )
 
@@ -68,3 +76,8 @@ curve = ExtResource( 1 )
 body = NodePath("..")
 behavior = 1
 affect_layers = 17
+subgroup = null
+
+[node name="resolver" type="Node" parent="."]
+script = ExtResource( 8 )
+[connection signal="lost" from="combat" to="resolver" method="_on_combat_lost"]

@@ -1,17 +1,27 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=5 format=2]
 
 [ext_resource path="res://bin/boid_affector.gdns" type="Script" id=1]
 [ext_resource path="res://bin/banner.gdns" type="Script" id=2]
+[ext_resource path="res://distance_despawn.gd" type="Script" id=3]
 
 [sub_resource type="Curve" id=1]
 _data = [ Vector2( 0, 1 ), 0.0, -0.927273, 0, 1, Vector2( 1, 0.0727272 ), -0.927273, 0.0, 1, 0 ]
 
 [node name="enemy_banner" type="Spatial"]
 script = ExtResource( 2 )
+"Y Speed" = null
+"Rotate Speed" = null
+"Meter Conversion" = null
 
 [node name="affector" type="Spatial" parent="."]
 script = ExtResource( 1 )
 radius = 100.0
 strength = 5000.0
 curve = SubResource( 1 )
+body = null
+behavior = null
 affect_layers = 16
+subgroup = null
+
+[node name="distance_despawn" type="Node" parent="."]
+script = ExtResource( 3 )

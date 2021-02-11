@@ -31,6 +31,7 @@ float GDBanner::get_angle()
 void GDBanner::_register_methods() 
 {
     register_method("_enter_tree", &GDBanner::_enter_tree);
+    register_method("_exit_tree", &GDBanner::_exit_tree);
     register_method("_physics_process", &GDBanner::_physics_process);
     
     register_method("get_y_pos", &GDBanner::get_y_pos);
@@ -89,6 +90,14 @@ void GDBanner::_init()
 void GDBanner::_enter_tree()
 {
     // distanceLabel = Object::cast_to<RichTextLabel>(get_node("/root/nodes/hud/distance"));
+}
+
+void GDBanner::_exit_tree()
+{
+    for (GDCrowdNav* node : subgroup_nodes)
+    {
+        node->queue_free();
+    }
 }
 
 void GDBanner::_physics_process(float delta)

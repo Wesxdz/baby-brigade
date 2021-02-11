@@ -2,6 +2,12 @@
 
 using namespace godot;
 
+void GDCareer::_register_methods() {
+}
+
+void GDAction::_register_methods() {
+}
+
 void GDBaby::_register_methods() {
 }
 

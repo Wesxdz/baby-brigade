@@ -241,15 +241,6 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
         if (((int)(noise * 15000)) % 2400 == 1)
         {
             Vector3 spawnPoint = pos + vert;
-            for (int n = 0; n < 10; n++)
-            {
-                GDCrowdNav* demon = Object::cast_to<GDCrowdNav>(demon_prefab->instance());
-                // demon->rotate_z(-Math_PI/2.0);
-                // demon->rotate_y(-radians);
-                demon->set_translation(spawnPoint + Vector3(0, n, 0));
-                demon->subgroup = enemySpawnGroup;
-                get_node("/root/nodes/gameplay/hill")->add_child(demon);
-            }
             GDBanner* banner = Object::cast_to<GDBanner>(enemy_banner_prefab->instance());
             banner->yPos = spawnPoint.y;
             banner->angle = radians;
@@ -259,6 +250,16 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
             GDBoidAffector* affector = Object::cast_to<GDBoidAffector>(banner->get_child(0));
             affector->subgroup = enemySpawnGroup;
             get_node("/root/nodes/gameplay/hill")->add_child(banner);
+            for (int n = 0; n < 10; n++)
+            {
+                GDCrowdNav* demon = Object::cast_to<GDCrowdNav>(demon_prefab->instance());
+                // demon->rotate_z(-Math_PI/2.0);
+                // demon->rotate_y(-radians);
+                demon->set_translation(spawnPoint + Vector3(0, n, 0));
+                demon->subgroup = enemySpawnGroup;
+                get_node("/root/nodes/gameplay/hill")->add_child(demon);
+                banner->subgroup_nodes.push_back(demon);
+            }
             enemySpawnGroup++;
         }
         arc_progress += degrees_per_quad;

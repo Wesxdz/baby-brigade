@@ -3,6 +3,11 @@
 #include <Godot.hpp>
 #include <Spatial.hpp>
 #include <RichTextLabel.hpp>
+#include <Ref.hpp>
+#include <core/Array.hpp>
+
+#include "gdcrowdnav.h"
+
 
 namespace godot {
 
@@ -24,6 +29,7 @@ private:
     float formationRadius;
 
 public:
+    std::vector<GDCrowdNav*> subgroup_nodes;
     float yPos;
     float angle;
 	static void _register_methods();
@@ -33,6 +39,7 @@ public:
 
 	void _init();
     void _enter_tree();
+    void _exit_tree();
     void _physics_process(float delta);
     void set_y_pos(float p);
     float get_y_pos();
