@@ -94,9 +94,13 @@ void GDBanner::_enter_tree()
 
 void GDBanner::_exit_tree()
 {
-    for (GDCrowdNav* node : subgroup_nodes)
+    for (NodePath& np : subgroup_nodes)
     {
-        node->queue_free();
+        Node* n = get_node_or_null(np);
+        if (n)
+        {
+            n->queue_free();
+        }
     }
 }
 

@@ -45,6 +45,7 @@ settings/stdout/print_fps=true
 
 window/size/width=320
 window/size/height=480
+window/vsync/use_vsync=false
 window/handheld/orientation="portrait"
 window/shading/force_vertex_shading.mobile=true
 

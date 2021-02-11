@@ -5,6 +5,7 @@
 #include <PhysicsDirectSpaceState.hpp>
 
 #include <algorithm>
+#include <GodotProfiling.hpp>
 
 using namespace godot;
 
@@ -70,6 +71,7 @@ void GDCrowdNav::_exit_tree()
     field = Object::cast_to<GDBoidField>(get_node("/root/nodes/gameplay/boid_field"));
     field->crowdAgents.erase(std::remove(field->crowdAgents.begin(), field->crowdAgents.end(), get_rid()), field->crowdAgents.end());
     field->affected.erase(get_rid());
+    field->accumulatedForces.erase(get_rid());
     field->subgroups.erase(get_rid());
 }
 
@@ -167,7 +169,7 @@ void GDBoidAffector::_enter_tree()
 
 void GDBoidAffector::_exit_tree()
 {
-    field->boids.erase(std::find(field->boids.begin(), field->boids.end(), this));
+    field->boids.erase(std::remove(field->boids.begin(), field->boids.end(), this), field->boids.end());
 }
 
 void GDBoidField::Step()
@@ -201,11 +203,13 @@ void GDBoidField::Step()
 
 void GDBoidField::StepOptimized()
 {
+    // Godot::print(std::to_string(crowdAgents.size()).c_str());
     accumulatedForces.clear();
     auto physics = PhysicsServer::get_singleton();
     PointCloud<float> agentSearch;
     for (RID agent : crowdAgents)
     {
+        Godot::print(std::to_string(crowdAgents.size()).c_str());
         PhysicsDirectBodyState* agentState = physics->body_get_direct_state(agent);
         if (agentState)
         {
@@ -217,6 +221,7 @@ void GDBoidField::StepOptimized()
     }
     agent_kd_tree_t kdtree(3, agentSearch, KDTreeSingleIndexAdaptorParams(10));
     kdtree.buildIndex();
+    Godot::print(std::to_string(boids.size()).c_str());
     for (GDBoidAffector* boid : boids)
     {
         std::vector<std::pair<size_t, float>> nearby;

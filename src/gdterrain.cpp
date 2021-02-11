@@ -250,15 +250,15 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
             GDBoidAffector* affector = Object::cast_to<GDBoidAffector>(banner->get_child(0));
             affector->subgroup = enemySpawnGroup;
             get_node("/root/nodes/gameplay/hill")->add_child(banner);
-            for (int n = 0; n < 10; n++)
+            for (int n = 0; n < 30; n++)
             {
                 GDCrowdNav* demon = Object::cast_to<GDCrowdNav>(demon_prefab->instance());
                 // demon->rotate_z(-Math_PI/2.0);
                 // demon->rotate_y(-radians);
                 demon->set_translation(spawnPoint + Vector3(0, n, 0));
                 demon->subgroup = enemySpawnGroup;
-                get_node("/root/nodes/gameplay/hill")->add_child(demon);
-                banner->subgroup_nodes.push_back(demon);
+                get_node("/root/nodes/gameplay/hill")->add_child(demon, true);
+                banner->subgroup_nodes.push_back(demon->get_path());
             }
             enemySpawnGroup++;
         }

@@ -41,7 +41,6 @@ height = 0.0
 fall_velocity = 0.5
 fall_acceleration = -5.0
 layer = 16
-subgroup = null
 
 [node name="shadow" parent="." instance=ExtResource( 6 )]
 material_override = SubResource( 1 )
@@ -76,7 +75,6 @@ curve = ExtResource( 1 )
 body = NodePath("..")
 behavior = 1
 affect_layers = 17
-subgroup = null
 
 [node name="resolver" type="Node" parent="."]
 script = ExtResource( 8 )

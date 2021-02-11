@@ -29,7 +29,7 @@ private:
     float formationRadius;
 
 public:
-    std::vector<GDCrowdNav*> subgroup_nodes;
+    std::vector<NodePath> subgroup_nodes;
     float yPos;
     float angle;
 	static void _register_methods();
