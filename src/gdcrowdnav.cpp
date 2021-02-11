@@ -20,7 +20,7 @@ void GDCrowdNav::_register_methods()
 	register_method("_physics_process", &GDCrowdNav::_physics_process);
     register_method("_integrate_forces", &GDCrowdNav::_integrate_forces);
     register_method("_enter_tree", &GDCrowdNav::_enter_tree);
-    register_method("_exit_tree", &GDCrowdNav::_enter_tree);
+    register_method("_exit_tree", &GDCrowdNav::_exit_tree);
 
     register_signal<GDCrowdNav>((char *)"landed");
 }
@@ -209,7 +209,7 @@ void GDBoidField::StepOptimized()
     PointCloud<float> agentSearch;
     for (RID agent : crowdAgents)
     {
-        Godot::print(std::to_string(crowdAgents.size()).c_str());
+        // Godot::print(std::to_string(crowdAgents.size()).c_str());
         PhysicsDirectBodyState* agentState = physics->body_get_direct_state(agent);
         if (agentState)
         {
@@ -219,9 +219,9 @@ void GDBoidField::StepOptimized()
             agentSearch.pts.push_back(Vector3(-100000, 0, 0));
         }
     }
-    agent_kd_tree_t kdtree(3, agentSearch, KDTreeSingleIndexAdaptorParams(10));
+    agent_kd_tree_t kdtree(3, agentSearch, KDTreeSingleIndexAdaptorParams(3));
     kdtree.buildIndex();
-    Godot::print(std::to_string(boids.size()).c_str());
+    // Godot::print(std::to_string(boids.size()).c_str());
     for (GDBoidAffector* boid : boids)
     {
         std::vector<std::pair<size_t, float>> nearby;

@@ -19,3 +19,4 @@ affect_layers = 16
 
 [node name="distance_despawn" type="Node" parent="."]
 script = ExtResource( 3 )
+despawn_distance = 400.0

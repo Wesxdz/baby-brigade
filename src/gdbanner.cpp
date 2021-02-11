@@ -10,6 +10,7 @@
 #include <Dictionary.hpp>
 #include <ResourceLoader.hpp>
 #include <PackedScene.hpp>
+#include <OS.hpp>
 
 using namespace godot;
 
@@ -99,7 +100,7 @@ void GDBanner::_exit_tree()
         Node* n = get_node_or_null(np);
         if (n)
         {
-            n->queue_free();
+            n->free();
         }
     }
 }
@@ -144,6 +145,8 @@ void GDTwistController::set_spin_enabled(bool enabled)
 
 void GDTwistController::_enter_tree()
 {
+    Rect2 safe = OS::get_singleton()->get_window_safe_area();
+    dragXToAngle = (Math_PI * 1.5)/safe.size.width;
     banner = Object::cast_to<GDBanner>(get_node(bannerPath));
 }
 
