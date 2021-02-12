@@ -12,7 +12,7 @@ using namespace godot;
 void GDCrowdNav::_register_methods() 
 {
     register_property<GDCrowdNav, float>("height", &GDCrowdNav::set_height, &GDCrowdNav::get_height, 20.0);
-    register_property<GDCrowdNav, float>("fall_velocity", &GDCrowdNav::set_fall_velocity, &GDCrowdNav::get_fall_velocity, 0.0);
+    register_property<GDCrowdNav, float>("fall_velocity", &GDCrowdNav::fall_velocity, 0.0);
     register_property<GDCrowdNav, float>("fall_acceleration", &GDCrowdNav::fall_acceleration, -5.0f);
     register_property<GDCrowdNav, uint32_t>("layer", &GDCrowdNav::layer, 0, GODOT_METHOD_RPC_MODE_DISABLED, GODOT_PROPERTY_USAGE_DEFAULT, GODOT_PROPERTY_HINT_FLAGS, "Baby, Obstacle, Item, Banner, Enemy");
     register_property<GDCrowdNav, int>("subgroup", &GDCrowdNav::subgroup, 0);
@@ -20,7 +20,9 @@ void GDCrowdNav::_register_methods()
 	register_method("_physics_process", &GDCrowdNav::_physics_process);
     register_method("_integrate_forces", &GDCrowdNav::_integrate_forces);
     register_method("_enter_tree", &GDCrowdNav::_enter_tree);
+    register_method("leave_boid_field", &GDCrowdNav::leave_boid_field);
     register_method("_exit_tree", &GDCrowdNav::_exit_tree);
+    register_method("set_fall_velocity", &GDCrowdNav::set_fall_velocity);
 
     register_signal<GDCrowdNav>((char *)"landed");
 }
@@ -61,23 +63,28 @@ void GDCrowdNav::_init()
 void GDCrowdNav::_enter_tree()
 {
     field = Object::cast_to<GDBoidField>(get_node("/root/nodes/gameplay/boid_field"));
-    field->affected[get_rid()] = layer;
-    field->subgroups[get_rid()] = subgroup;
-    field->crowdAgents.push_back(get_rid());
+    field->affected[this] = layer;
+    field->subgroups[this] = subgroup;
+    field->crowdAgents.push_back(this);
+}
+
+void GDCrowdNav::leave_boid_field()
+{
+    field = Object::cast_to<GDBoidField>(get_node("/root/nodes/gameplay/boid_field"));
+    field->crowdAgents.erase(std::remove(field->crowdAgents.begin(), field->crowdAgents.end(), this), field->crowdAgents.end());
+    field->affected.erase(this);
+    field->accumulatedForces.erase(this);
+    field->subgroups.erase(this);
 }
 
 void GDCrowdNav::_exit_tree()
 {
-    field = Object::cast_to<GDBoidField>(get_node("/root/nodes/gameplay/boid_field"));
-    field->crowdAgents.erase(std::remove(field->crowdAgents.begin(), field->crowdAgents.end(), get_rid()), field->crowdAgents.end());
-    field->affected.erase(get_rid());
-    field->accumulatedForces.erase(get_rid());
-    field->subgroups.erase(get_rid());
+    leave_boid_field();
 }
 
 void GDCrowdNav::_physics_process(float delta)
 {
-    if (height > 0)
+    if (height > 0 || (fall_velocity > 0.0f && on_ground))
     {
         if (on_ground)
         {
@@ -96,9 +103,9 @@ void GDCrowdNav::_physics_process(float delta)
     }
     height = std::max(height + fall_velocity, 0.0f);
     
-    if (field->accumulatedForces.count(get_rid()))
+    if (field->accumulatedForces.count(this))
     {
-        add_central_force(field->accumulatedForces[get_rid()] * delta);
+        add_central_force(field->accumulatedForces[this] * delta);
     }
 }
 
@@ -175,11 +182,9 @@ void GDBoidAffector::_exit_tree()
 void GDBoidField::Step()
 {
     accumulatedForces.clear();
-    auto physics = PhysicsServer::get_singleton();
     for (size_t a = 0; a < crowdAgents.size(); a++)
     {
-        RID agent = crowdAgents[a];
-        PhysicsDirectBodyState* agentState = physics->body_get_direct_state(agent);
+        GDCrowdNav* agent = crowdAgents[a];
         for (size_t b = 0; b < boids.size(); b++) // TODO: Spatial partitioning
         {
             GDBoidAffector* boid = boids[b];
@@ -187,15 +192,12 @@ void GDBoidField::Step()
             if (boid->body == agent) continue;
             if ((!(boid->affect_layers & affected[agent])) || (boid->subgroup != 0 && boid->subgroup != subgroups[agent])) continue;
 
-            if (agentState)
+            Vector3 otherPos = agent->get_global_transform().origin;
+            Vector3 toAgent = otherPos - pos;
+            float t = toAgent.length()/boid->radius;
+            if (t <= 1.0f)
             {
-                Vector3 otherPos = agentState->get_transform().origin;
-                Vector3 toAgent = otherPos - pos;
-                float t = toAgent.length()/boid->radius;
-                if (t <= 1.0f)
-                {
-                    accumulatedForces[agent] += toAgent * boid->curve.ptr()->interpolate(1.0f - t) * boid->strength * (boid->behavior == 0 ? -1.0f : 1.0f);
-                }
+                accumulatedForces[agent] += toAgent * boid->curve.ptr()->interpolate(1.0f - t) * boid->strength * (boid->behavior == 0 ? -1.0f : 1.0f);
             }
         }
     }
@@ -205,19 +207,10 @@ void GDBoidField::StepOptimized()
 {
     // Godot::print(std::to_string(crowdAgents.size()).c_str());
     accumulatedForces.clear();
-    auto physics = PhysicsServer::get_singleton();
     PointCloud<float> agentSearch;
-    for (RID agent : crowdAgents)
+    for (GDCrowdNav* agent : crowdAgents)
     {
-        // Godot::print(std::to_string(crowdAgents.size()).c_str());
-        PhysicsDirectBodyState* agentState = physics->body_get_direct_state(agent);
-        if (agentState)
-        {
-            agentSearch.pts.push_back(agentState->get_transform().origin);
-        } else
-        {
-            agentSearch.pts.push_back(Vector3(-100000, 0, 0));
-        }
+        agentSearch.pts.push_back(agent->get_global_transform().origin);
     }
     agent_kd_tree_t kdtree(3, agentSearch, KDTreeSingleIndexAdaptorParams(3));
     kdtree.buildIndex();
@@ -232,13 +225,14 @@ void GDBoidField::StepOptimized()
         for (size_t i = 0; i < found; i++)
         {
             size_t agentIndex = nearby[i].first;
-            RID agent = crowdAgents[agentIndex];
-            if (boid->body == agent) continue;
+            GDCrowdNav* agent = crowdAgents[agentIndex];
+            if (boid->body == agent->get_rid()) continue;
             if ((!(boid->affect_layers & affected[agent]))) continue;
             if (boid->subgroup != 0 && boid->subgroup != subgroups[agent]) continue;
             Vector3 otherPos = agentSearch.pts[agentIndex];
             Vector3 toAgent = otherPos - origin;
             float t = toAgent.length()/boid->radius;
+            if (toAgent.length() < 1) toAgent.normalize();
             if (t <= 1.0f)
             {
                 accumulatedForces[agent] += toAgent * boid->curve.ptr()->interpolate(1.0f - t) * boid->strength * (boid->behavior == 0 ? -1.0f : 1.0f);

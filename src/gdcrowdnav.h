@@ -11,6 +11,8 @@
 #include "nanoflann.hpp"
 using namespace nanoflann;
 
+#include "gdcrowdnav.h"
+
 template <typename T>
 struct PointCloud
 {
@@ -71,6 +73,7 @@ public:
 	void _init();
 	
 	void _enter_tree();
+	void leave_boid_field();
 	void _exit_tree();
 	void _physics_process(float delta);
 	void _integrate_forces(PhysicsDirectBodyState* state);
@@ -115,10 +118,10 @@ class GDBoidField : public Node
 	GODOT_CLASS(GDBoidField, Node)
 public:
 	std::vector<GDBoidAffector*> boids;
-	std::vector<RID> crowdAgents;
-	std::map<RID, Vector3> accumulatedForces;
-	std::map<RID, uint32_t> affected;
-	std::map<RID, int> subgroups;
+	std::vector<GDCrowdNav*> crowdAgents;
+	std::map<GDCrowdNav*, Vector3> accumulatedForces;
+	std::map<GDCrowdNav*, uint32_t> affected;
+	std::map<GDCrowdNav*, int> subgroups;
 
 	void Step();
 	void StepOptimized();

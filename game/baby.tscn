@@ -1,8 +1,8 @@
-[gd_scene load_steps=21 format=2]
+[gd_scene load_steps=23 format=2]
 
 [ext_resource path="res://boid_repel.tscn" type="PackedScene" id=1]
 [ext_resource path="res://baby_quad.tscn" type="PackedScene" id=2]
-[ext_resource path="res://baby_despawn.tres" type="Animation" id=3]
+[ext_resource path="res://baby_defeated_right.tres" type="Animation" id=3]
 [ext_resource path="res://bin/crowd_nav.gdns" type="Script" id=4]
 [ext_resource path="res://shadow003.png" type="Texture" id=5]
 [ext_resource path="res://shadow.tscn" type="PackedScene" id=6]
@@ -14,6 +14,7 @@
 [ext_resource path="res://baby-quad001.png" type="Texture" id=12]
 [ext_resource path="res://combat.gd" type="Script" id=13]
 [ext_resource path="res://baby_resolver.gd" type="Script" id=14]
+[ext_resource path="res://baby_defeated_left.tres" type="Animation" id=15]
 
 [sub_resource type="SpatialMaterial" id=1]
 resource_local_to_scene = true
@@ -54,6 +55,9 @@ shader_param/palette = ExtResource( 8 )
 [sub_resource type="SphereShape" id=6]
 radius = 5.0
 
+[sub_resource type="Animation" id=7]
+resource_name = "walk"
+
 [node name="baby" type="RigidBody"]
 collision_layer = 2
 collision_mask = 12
@@ -62,9 +66,8 @@ can_sleep = false
 linear_damp = 10.0
 angular_damp = 1.0
 script = ExtResource( 4 )
-height = 1.0
-fall_velocity = 0.5
-fall_acceleration = -5.0
+height = 0.576923
+fall_velocity = 1.0
 layer = 1
 
 [node name="shadow" parent="." instance=ExtResource( 6 )]
@@ -82,7 +85,7 @@ material_override = SubResource( 5 )
 [node name="boid_repel" parent="." instance=ExtResource( 1 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 radius = 5.0
-strength = 3000.0
+strength = 5000.0
 behavior = 1
 
 [node name="combat" type="Area" parent="." groups=[
@@ -98,10 +101,11 @@ resolve = 5.0
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, -1, 0, 1, -1.62921e-07, 0, 4.66747, 0 )
 shape = SubResource( 6 )
 
-[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
-root_node = NodePath("")
-autoplay = "resolver"
-anims/resolver = ExtResource( 3 )
+[node name="anim" type="AnimationPlayer" parent="."]
+anims/baby_defeated_left = ExtResource( 15 )
+anims/baby_defeated_right = ExtResource( 3 )
+anims/walk = SubResource( 7 )
+next/walk = "walk"
 
 [node name="resolver" type="Node" parent="."]
 script = ExtResource( 14 )

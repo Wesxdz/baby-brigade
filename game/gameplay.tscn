@@ -11,7 +11,7 @@
 [ext_resource path="res://bin/arc_proc_hill.gdns" type="Script" id=18]
 
 [sub_resource type="Curve" id=1]
-_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 1, Vector2( 0.259036, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.633523, 0.390909 ), -1.57193, -1.57193, 0, 0, Vector2( 1, 0.154545 ), 0.468292, 0.0, 0, 0 ]
+_data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 1, Vector2( 0.259036, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.628866, 0.0454545 ), 0.0587878, 0.0587878, 0, 0, Vector2( 1, 0 ), 0.0801652, 0.0, 0, 0 ]
 
 [node name="gameplay" type="Spatial"]
 

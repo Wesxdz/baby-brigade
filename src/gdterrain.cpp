@@ -98,7 +98,7 @@ void GDArcProcHill::_enter_tree()
     target = Object::cast_to<Spatial>(get_node("/root/nodes/gameplay/hill/banner"));
     auto res = ResourceLoader::get_singleton();
     snowMaterial = res->load("res://arc_test.tres");
-    tree_prefab = res->load("res://tree.tscn");
+    tree_prefab = res->load("res://cactus.tscn");
     coin_prefab = res->load("res://coin.tscn");
     demon_prefab = res->load("res://demon.tscn");
     enemy_banner_prefab = res->load("res://enemy_banner.tscn");
@@ -225,7 +225,7 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
             tree->set_translation(vert);
             float size = 1.0f + (1.0f + noise/amplitude) * 2.0f;
             // Random rotation
-            // rotate_y(360.0f * static_cast <float> (rand()) / static_cast <float> (RAND_MAX));
+            // tree->rotate_y(360.0f * static_cast <float> (rand()) / static_cast <float> (RAND_MAX));
             tree->set_scale(Vector3(size, size, size));
             Object::cast_to<GDBoidAffector>(tree->get_node("boid_repel"))->radius *= size;
             props.push_back(tree);

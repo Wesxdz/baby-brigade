@@ -1,6 +1,6 @@
 [gd_scene load_steps=3 format=2]
 
-[ext_resource path="res://audio/sfx - Track 07 (Miner Mine Rock).wav" type="AudioStream" id=1]
+[ext_resource path="res://asmr/pop-short.wav" type="AudioStream" id=1]
 [ext_resource path="res://despawn_timer.gd" type="Script" id=2]
 
 [node name="fight_sfx" type="AudioStreamPlayer"]

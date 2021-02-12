@@ -39,7 +39,6 @@ linear_damp = 10.0
 script = ExtResource( 4 )
 height = 0.0
 fall_velocity = 0.5
-fall_acceleration = -5.0
 layer = 16
 
 [node name="shadow" parent="." instance=ExtResource( 6 )]
@@ -61,7 +60,7 @@ shape = SubResource( 3 )
 [node name="bean" type="Spatial" parent="."]
 
 [node name="baby_quad" type="MeshInstance" parent="bean"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.14962, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0 )
 material_override = SubResource( 4 )
 mesh = SubResource( 5 )
 material/0 = null
