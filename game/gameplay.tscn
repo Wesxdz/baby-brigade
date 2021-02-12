@@ -29,6 +29,7 @@ script = ExtResource( 18 )
 "Despawn Distance" = 400.0
 
 [node name="baby" parent="hill" instance=ExtResource( 4 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
 
 [node name="banner" type="Spatial" parent="hill"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0 )

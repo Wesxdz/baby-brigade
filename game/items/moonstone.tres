@@ -1,8 +1,9 @@
-[gd_resource type="Resource" load_steps=4 format=2]
+[gd_resource type="Resource" load_steps=5 format=2]
 
 [ext_resource path="res://ItemData.gd" type="Script" id=1]
 [ext_resource path="res://moonstone.png" type="Texture" id=2]
 [ext_resource path="res://item_drop_resource.tscn" type="PackedScene" id=3]
+[ext_resource path="res://audio/sfx - Track 06 (Collect Moonstone).wav" type="AudioStream" id=4]
 
 [resource]
 script = ExtResource( 1 )
@@ -11,3 +12,4 @@ icon = ExtResource( 2 )
 outline_color = Color( 0.65098, 0.521569, 0.623529, 1 )
 text_color = Color( 0.290196, 0.188235, 0.321569, 1 )
 spawn = ExtResource( 3 )
+pickup_sfx = ExtResource( 4 )

@@ -9,9 +9,11 @@ void GDInventory::_register_methods()
 	register_method("can_craft", &GDInventory::can_craft);
 	register_method("is_resource", &GDInventory::is_resource);
 	register_method("get_stock", &GDInventory::get_stock);
+	register_method("change_resource", &GDInventory::change_resource);
 	register_method("num_ingredients", &GDInventory::num_ingredients);
 	register_method("get_ingredient_items", &GDInventory::get_ingredient_items);
 	register_method("get_ingredient_counts", &GDInventory::get_ingredient_counts);
+	register_signal<GDInventory>("item_amount_changed", "item", GODOT_VARIANT_TYPE_INT, "amount", GODOT_VARIANT_TYPE_INT);
 }
 
 GDInventory::GDInventory() 
@@ -82,6 +84,12 @@ void GDInventory::craft(int item)
 bool GDInventory::is_resource(int item)
 {
 	return resources.count((Item)item);
+}
+
+void GDInventory::change_resource(int item, int amount)
+{
+	resources[(Item)item] += amount;
+	emit_signal("item_amount_changed", item, amount);
 }
 
 int GDInventory::get_stock(int item)

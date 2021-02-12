@@ -61,6 +61,7 @@ public:
 
 	bool can_craft(int item);
 	void craft(int item);
+	void change_resource(int item, int amount);
 	bool is_resource(int item);
 	int get_stock(int item);
 	

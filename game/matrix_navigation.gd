@@ -33,11 +33,22 @@ func _input(event):
 			var rect : Rect2 = $selection.get_global_rect()
 			rect.size *= $selection.rect_scale.x
 			if rect.has_point(event.position):
-				placing = true
-				drop = itemDrop.instance()
-				drop.material_override.set_texture(0, last_closest.texture) # TEXTURE_ALBEDO
-				get_node("/root/nodes/gameplay/hill").add_child(drop)
-				$purchase.play()
+				var can_place = false
+				var item = last_closest.item.id
+				if $"/root/inventory".is_resource(item):
+					can_place = $"/root/inventory".get_stock(item) > 0
+					if can_place:
+						$"/root/inventory".change_resource(item, -1)
+				else:
+					can_place = $"/root/inventory".can_craft(item)
+					if can_place:
+						$"/root/inventory".craft(item)
+				if can_place:
+					placing = true
+					drop = itemDrop.instance()
+					drop.material_override.set_texture(0, last_closest.texture) # TEXTURE_ALBEDO
+					get_node("/root/nodes/gameplay/hill").add_child(drop)
+					$purchase.play()
 			elif get_global_rect().has_point(event.position):
 				dragging = true
 			if get_global_rect().has_point(event.position):
