@@ -24,7 +24,7 @@ void GDCrowdNav::_register_methods()
     register_method("_exit_tree", &GDCrowdNav::_exit_tree);
     register_method("set_fall_velocity", &GDCrowdNav::set_fall_velocity);
 
-    register_signal<GDCrowdNav>((char *)"landed");
+    register_signal<GDCrowdNav>("landed", Dictionary());
 }
 
 GDCrowdNav::GDCrowdNav() {}
