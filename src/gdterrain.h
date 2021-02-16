@@ -7,12 +7,64 @@
 #include <Material.hpp>
 #include <MeshInstance.hpp>
 #include <PackedScene.hpp>
+#include <Texture.hpp>
+#include <ShaderMaterial.hpp>
+
+#include <unordered_map>
 
 #include "FastNoiseLite.h"
 #include <list>
 #include <vector>
 
 namespace godot {
+
+enum BiomeType
+{
+	GRASSLANDS,
+	TUNDRA,
+	DESERT,
+};
+
+struct SpawnPrefabData
+{
+	Ref<PackedScene> prefab;
+	float freq;
+	// TODO: More sophisticated procedural generation ruleset
+};
+
+struct BiomeSpawnData
+{
+	float minSize;
+	float averageSize;
+	float maxSize;
+	Color sky;
+	Ref<Texture> palette;
+	std::vector<SpawnPrefabData> prefabs;
+	// TODO: Enemy types that can spawn in this biome
+};
+
+struct BiomeInstance
+{
+	BiomeType type;
+	float size;
+};
+
+struct BiomeInterpolation
+{
+	BiomeType a;
+	BiomeType b;
+	float startTransitionY;
+};
+
+struct BiomeLine
+{
+	std::vector<int> startY;
+	std::vector<BiomeInstance> biomes;
+	std::unordered_map<BiomeType, std::vector<BiomeType>> transitionPaths;
+	const float biomeTransition = 0.0f;
+	std::unordered_map<BiomeType, BiomeSpawnData> spawner;
+	BiomeInterpolation GetInterpolation(float y);
+};
 
 // Arc Procedural Hill (a cone atop a cylinder, with a noise surface)
 class GDArcProcHill : public Spatial {
@@ -25,7 +77,7 @@ private:
 		RID body;
 		Vector3 pos;
 	};
-
+	BiomeLine biomeLine;
 	float cone_height;
 	float hill_radius;
 	// Multiplier of noise points in world space
@@ -33,9 +85,7 @@ private:
 	float amplitude;
 	int arcsPerRing;
 	FastNoiseLite noiseGen;
-	Ref<Material> snowMaterial;
-	Ref<PackedScene> tree_prefab;
-	Ref<PackedScene> coin_prefab;
+	Ref<ShaderMaterial> terrain_material;
 	Ref<PackedScene> demon_prefab;
 	Ref<PackedScene> enemy_banner_prefab;
 	std::list<Arcsegment> arcs;

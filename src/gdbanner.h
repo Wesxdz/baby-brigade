@@ -29,7 +29,7 @@ private:
     float formationRadius;
 
 public:
-    std::vector<NodePath> subgroup_nodes;
+    int followers;
     float yPos;
     float angle;
 	static void _register_methods();
@@ -40,6 +40,7 @@ public:
 	void _init();
     void _enter_tree();
     void _exit_tree();
+    void despawn();
     void _physics_process(float delta);
     void set_y_pos(float p);
     float get_y_pos();
@@ -49,6 +50,7 @@ public:
     float get_y_speed();
     void set_rotate_speed(float s);
     float get_rotate_speed();
+    void lose_follower();
 };
 
 class GDTwistController : public Node

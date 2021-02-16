@@ -38,11 +38,13 @@ void GDBanner::_register_methods()
     register_method("get_y_pos", &GDBanner::get_y_pos);
     register_method("get_angle", &GDBanner::get_angle);
     register_method("get_radius", &GDBanner::get_radius);
+    register_method("lose_follower", &GDBanner::lose_follower);
 
     register_property<GDBanner, float>("Y Speed", &GDBanner::set_y_speed, &GDBanner::get_y_speed, 0.0f);
     register_property<GDBanner, float>("Rotate Speed", &GDBanner::set_rotate_speed, &GDBanner::get_rotate_speed, 0.0f);
 
     register_property<GDBanner, float>("Meter Conversion", &GDBanner::meterConversion, 0.1f);
+    register_signal<GDBanner>("despawn_banner");
 }
 
 void GDBanner::set_y_speed(float s)
@@ -93,16 +95,23 @@ void GDBanner::_enter_tree()
     // distanceLabel = Object::cast_to<RichTextLabel>(get_node("/root/nodes/hud/distance"));
 }
 
+void GDBanner::despawn()
+{
+    emit_signal("despawn_banner");
+}
+
+void GDBanner::lose_follower()
+{
+    followers--;
+    if (followers == 0)
+    {
+        Godot::print("Spawn loot!");
+    }
+}
+
 void GDBanner::_exit_tree()
 {
-    for (NodePath& np : subgroup_nodes)
-    {
-        Node* n = get_node_or_null(np);
-        if (n)
-        {
-            n->free();
-        }
-    }
+    despawn();
 }
 
 void GDBanner::_physics_process(float delta)

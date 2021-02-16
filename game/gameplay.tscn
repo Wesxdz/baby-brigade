@@ -34,7 +34,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0 )
 [node name="banner" type="Spatial" parent="hill"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0 )
 script = ExtResource( 1 )
-"Y Speed" = -50.0
+"Y Speed" = -200.0
 
 [node name="controller" type="Node" parent="hill/banner"]
 script = ExtResource( 8 )

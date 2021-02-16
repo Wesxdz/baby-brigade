@@ -37,7 +37,7 @@ public:
 	String name;
 	float cooldown;
 	float priority;
-	// Animation?\
+	// Animation?
 	Ref<PackedScene> fx;
 
 };

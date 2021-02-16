@@ -1,23 +1,22 @@
-[gd_scene load_steps=12 format=2]
+[gd_scene load_steps=11 format=2]
 
 [ext_resource path="res://pixel_scale.gd" type="Script" id=1]
 [ext_resource path="res://baby-template.png" type="Texture" id=2]
 [ext_resource path="res://baby_candy.gd" type="Script" id=3]
-[ext_resource path="res://swig.png" type="Texture" id=4]
-[ext_resource path="res://logo.png" type="Texture" id=5]
+[ext_resource path="res://play.png" type="Texture" id=4]
 [ext_resource path="res://audio/start_game.wav" type="AudioStream" id=6]
 [ext_resource path="res://start_game.gd" type="Script" id=9]
 
 [sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0.290196, 0.188235, 0.321569, 1 )
-
-[sub_resource type="CanvasItemMaterial" id=2]
-blend_mode = 1
-light_mode = 1
+bg_color = Color( 0.121569, 0.0627451, 0.164706, 1 )
 
 [sub_resource type="StyleBoxEmpty" id=3]
 
 [sub_resource type="Theme" id=4]
+
+[sub_resource type="CanvasItemMaterial" id=2]
+blend_mode = 1
+light_mode = 1
 
 [node name="menu" type="Control"]
 anchor_right = 1.0
@@ -31,29 +30,14 @@ __meta__ = {
 [node name="start" type="Panel" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
+margin_left = 0.529739
+margin_top = -0.529732
+margin_right = 0.529724
+margin_bottom = -0.529724
 custom_styles/panel = SubResource( 1 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
-
-[node name="baby_candy" type="CPUParticles2D" parent="start"]
-material = SubResource( 2 )
-position = Vector2( 0, -32 )
-amount = 128
-lifetime = 20.0
-local_coords = false
-texture = ExtResource( 2 )
-emission_shape = 2
-emission_rect_extents = Vector2( 160, 1 )
-flag_align_y = true
-direction = Vector2( -1, 0 )
-spread = 180.0
-gravity = Vector2( 0, 30 )
-initial_velocity = 100.0
-color = Color( 1, 0, 0, 1 )
-hue_variation = 0.91
-hue_variation_random = 1.0
-script = ExtResource( 3 )
 
 [node name="foreground" type="Panel" parent="start"]
 anchor_left = 0.25
@@ -89,24 +73,6 @@ __meta__ = {
 "_edit_use_anchors_": false
 }
 
-[node name="logo" type="TextureRect" parent="start/foreground"]
-anchor_left = 0.5
-anchor_top = 0.5
-anchor_right = 0.5
-anchor_bottom = 0.5
-margin_left = -59.0
-margin_top = 23.0804
-margin_right = 59.0
-margin_bottom = 75.0804
-grow_horizontal = 2
-grow_vertical = 2
-rect_pivot_offset = Vector2( 59, 0 )
-texture = ExtResource( 5 )
-script = ExtResource( 1 )
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
 [node name="start_game_sfx" type="AudioStreamPlayer" parent="start/foreground"]
 stream = ExtResource( 6 )
 
@@ -121,3 +87,21 @@ script = ExtResource( 9 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
+
+[node name="baby_candy" type="CPUParticles2D" parent="start"]
+material = SubResource( 2 )
+position = Vector2( 0, -32 )
+amount = 16
+lifetime = 60.0
+local_coords = false
+texture = ExtResource( 2 )
+emission_shape = 2
+emission_rect_extents = Vector2( 160, 1 )
+flag_align_y = true
+direction = Vector2( -1, 0 )
+spread = 180.0
+gravity = Vector2( 0, 5 )
+initial_velocity = 20.0
+color = Color( 0.819608, 0.0470588, 0.764706, 1 )
+hue_variation_random = 1.0
+script = ExtResource( 3 )

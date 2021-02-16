@@ -13,6 +13,8 @@
 #include <string>
 #include <time.h>
 #include <stdio.h>
+#include <algorithm>
+#include <random>
 
 using namespace godot;
 
@@ -42,6 +44,64 @@ void GDArcProcHill::_init()
 
 GDArcProcHill::GDArcProcHill()
 {
+    auto res = ResourceLoader::get_singleton();
+    biomeLine.spawner[GRASSLANDS] = {200.0f, 500.0f, 700.0f, 
+    Color(0.3, 1.0, 0.96, 1), res->load("res://grasslands_palette.png")};
+    biomeLine.spawner[TUNDRA] = {300.0f, 400.0f, 600.0f, 
+    Color(0.3, 1.0, 0.96, 1), res->load("res://tundra_palette.png"), {{res->load("res://tree.tscn"), 0.1f}}};
+    biomeLine.spawner[DESERT] = {400.0f, 600.0f, 800.0f, 
+    Color(0.3, 1.0, 0.96, 1), res->load("res://desert_palette.png"), {{res->load("res://cactus.tscn"), 0.02f}}};
+    biomeLine.transitionPaths[GRASSLANDS] = {TUNDRA, DESERT};
+    biomeLine.transitionPaths[TUNDRA] = {GRASSLANDS};
+    biomeLine.transitionPaths[DESERT] = {GRASSLANDS};
+    biomeLine.biomes.push_back({GRASSLANDS, 500});
+    biomeLine.startY.push_back(0.0f);
+    biomeLine.startY.push_back(-500.0f - biomeLine.biomeTransition);
+}
+
+BiomeInterpolation BiomeLine::GetInterpolation(float y)
+{
+    while (y < startY[startY.size() - 1])
+    {
+        Godot::print("Create new biome!");
+        BiomeInstance currentBiome = biomes[biomes.size() - 1];
+        BiomeInstance nextBiome;
+        nextBiome.type = transitionPaths[currentBiome.type][rand()%transitionPaths[currentBiome.type].size()];
+        BiomeSpawnData data = spawner[nextBiome.type];
+        std::default_random_engine gen;
+        std::normal_distribution<float> dist(data.averageSize);
+        nextBiome.size = std::min(std::max(data.minSize, dist(gen)), data.maxSize);
+        biomes.push_back(nextBiome);
+        startY.push_back(startY[startY.size() - 1] - nextBiome.size - biomeTransition);
+    }
+    BiomeInterpolation bi;
+    bi.startTransitionY = 0.0f;
+    bi.b = biomes[biomes.size() - 1].type;
+    if (biomes.size() == 1)
+    {
+        bi.a = biomes[biomes.size() - 1].type;
+    } 
+    else
+    {
+        size_t closestTransitionIndex = 0;
+        for (size_t i = startY.size() - 1; i >= 0; i--)
+        {
+            if (y < startY[i])
+            {
+                closestTransitionIndex = i;
+                break;
+            }
+        }
+        bool isInTransitionZone = closestTransitionIndex > 0 && std::abs(y - startY[closestTransitionIndex]) > biomes[closestTransitionIndex].size;
+        if (isInTransitionZone)
+        {
+            bi.startTransitionY = startY[closestTransitionIndex] + biomeTransition;
+            // bi.interp = (std::abs(y - startY[closestTransitionIndex]) - biomes[closestTransitionIndex].size)/biomeTransition;
+            Godot::print(std::to_string(bi.startTransitionY).c_str());
+        }
+        bi.a = biomes[biomes.size() - 2].type;
+    }
+    return bi;
 }
 
 GDArcProcHill::~GDArcProcHill()
@@ -54,7 +114,12 @@ void GDArcProcHill::create_arc(Vector3 pos, float degrees, float radius, float h
     auto vertices = PoolVector3Array();
     auto arr_mesh = gen_arc_mesh(pos, degrees, radius, hole, (size_t)degrees/6, vertices, (int)radius-hole);
     auto m = MeshInstance::_new();
-    m->set_material_override(snowMaterial);
+    // TODO: Refactor redundant code with create_y_arc to procedures
+    BiomeInterpolation bi = biomeLine.GetInterpolation(pos.y);
+    terrain_material->set_shader_param("ramp_start", biomeLine.spawner[bi.a].palette);
+    terrain_material->set_shader_param("ramp_end", biomeLine.spawner[bi.b].palette);
+    // terrain_material->set_shader_param("startTransitionY", bi.startTransitionY);
+    m->set_material_override(terrain_material->duplicate());
     m->set_cast_shadows_setting(0);
     m->set_mesh(arr_mesh);
     auto physics = PhysicsServer::get_singleton();
@@ -73,7 +138,11 @@ void GDArcProcHill::create_y_arc(Vector3 pos, float degrees, float radius)
     auto vertices = PoolVector3Array();
     auto arr_mesh = gen_y_arc_mesh(pos, degrees, radius, (size_t)degrees/6, vertices, 16);
     auto m = MeshInstance::_new();
-    m->set_material_override(snowMaterial);
+    BiomeInterpolation bi = biomeLine.GetInterpolation(pos.y);
+    terrain_material->set_shader_param("ramp_start", biomeLine.spawner[bi.a].palette);
+    terrain_material->set_shader_param("ramp_end", biomeLine.spawner[bi.b].palette);
+    // terrain_material->set_shader_param("startTransitionY", bi.startTransitionY);
+    m->set_material_override(terrain_material->duplicate());
     m->set_mesh(arr_mesh);
     m->set_translation(pos);
     auto physics = PhysicsServer::get_singleton();
@@ -97,13 +166,13 @@ void GDArcProcHill::_enter_tree()
 {
     target = Object::cast_to<Spatial>(get_node("/root/nodes/gameplay/hill/banner"));
     auto res = ResourceLoader::get_singleton();
-    snowMaterial = res->load("res://arc_test.tres");
-    tree_prefab = res->load("res://cactus.tscn");
-    coin_prefab = res->load("res://coin.tscn");
+    terrain_material = res->load("res://arc_terrain.tres");
+    // terrain_material->set_shader_param("ramp_start", biomes[GRASSLANDS].palette);
+    // terrain_material->set_shader_param("ramp_end", biomes[GRASSLANDS].palette);
     demon_prefab = res->load("res://demon.tscn");
     enemy_banner_prefab = res->load("res://enemy_banner.tscn");
     // TODO: just clone an arc prefab and add noise :) 
-    create_arc(Vector3(0, 0, 0), 360.0f, hill_radius, 0.0f);
+    create_arc(Vector3(0.0f, 0.0f, 0.0f), 360.0f, hill_radius, 0.0f);
 }
 
 void GDArcProcHill::_process(float delta)
@@ -217,19 +286,19 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
         Vector3 vert = Vector3(x + noise * x_circle, y, z + noise * z_circle);
         vertices.append(vert);
         // normals.append(Vector3(0, 1, 0));
-        if (((int)(noise * 10000)) % 600 == 1)
-        {
-            Spatial* tree = Object::cast_to<Spatial>(tree_prefab->instance());
-            tree->rotate_z(-Math_PI/2.0);
-            tree->rotate_y(-radians);
-            tree->set_translation(vert);
-            float size = 1.0f + (1.0f + noise/amplitude) * 2.0f;
-            // Random rotation
-            // tree->rotate_y(360.0f * static_cast <float> (rand()) / static_cast <float> (RAND_MAX));
-            tree->set_scale(Vector3(size, size, size));
-            Object::cast_to<GDBoidAffector>(tree->get_node("boid_repel"))->radius *= size;
-            props.push_back(tree);
-        }
+        // if (((int)(noise * 10000)) % 600 == 1)
+        // {
+        //     Spatial* tree = Object::cast_to<Spatial>(tree_prefab->instance());
+        //     tree->rotate_z(-Math_PI/2.0);
+        //     tree->rotate_y(-radians);
+        //     tree->set_translation(vert);
+        //     float size = 1.0f + (1.0f + noise/amplitude) * 2.0f;
+        //     // Random rotation
+        //     // tree->rotate_y(360.0f * static_cast <float> (rand()) / static_cast <float> (RAND_MAX));
+        //     tree->set_scale(Vector3(size, size, size));
+        //     Object::cast_to<GDBoidAffector>(tree->get_node("boid_repel"))->radius *= size;
+        //     props.push_back(tree);
+        // }
         //     if (((int)(noise * 15000)) % 800 == 1)
         // {
         //     Spatial* coin = Object::cast_to<Spatial>(coin_prefab->instance());
@@ -257,8 +326,10 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
                 // demon->rotate_y(-radians);
                 demon->set_translation(spawnPoint + Vector3(0, n, 0));
                 demon->subgroup = enemySpawnGroup;
-                get_node("/root/nodes/gameplay/hill")->add_child(demon, true);
-                banner->subgroup_nodes.push_back(demon->get_path());
+                get_node("/root/nodes/gameplay/hill")->add_child(demon);
+                banner->connect("despawn_banner", demon->get_node("resolver"), "despawn");
+                banner->followers++;
+                demon->get_node("resolver")->connect("despawn", banner, "lose_follower");
             }
             enemySpawnGroup++;
         }
