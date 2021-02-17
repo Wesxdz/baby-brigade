@@ -78,7 +78,7 @@ GDBanner::~GDBanner()
 void GDBanner::_init() 
 {
     yPos = get_translation().y;
-    radius = 70.0f;
+    radius = 200.0f;
 
     formationRadius = 10.0f;
 

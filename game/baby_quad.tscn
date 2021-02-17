@@ -4,28 +4,28 @@
 [ext_resource path="res://baby_quad.gd" type="Script" id=2]
 [ext_resource path="res://career.gd" type="Script" id=3]
 
-[sub_resource type="SpatialMaterial" id=2]
+[sub_resource type="SpatialMaterial" id=1]
 resource_local_to_scene = true
 flags_transparent = true
 flags_unshaded = true
 uv1_triplanar_sharpness = 2.2974
 
-[sub_resource type="QuadMesh" id=1]
-size = Vector2( 11, 11 )
+[sub_resource type="QuadMesh" id=2]
+size = Vector2( 32, 32 )
 
 [node name="bean" type="Spatial"]
 
 [node name="career" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.14962, 0.01 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0.01 )
 visible = false
-material_override = SubResource( 2 )
-mesh = SubResource( 1 )
+material_override = SubResource( 1 )
+mesh = SubResource( 2 )
 material/0 = null
 script = ExtResource( 3 )
 
 [node name="baby_quad" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.14962, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0 )
 material_override = ExtResource( 1 )
-mesh = SubResource( 1 )
+mesh = SubResource( 2 )
 material/0 = null
 script = ExtResource( 2 )

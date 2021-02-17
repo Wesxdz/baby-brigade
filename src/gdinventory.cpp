@@ -26,7 +26,7 @@ GDInventory::~GDInventory()
 
 void GDInventory::_init() 
 {
-	resources[Item::ASMR_COIN] = 20;
+	resources[Item::ASMR_COIN] = 1000;
 	resources[Item::PINEWOOD] = 0;
 	resources[Item::MOONSTONE] = 0;
 

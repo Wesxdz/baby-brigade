@@ -17,7 +17,7 @@ albedo_texture = ExtResource( 5 )
 
 [sub_resource type="QuadMesh" id=2]
 resource_local_to_scene = true
-size = Vector2( 11, 11 )
+size = Vector2( 32, 16 )
 
 [sub_resource type="SphereShape" id=3]
 radius = 5.0
@@ -28,7 +28,7 @@ flags_unshaded = true
 albedo_texture = ExtResource( 2 )
 
 [sub_resource type="QuadMesh" id=5]
-size = Vector2( 11, 11 )
+size = Vector2( 32, 32 )
 
 [node name="demon" type="RigidBody"]
 collision_layer = 2
@@ -60,7 +60,7 @@ shape = SubResource( 3 )
 [node name="bean" type="Spatial" parent="."]
 
 [node name="baby_quad" type="MeshInstance" parent="bean"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0 )
 material_override = SubResource( 4 )
 mesh = SubResource( 5 )
 material/0 = null

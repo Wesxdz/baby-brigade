@@ -8,5 +8,5 @@ shader = ExtResource( 2 )
 shader_param/scroll_x_speed = 0.0
 shader_param/scroll_y_speed = -0.5
 shader_param/repeat_u_count = 1
-shader_param/repeat_v_count = 3
+shader_param/repeat_v_count = 2
 shader_param/repeating_tiles = ExtResource( 1 )

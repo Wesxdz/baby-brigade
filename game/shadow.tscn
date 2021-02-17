@@ -15,7 +15,7 @@ albedo_texture = ExtResource( 1 )
 
 [sub_resource type="QuadMesh" id=2]
 resource_local_to_scene = true
-size = Vector2( 11, 11 )
+size = Vector2( 32, 16 )
 
 [node name="shadow" type="MeshInstance"]
 transform = Transform( 1, 0, 0, 0, -1.62921e-07, 1, 0, -1, -1.62921e-07, 0, -0.000380039, 0 )

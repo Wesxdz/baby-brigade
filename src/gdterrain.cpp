@@ -136,11 +136,11 @@ void GDArcProcHill::create_arc(Vector3 pos, float degrees, float radius, float h
 void GDArcProcHill::create_y_arc(Vector3 pos, float degrees, float radius)
 {
     auto vertices = PoolVector3Array();
-    auto arr_mesh = gen_y_arc_mesh(pos, degrees, radius, (size_t)degrees/6, vertices, 16);
+    auto arr_mesh = gen_y_arc_mesh(pos, degrees, radius, (size_t)degrees/6, vertices, 1);
     auto m = MeshInstance::_new();
-    BiomeInterpolation bi = biomeLine.GetInterpolation(pos.y);
-    terrain_material->set_shader_param("ramp_start", biomeLine.spawner[bi.a].palette);
-    terrain_material->set_shader_param("ramp_end", biomeLine.spawner[bi.b].palette);
+    // BiomeInterpolation bi = biomeLine.GetInterpolation(pos.y);
+    // terrain_material->set_shader_param("ramp_start", biomeLine.spawner[bi.a].palette);
+    // terrain_material->set_shader_param("ramp_end", biomeLine.spawner[bi.b].palette);
     // terrain_material->set_shader_param("startTransitionY", bi.startTransitionY);
     m->set_material_override(terrain_material->duplicate());
     m->set_mesh(arr_mesh);
@@ -264,6 +264,7 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
     auto vertices = PoolVector3Array();
     auto normals = PoolVector3Array();
     auto uvs = PoolVector2Array();
+    auto uv2 = PoolVector2Array();
     std::vector<float> noises;
     auto indices = PoolIntArray();
     float degrees_per_quad = degrees/quads;
@@ -275,10 +276,9 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
         float z_circle = sin(radians);
         int layer = v/verts_per_layer;
         float interp = 1.0f - (layer/layers);
-        float grav = radius/layers * layer;
         float x = x_circle * radius;
         float z = z_circle * radius;
-        float y = -grav;
+        float y = -16.0f * layer;
         float noise = noiseGen.GetNoise(pos.x + x, pos.y + y, pos.z + z);
         noises.push_back(noise);
         noise *= amplitude;
@@ -307,52 +307,58 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
         //     coin->set_translation(vert);
         //     props.push_back(coin);
         // }
-        if (((int)(noise * 15000)) % 2400 == 1)
-        {
-            Vector3 spawnPoint = pos + vert;
-            GDBanner* banner = Object::cast_to<GDBanner>(enemy_banner_prefab->instance());
-            banner->yPos = spawnPoint.y;
-            banner->angle = radians;
-            banner->set_translation(spawnPoint);
-            banner->set_rotate_speed((rand())/((float)(RAND_MAX/2.0f)) - 1.0f);
-            banner->set_y_speed((rand())/((float)(RAND_MAX/10.0f)) + 5.0f);
-            GDBoidAffector* affector = Object::cast_to<GDBoidAffector>(banner->get_child(0));
-            affector->subgroup = enemySpawnGroup;
-            get_node("/root/nodes/gameplay/hill")->add_child(banner);
-            for (int n = 0; n < std::max(1, (int)(-spawnPoint.y/1000 + (rand()/((float)(RAND_MAX/3.0f)) - 2.0))); n++)
-            {
-                GDCrowdNav* demon = Object::cast_to<GDCrowdNav>(demon_prefab->instance());
-                // demon->rotate_z(-Math_PI/2.0);
-                // demon->rotate_y(-radians);
-                demon->set_translation(spawnPoint + Vector3(0, n, 0));
-                demon->subgroup = enemySpawnGroup;
-                get_node("/root/nodes/gameplay/hill")->add_child(demon);
-                banner->connect("despawn_banner", demon->get_node("resolver"), "despawn");
-                banner->followers++;
-                demon->get_node("resolver")->connect("despawn", banner, "lose_follower");
-            }
-            enemySpawnGroup++;
-        }
+        // Temp disable enemy spawning for testing terrain
+        // if (((int)(noise * 15000)) % 2400 == 1)
+        // {
+        //     Vector3 spawnPoint = pos + vert;
+        //     GDBanner* banner = Object::cast_to<GDBanner>(enemy_banner_prefab->instance());
+        //     banner->yPos = spawnPoint.y;
+        //     banner->angle = radians;
+        //     banner->set_translation(spawnPoint);
+        //     banner->set_rotate_speed((rand())/((float)(RAND_MAX/2.0f)) - 1.0f);
+        //     banner->set_y_speed((rand())/((float)(RAND_MAX/10.0f)) + 5.0f);
+        //     GDBoidAffector* affector = Object::cast_to<GDBoidAffector>(banner->get_child(0));
+        //     affector->subgroup = enemySpawnGroup;
+        //     get_node("/root/nodes/gameplay/hill")->add_child(banner);
+        //     for (int n = 0; n < std::max(1, (int)(-spawnPoint.y/1000 + (rand()/((float)(RAND_MAX/3.0f)) - 2.0))); n++)
+        //     {
+        //         GDCrowdNav* demon = Object::cast_to<GDCrowdNav>(demon_prefab->instance());
+        //         // demon->rotate_z(-Math_PI/2.0);
+        //         // demon->rotate_y(-radians);
+        //         demon->set_translation(spawnPoint + Vector3(0, n, 0));
+        //         demon->subgroup = enemySpawnGroup;
+        //         get_node("/root/nodes/gameplay/hill")->add_child(demon);
+        //         banner->connect("despawn_banner", demon->get_node("resolver"), "despawn");
+        //         banner->followers++;
+        //         demon->get_node("resolver")->connect("despawn", banner, "lose_follower");
+        //     }
+        //     enemySpawnGroup++;
+        // }
         arc_progress += degrees_per_quad;
         if (arc_progress > degrees) arc_progress = 0.0f;
     }
     for (size_t quad = 0; quad < quads * layers; quad++)
     {
+        // int layer = quad/quads;
+        // float progress = (float)layer/layers;
+        // float inc = 1.0f/layers;
+        float progress = 0.0f;
+        float inc = 1.0f;
+        int tiles = 4;
+        float tile_uv = 1.0/tiles;
+        float tile = (rand() % tiles)/((float)tiles);
         indices.append(quad + verts_per_layer);
+        uv2.append({progress + inc, tile});
         indices.append(quad + 1);
+        uv2.append({progress, tile + tile_uv});
         indices.append(quad);
-        // for (int i = 0; i < 3; i++)
-        // {
-        //     normals.append((vertices[quad + verts_per_layer] + vertices[quad + 1] + vertices[quad])/3.0f);
-        // }
-
+        uv2.append({progress, tile});
         indices.append(quad + verts_per_layer);
+        uv2.append({progress + inc, tile});
         indices.append(quad + 1 + verts_per_layer);
+        uv2.append({progress + inc, tile + tile_uv});
         indices.append(quad + 1);
-        // for (int i = 0; i < 3; i++)
-        // {
-        //     normals.append((vertices[quad + verts_per_layer] + vertices[quad + 1 + verts_per_layer] + vertices[quad + 1])/3.0f);
-        // }
+        uv2.append({progress, tile + tile_uv});
     }
     for (size_t x = 0; x < indices.size(); x++)
     {
@@ -364,6 +370,7 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
     arrays[ArrayMesh::ARRAY_VERTEX] = faces;
     // arrays[ArrayMesh::ARRAY_NORMAL] = normals;
     arrays[ArrayMesh::ARRAY_TEX_UV]= uvs;
+    arrays[ArrayMesh::ARRAY_TEX_UV2] = uv2;
     // arrays[ArrayMesh::ARRAY_INDEX] = indices;
     mesh->add_surface_from_arrays(Mesh::PRIMITIVE_TRIANGLES, arrays);
     return mesh;
