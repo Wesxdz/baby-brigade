@@ -348,17 +348,17 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
         float tile_uv = 1.0/tiles;
         float tile = (rand() % tiles)/((float)tiles);
         indices.append(quad + verts_per_layer);
-        uv2.append({progress + inc, tile});
-        indices.append(quad + 1);
         uv2.append({progress, tile + tile_uv});
+        indices.append(quad + 1);
+        uv2.append({progress + inc, tile});
         indices.append(quad);
         uv2.append({progress, tile});
         indices.append(quad + verts_per_layer);
-        uv2.append({progress + inc, tile});
+        uv2.append({progress, tile + tile_uv});
         indices.append(quad + 1 + verts_per_layer);
         uv2.append({progress + inc, tile + tile_uv});
         indices.append(quad + 1);
-        uv2.append({progress, tile + tile_uv});
+        uv2.append({progress + inc, tile});
     }
     for (size_t x = 0; x < indices.size(); x++)
     {
