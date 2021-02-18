@@ -118,7 +118,6 @@ roll_left={
 
 [rendering]
 
-quality/driver/driver_name="GLES2"
 quality/2d/use_pixel_snap=true
 threads/thread_model=2
 vram_compression/import_etc=true

@@ -66,6 +66,15 @@ struct BiomeLine
 	BiomeInterpolation GetInterpolation(float y);
 };
 
+struct FoilageSpawner
+{
+	Ref<PackedScene> prefab;
+	// terrain height range
+	// frequency
+	// grouping rules
+	// biome mapping
+};
+
 // Arc Procedural Hill (a cone atop a cylinder, with a noise surface)
 class GDArcProcHill : public Spatial {
 	GODOT_CLASS(GDArcProcHill, Spatial)
@@ -86,6 +95,7 @@ private:
 	int arcsPerRing;
 	FastNoiseLite noiseGen;
 	Ref<ShaderMaterial> terrain_material;
+	Ref<PackedScene> flower_prefab;
 	Ref<PackedScene> demon_prefab;
 	Ref<PackedScene> enemy_banner_prefab;
 	std::list<Arcsegment> arcs;
@@ -95,6 +105,7 @@ private:
 	float spawnDistance = 200.0f;
 	std::vector<Spatial*> props;
 	int enemySpawnGroup = 1;
+	int foilage_spawn_count = 0;
 
 public:
 

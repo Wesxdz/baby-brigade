@@ -16,7 +16,6 @@
 [ext_resource path="res://resource.gd" type="Script" id=16]
 [ext_resource path="res://mobile_fx.gd" type="Script" id=18]
 [ext_resource path="res://stone_axe.png" type="Texture" id=20]
-[ext_resource path="res://babybox.png" type="Texture" id=21]
 [ext_resource path="res://sword.png" type="Texture" id=22]
 [ext_resource path="res://smoke-palette.png" type="Texture" id=23]
 [ext_resource path="res://metaballs/assets/textures/gradient_linear.png" type="Texture" id=24]
@@ -97,6 +96,10 @@ light_mode = 1
 font_data = ExtResource( 1 )
 
 [sub_resource type="StyleBoxEmpty" id=19]
+
+[sub_resource type="StreamTexture" id=21]
+resource_local_to_scene = true
+load_path = "res://.import/babybox.png-6f8db8476ffa94d375fee7d975fa428c.stex"
 
 [sub_resource type="AudioStreamRandomPitch" id=20]
 audio_stream = ExtResource( 30 )
@@ -611,7 +614,7 @@ margin_right = 32.0
 margin_bottom = 32.0
 rect_pivot_offset = Vector2( 16, 16 )
 mouse_default_cursor_shape = 2
-texture = ExtResource( 21 )
+texture = SubResource( 21 )
 script = ExtResource( 37 )
 __meta__ = {
 "_edit_use_anchors_": false

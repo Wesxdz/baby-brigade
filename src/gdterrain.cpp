@@ -5,6 +5,8 @@
 #include <ResourceLoader.hpp>
 #include <PhysicsServer.hpp>
 #include <World.hpp>
+#include <MultiMesh.hpp>
+#include <MultiMeshInstance.hpp>
 
 #include "gdcrowdnav.h"
 #include "gdbanner.h"
@@ -171,6 +173,7 @@ void GDArcProcHill::_enter_tree()
     // terrain_material->set_shader_param("ramp_end", biomes[GRASSLANDS].palette);
     demon_prefab = res->load("res://demon.tscn");
     enemy_banner_prefab = res->load("res://enemy_banner.tscn");
+    flower_prefab = res->load("res://foilage/flower_red.tscn");
     // TODO: just clone an arc prefab and add noise :) 
     create_arc(Vector3(0.0f, 0.0f, 0.0f), 360.0f, hill_radius, 0.0f);
 }
@@ -300,6 +303,37 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
         //     props.push_back(tree);
         // }
         //     if (((int)(noise * 15000)) % 800 == 1)
+        // {
+        //     Spatial* coin = Object::cast_to<Spatial>(coin_prefab->instance());
+        //     coin->rotate_z(-Math_PI/2.0);
+        //     coin->rotate_y(-radians);
+        //     coin->set_translation(vert);
+        //     props.push_back(coin);
+        // }
+        if (((int)(noise * 1.0)) % 100 == 0)
+        {
+            // TODO: Render quads via MultiMeshInstance with tile based on INSTANCE_CUSTOM data
+            auto spawn = Transform(Basis(), pos + vert);
+            spawn.translate(16.0 * Vector3(vert.x, 0.0, vert.z).normalized());
+            spawn.rotate_basis(Vector3(1.0, 0, 0), Math_PI/2.0 + .3 - (rand() % 100 * 0.006));
+            spawn.rotate_basis(Vector3(0.0, 1.0, 0.0), -radians + Math_PI/2.0 + .3 - (rand() % 100 * 0.006));
+            MultiMeshInstance* foilage = Object::cast_to<MultiMeshInstance>(get_node("/root/nodes/gameplay/hill/terrain/foilage"));
+            Ref<MultiMesh> mm = foilage->get_multimesh();
+            mm->set_visible_instance_count(foilage_spawn_count);
+            mm->set_instance_transform(foilage_spawn_count % mm->get_instance_count(), spawn);
+            foilage_spawn_count++;
+            // TODO: Despawn!
+            // Spatial* tree = Object::cast_to<Spatial>(flower_prefab->instance());
+            // // tree->rotate_z(-Math_PI/2.0);
+            // // tree->rotate_y(-radians);
+            // // Object::cast_to<Spatial>(tree->get_child(0))->rotate_y(1.5708);
+            // // tree->translate(vert);
+            // tree->set_transform(spawn);
+            // // tree->look_at(tree->get_global_transform().origin + Vector3(0.0, -1.0, 0.0), Vector3(vert.x, 0.0, vert.z));
+            // // tree->get_transform().set_look_at(Vector3(0, 0, 0), Vector3(0, -100.0, 0), Vector3(vert.x, 0.0, vert.z));
+            // props.push_back(tree);
+        }
+        // if (((int)(noise * 15000)) % 800 == 1)
         // {
         //     Spatial* coin = Object::cast_to<Spatial>(coin_prefab->instance());
         //     coin->rotate_z(-Math_PI/2.0);

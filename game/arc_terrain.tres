@@ -1,9 +1,10 @@
-[gd_resource type="ShaderMaterial" load_steps=5 format=2]
+[gd_resource type="ShaderMaterial" load_steps=6 format=2]
 
 [ext_resource path="res://terrain.shader" type="Shader" id=1]
 [ext_resource path="res://tundra_palette.png" type="Texture" id=2]
 [ext_resource path="res://grasslands_palette.png" type="Texture" id=3]
 [ext_resource path="res://grass.png" type="Texture" id=4]
+[ext_resource path="res://trans.png" type="Texture" id=5]
 
 [resource]
 resource_local_to_scene = true
@@ -12,3 +13,4 @@ shader_param/startTransitionY = 0.0
 shader_param/ramp_start = ExtResource( 2 )
 shader_param/ramp_end = ExtResource( 3 )
 shader_param/base_UV = ExtResource( 4 )
+shader_param/trans_UV = ExtResource( 5 )
