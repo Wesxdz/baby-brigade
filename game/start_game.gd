@@ -1,20 +1,19 @@
 extends Control
 
 var thread
-var gameplay
 var ready_to_start = false
 var indicate_start = false
-var gameplay_prefab = preload("res://gameplay.tscn")
-var hud_prefab = preload("res://hud.tscn")
+var gameplay_prefab = null# preload("res://gameplay.tscn")
+var gameplay
+var hud_prefab = null# preload("res://hud.tscn")
+var hud
 var game_started = false
 
 func _ready():
+	pass
 #	thread = Thread.new()
-#	print("Load gameplay")
 #	thread.start(self, "load_gameplay", "ok")
-	gameplay = gameplay_prefab.instance()
-	gameplay_loaded()
-	
+#
 func start_game():
 	$"../start_game_sfx".play()
 	indicate_start = true
@@ -34,11 +33,13 @@ func _input(event):
 	
 func begin_game():
 	game_started = true
-	print("Begin game!")
 	indicate_start = false
-#	$"../title_ost".stop()
+	gameplay_prefab = load("res://gameplay.tscn")
+	gameplay = gameplay_prefab.instance()
+	hud_prefab = load("res://hud.tscn")
+	hud = hud_prefab.instance()
 	$"/root/nodes/menu/start".visible = false
-	$"/root/nodes".add_child(hud_prefab.instance())
+	$"/root/nodes".add_child(hud)
 	$"/root/nodes".add_child(gameplay)
 	
 func restart_menu():
@@ -50,12 +51,13 @@ func restart_menu():
 	$"/root/start_menu".visible = true
 
 func load_gameplay(data):
+	gameplay_prefab = load("res://gameplay.tscn")
 	gameplay = gameplay_prefab.instance()
+	hud_prefab = load("res://hud.tscn")
+	hud = hud_prefab.instance()
 	call_deferred("gameplay_loaded")
 	
 func gameplay_loaded():
-	print("Gameplay loaded!")
-#	thread.wait_to_finish()
 	ready_to_start = true
 
 #func _exit_tree():

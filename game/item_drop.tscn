@@ -12,11 +12,11 @@ material = ExtResource( 2 )
 size = Vector2( 8, 22 )
 
 [node name="drop" type="MeshInstance"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 25.1184, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 32, 0 )
 material_override = ExtResource( 1 )
 mesh = SubResource( 1 )
 material/0 = null
 
 [node name="fall_path" parent="." instance=ExtResource( 3 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -13.3235, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -20, 0 )
 mesh = SubResource( 2 )

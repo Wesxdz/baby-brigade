@@ -7,6 +7,7 @@
 
 [resource]
 resource_local_to_scene = true
+flags = 16
 frames = 4
 fps = 8.0
 frame_0/texture = ExtResource( 4 )

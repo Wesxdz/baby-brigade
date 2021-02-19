@@ -8,6 +8,8 @@
 #include <Curve.hpp>
 #include <Texture.hpp>
 
+#include <unordered_map>
+
 #include "nanoflann.hpp"
 using namespace nanoflann;
 
@@ -119,6 +121,8 @@ class GDBoidField : public Node
 public:
 	std::vector<GDBoidAffector*> boids;
 	std::vector<GDCrowdNav*> crowdAgents;
+	// TODO: Need a way to optimize query further (by subgroup)
+	std::unordered_map<uint32_t, std::vector<GDCrowdNav*>> agentsOfLayer;
 	std::map<GDCrowdNav*, Vector3> accumulatedForces;
 	std::map<GDCrowdNav*, uint32_t> affected;
 	std::map<GDCrowdNav*, int> subgroups;

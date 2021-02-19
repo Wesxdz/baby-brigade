@@ -22,20 +22,17 @@ _global_script_class_icons={
 
 config/name="Baby Brigade"
 run/main_scene="res://load_entry.tscn"
-boot_splash/image="res://loading.png"
+run/low_processor_mode=true
+boot_splash/image="res://loading_screen.png"
 boot_splash/fullsize=false
 boot_splash/use_filter=false
-boot_splash/bg_color=Color( 0, 0, 0, 1 )
+boot_splash/bg_color=Color( 0.121569, 0.0627451, 0.164706, 1 )
 config/icon="res://swig_icon.png"
 
 [autoload]
 
 pixel="*res://pixel_scaler.tscn"
 inventory="*res://inventory.tscn"
-
-[compression]
-
-formats/zstd/compression_level=20
 
 [debug]
 

@@ -8,7 +8,7 @@ func _on_drop_landed():
 	var spawn_pos = get_parent().transform.origin
 	var smoke = smoke_fx.instance()
 	smoke.emitting = true
-	smoke.position = get_viewport().get_camera().unproject_position(spawn_pos)/$"/root/nodes/hud".hud_scale.x
+	smoke.position = get_viewport().get_camera().unproject_position(spawn_pos)/$"/root/pixel".snap
 	get_node("/root/nodes/hud/smoke/viewport").add_child(smoke)
 	var land = land_sfx.instance()
 	$"/root/inventory".add_child(land)

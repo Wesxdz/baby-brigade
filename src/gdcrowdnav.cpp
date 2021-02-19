@@ -66,6 +66,7 @@ void GDCrowdNav::_enter_tree()
     field->affected[this] = layer;
     field->subgroups[this] = subgroup;
     field->crowdAgents.push_back(this);
+    field->agentsOfLayer[layer].push_back(this);
 }
 
 void GDCrowdNav::leave_boid_field()
@@ -75,6 +76,8 @@ void GDCrowdNav::leave_boid_field()
     field->affected.erase(this);
     field->accumulatedForces.erase(this);
     field->subgroups.erase(this);
+    auto layerVector = field->agentsOfLayer[layer];
+    layerVector.erase(std::remove(layerVector.begin(), layerVector.end(), this), layerVector.end());
 }
 
 void GDCrowdNav::_exit_tree()

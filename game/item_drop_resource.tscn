@@ -34,6 +34,7 @@ radius = 12.0
 [node name="drop" type="RigidBody"]
 gravity_scale = 0.0
 script = ExtResource( 2 )
+height = 32.0
 layer = 4
 
 [node name="shadow" parent="." instance=ExtResource( 4 )]

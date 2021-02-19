@@ -95,7 +95,6 @@ private:
 	int arcsPerRing;
 	FastNoiseLite noiseGen;
 	Ref<ShaderMaterial> terrain_material;
-	Ref<PackedScene> flower_prefab;
 	Ref<PackedScene> demon_prefab;
 	Ref<PackedScene> enemy_banner_prefab;
 	std::list<Arcsegment> arcs;

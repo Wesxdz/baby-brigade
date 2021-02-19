@@ -173,7 +173,6 @@ void GDArcProcHill::_enter_tree()
     // terrain_material->set_shader_param("ramp_end", biomes[GRASSLANDS].palette);
     demon_prefab = res->load("res://demon.tscn");
     enemy_banner_prefab = res->load("res://enemy_banner.tscn");
-    flower_prefab = res->load("res://foilage/flower_red.tscn");
     // TODO: just clone an arc prefab and add noise :) 
     create_arc(Vector3(0.0f, 0.0f, 0.0f), 360.0f, hill_radius, 0.0f);
 }
