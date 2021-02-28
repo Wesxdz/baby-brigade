@@ -42,6 +42,19 @@ struct PointCloud
 
 };
 
+struct FoilageSpring
+{
+	godot::Vector3 origin;
+	godot::Vector3 up;
+	godot::Quat displacement;
+	// Maximum displacement radians
+	float range;
+	// Spring constant
+	float rate; // 0 to not rise after being pushed down
+	// Hooke's law 2.0f * Math_PI * up.length() OR what is displacement.length()??
+	// Don't apply a force directly back to up, it should be perpendicular to displacement normal towards up
+};
+
 typedef KDTreeSingleIndexAdaptor<
 	L2_Simple_Adaptor<float, PointCloud<real_t>>,
 	PointCloud<real_t>,
@@ -127,12 +140,16 @@ public:
 	std::map<GDCrowdNav*, uint32_t> affected;
 	std::map<GDCrowdNav*, int> subgroups;
 
+	std::vector<Vector3> foilageAccumulatedForces;
+
 	void Step();
 	void StepOptimized();
+	void IntegrateFoilage(float delta);
 
 public:
 	static void _register_methods();
 	void _init();
+	void _enter_tree();
 
 	void _physics_process(float delta);
 };

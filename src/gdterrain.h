@@ -16,6 +16,8 @@
 #include <list>
 #include <vector>
 
+#include "gdcrowdnav.h"
+
 namespace godot {
 
 enum BiomeType
@@ -104,9 +106,10 @@ private:
 	float spawnDistance = 200.0f;
 	std::vector<Spatial*> props;
 	int enemySpawnGroup = 1;
-	int foilage_spawn_count = 0;
 
 public:
+	int foilage_spawn_count = 0;
+	std::vector<FoilageSpring> foilage_data;
 
 	static void _register_methods();
 

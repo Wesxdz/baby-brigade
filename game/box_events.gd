@@ -12,7 +12,7 @@ func _on_drop_landed():
 	get_node("/root/nodes/hud/smoke/viewport").add_child(smoke)
 	var land = land_sfx.instance()
 	$"/root/inventory".add_child(land)
-	for i in range(0, ceil(rand_range(1, 5))):
+	for i in range(0, 3): # ceil(rand_range(1, 5))
 		var baby = baby_prefab.instance()
 		get_node("/root/nodes/gameplay/hill").add_child(baby)
 		baby.set_translation(spawn_pos + Vector3(spawn_pos.normalized().x, i, spawn_pos.normalized().z) )

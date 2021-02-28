@@ -166,6 +166,10 @@ void GDArcProcHill::create_y_arc(Vector3 pos, float degrees, float radius)
 
 void GDArcProcHill::_enter_tree()
 {
+    MultiMeshInstance* foilage = Object::cast_to<MultiMeshInstance>(get_node("/root/nodes/gameplay/hill/terrain/foilage"));
+    Ref<MultiMesh> mm = foilage->get_multimesh();
+    foilage_data.resize(mm->get_instance_count());
+
     target = Object::cast_to<Spatial>(get_node("/root/nodes/gameplay/hill/banner"));
     auto res = ResourceLoader::get_singleton();
     terrain_material = res->load("res://arc_terrain.tres");
@@ -312,14 +316,17 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
         if (((int)(noise * 1.0)) % 100 == 0)
         {
             // TODO: Render quads via MultiMeshInstance with tile based on INSTANCE_CUSTOM data
-            auto spawn = Transform(Basis(), pos + vert);
-            spawn.translate(16.0 * Vector3(vert.x, 0.0, vert.z).normalized());
-            spawn.rotate_basis(Vector3(1.0, 0, 0), Math_PI/2.0 + .3 - (rand() % 100 * 0.006));
-            spawn.rotate_basis(Vector3(0.0, 1.0, 0.0), -radians + Math_PI/2.0 + .3 - (rand() % 100 * 0.006));
+            auto spawn = Transform(Basis(), Vector3());
+            spawn.rotate(Vector3(1.0, 0, 0), Math_PI/2.0); // + .3 - (rand() % 100 * 0.006)
+            spawn.rotate(Vector3(0.0, 1.0, 0.0), -radians + Math_PI/2.0); // + .3 - (rand() % 100 * 0.006)
+            spawn.origin = pos + vert; // 16.0 * Vector3(vert.x, 0.0, vert.z).normalized()
             MultiMeshInstance* foilage = Object::cast_to<MultiMeshInstance>(get_node("/root/nodes/gameplay/hill/terrain/foilage"));
             Ref<MultiMesh> mm = foilage->get_multimesh();
             mm->set_visible_instance_count(foilage_spawn_count);
-            mm->set_instance_transform(foilage_spawn_count % mm->get_instance_count(), spawn);
+            int index = foilage_spawn_count % mm->get_instance_count();
+            mm->set_instance_transform(index, spawn);
+            // TODO: Only simulate foilage data for quads that are visible and affected by forces
+            foilage_data[index] = {spawn.origin, Vector3(spawn.origin.x, 0.0, spawn.origin.z).normalized(), Quat(), Math_PI/2.0, 1.0};
             foilage_spawn_count++;
             // TODO: Despawn!
             // Spatial* tree = Object::cast_to<Spatial>(flower_prefab->instance());

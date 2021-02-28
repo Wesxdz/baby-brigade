@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode unshaded, blend_add, cull_disabled;
+render_mode unshaded, blend_mix, cull_disabled;
 
 uniform sampler2D repeating_tiles;
 uniform float scroll_x_speed = 0.0;

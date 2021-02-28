@@ -68,6 +68,7 @@ font_data = ExtResource( 1 )
 
 [sub_resource type="StreamTexture" id=10]
 resource_local_to_scene = true
+flags = 16
 load_path = "res://.import/babybox.png-6f8db8476ffa94d375fee7d975fa428c.stex"
 
 [sub_resource type="AudioStreamRandomPitch" id=11]

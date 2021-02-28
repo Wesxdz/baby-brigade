@@ -6,6 +6,10 @@
 
 #include <algorithm>
 #include <GodotProfiling.hpp>
+#include <MultiMesh.hpp>
+#include <MultiMeshInstance.hpp>
+
+#include "gdterrain.h"
 
 using namespace godot;
 
@@ -140,7 +144,7 @@ void GDBoidAffector::_register_methods()
     register_property<GDBoidAffector, Ref<Curve>>("curve", &GDBoidAffector::curve, Ref<Curve>());
     register_property<GDBoidAffector, NodePath>("body", &GDBoidAffector::bodyNode, NodePath());
     register_property<GDBoidAffector, int>("behavior", &GDBoidAffector::behavior, 0);
-    register_property<GDBoidAffector, uint32_t>("affect_layers", &GDBoidAffector::affect_layers, 0, GODOT_METHOD_RPC_MODE_DISABLED, GODOT_PROPERTY_USAGE_DEFAULT, GODOT_PROPERTY_HINT_FLAGS, "Baby, Obstacle, Item, Banner, Enemy");
+    register_property<GDBoidAffector, uint32_t>("affect_layers", &GDBoidAffector::affect_layers, 0, GODOT_METHOD_RPC_MODE_DISABLED, GODOT_PROPERTY_USAGE_DEFAULT, GODOT_PROPERTY_HINT_FLAGS, "Baby, Obstacle, Item, Banner, Enemy, Foilage");
     register_property<GDBoidAffector, int>("subgroup", &GDBoidAffector::subgroup, 0);
 
     register_method("_enter_tree", &GDBoidAffector::_enter_tree);
@@ -196,11 +200,11 @@ void GDBoidField::Step()
             if ((!(boid->affect_layers & affected[agent])) || (boid->subgroup != 0 && boid->subgroup != subgroups[agent])) continue;
 
             Vector3 otherPos = agent->get_global_transform().origin;
-            Vector3 toAgent = otherPos - pos;
-            float t = toAgent.length()/boid->radius;
+            Vector3 toFoilage = otherPos - pos;
+            float t = toFoilage.length()/boid->radius;
             if (t <= 1.0f)
             {
-                accumulatedForces[agent] += toAgent * boid->curve.ptr()->interpolate(1.0f - t) * boid->strength * (boid->behavior == 0 ? -1.0f : 1.0f);
+                accumulatedForces[agent] += toFoilage * boid->curve.ptr()->interpolate(1.0f - t) * boid->strength * (boid->behavior == 0 ? -1.0f : 1.0f);
             }
         }
     }
@@ -215,7 +219,7 @@ void GDBoidField::StepOptimized()
     {
         agentSearch.pts.push_back(agent->get_global_transform().origin);
     }
-    agent_kd_tree_t kdtree(3, agentSearch, KDTreeSingleIndexAdaptorParams(3));
+    agent_kd_tree_t kdtree(3, agentSearch, KDTreeSingleIndexAdaptorParams(10));
     kdtree.buildIndex();
     // Godot::print(std::to_string(boids.size()).c_str());
     for (GDBoidAffector* boid : boids)
@@ -233,20 +237,88 @@ void GDBoidField::StepOptimized()
             if ((!(boid->affect_layers & affected[agent]))) continue;
             if (boid->subgroup != 0 && boid->subgroup != subgroups[agent]) continue;
             Vector3 otherPos = agentSearch.pts[agentIndex];
-            Vector3 toAgent = otherPos - origin;
-            float t = toAgent.length()/boid->radius;
-            if (toAgent.length() < 1) toAgent.normalize();
+            Vector3 toFoilage = otherPos - origin;
+            float t = toFoilage.length()/boid->radius;
+            if (toFoilage.length() < 1) toFoilage.normalize();
             if (t <= 1.0f)
             {
-                accumulatedForces[agent] += toAgent * boid->curve.ptr()->interpolate(1.0f - t) * boid->strength * (boid->behavior == 0 ? -1.0f : 1.0f);
+                accumulatedForces[agent] += toFoilage * boid->curve.ptr()->interpolate(1.0f - t) * boid->strength * (boid->behavior == 0 ? -1.0f : 1.0f);
             }
         }
+    }
+}
+
+void GDBoidField::IntegrateFoilage(float delta)
+{
+    foilageAccumulatedForces.clear();
+    auto foilage = Object::cast_to<MultiMeshInstance>(get_node("/root/nodes/gameplay/hill/terrain/foilage"));
+    Ref<MultiMesh> mm = foilage->get_multimesh();
+    auto terrain = Object::cast_to<GDArcProcHill>(get_node("/root/nodes/gameplay/hill/terrain"));
+    PointCloud<float> foilageSearch;
+    // TODO: foilageSearch only needs to be constructed when foilage is updated
+    int spawnedFoilage = std::min((int)mm->get_instance_count(), terrain->foilage_spawn_count);
+    for (size_t i = 0; i < spawnedFoilage; i++)
+    {
+        foilageSearch.pts.push_back(terrain->foilage_data[i].origin);
+    }
+    agent_kd_tree_t kdtree(3, foilageSearch, KDTreeSingleIndexAdaptorParams(5));
+    kdtree.buildIndex();
+    for (GDBoidAffector* boid : boids)
+    {
+        if (boid->affect_layers & 0b100000)
+        {
+            std::vector<std::pair<size_t, float>> nearby;
+            SearchParams params;
+            auto origin = boid->get_global_transform().origin;
+            const float queryOrigin[3] = {origin.x, origin.y, origin.z};
+            // Godot::print(std::to_string(terrain->foilage_data[0].origin.y).c_str());
+            size_t found = kdtree.radiusSearch(&queryOrigin[0], 3.0f * boid->radius * boid->radius, nearby, params);
+            for (size_t i = 0; i < found; i++)
+            {
+                size_t foilageIndex = nearby[i].first;
+                // foilageAccumulatedForces[foilageIndex] += Vector3(1.0, 0, 0);
+                Vector3 otherPos = foilageSearch.pts[foilageIndex];
+                Vector3 toFoilage = otherPos - origin;
+                float t = toFoilage.length()/boid->radius;
+                foilageAccumulatedForces[foilageIndex] += toFoilage;
+                // foilageAccumulatedForces[foilageIndex] += toFoilage * boid->curve.ptr()->interpolate(1.0f - t) * boid->strength * (boid->behavior == 0 ? -1.0f : 1.0f);
+            }
+        }
+    }
+    for (size_t i = 0; i < spawnedFoilage; i++)
+    {
+        Transform t = mm->get_instance_transform(i);
+        FoilageSpring& spring = terrain->foilage_data[i];
+        // t.origin += Vector3(t.origin.x, 0.0f, t.origin.z).normalized() * foilageAccumulatedForces[i].length() * delta * 1000.0;
+        t.set_look_at(t.origin, Vector3(0, -1, 0), spring.up);
+        if (foilageAccumulatedForces[i].length_squared() > 0.0f)
+        {
+            Vector3 rotationAxis = (-foilageAccumulatedForces[i].normalized()).cross(spring.up);
+            spring.displacement *= Quat(rotationAxis, delta * 4.0f);
+        }
+        Vector3 axis;
+        float angle;
+        spring.displacement.get_axis_and_angle(axis, angle);
+        if (angle > spring.range)
+        {
+            spring.displacement = Quat(axis, spring.range);
+        }
+        if (angle > 0.0f)
+        {
+            spring.displacement = spring.displacement.slerp(Quat(axis, 0.0f), delta * 10.0f * angle);
+            spring.displacement.get_axis_and_angle(axis, angle);
+            Vector3 origin = t.origin;
+            t.rotate(axis, angle);
+            t.origin = origin;
+        }
+        mm->set_instance_transform(i, t);
     }
 }
 
 void GDBoidField::_register_methods()
 {
     register_method("_physics_process", &GDBoidField::_physics_process);
+    register_method("_enter_tree", &GDBoidField::_enter_tree);
 }
 
 void GDBoidField::_init()
@@ -254,8 +326,16 @@ void GDBoidField::_init()
 
 }
 
+void GDBoidField::_enter_tree()
+{
+    auto foilage = Object::cast_to<MultiMeshInstance>(get_node("/root/nodes/gameplay/hill/terrain/foilage"));
+    Ref<MultiMesh> mm = foilage->get_multimesh();
+    foilageAccumulatedForces.resize(mm->get_instance_count());
+}
+
 void GDBoidField::_physics_process(float delta)
 {
     // Step();
     StepOptimized();
+    IntegrateFoilage(delta);
 }

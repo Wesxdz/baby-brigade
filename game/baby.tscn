@@ -88,6 +88,7 @@ transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0 )
 radius = 12.0
 strength = 5000.0
 behavior = 1
+affect_layers = 49
 
 [node name="combat" type="Area" parent="." groups=[
 "baby",
