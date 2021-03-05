@@ -4,7 +4,7 @@
 [ext_resource path="res://baby_quad.gd" type="Script" id=2]
 [ext_resource path="res://career.gd" type="Script" id=3]
 
-[sub_resource type="Shader" id=3]
+[sub_resource type="Shader" id=1]
 code = "shader_type spatial;
 render_mode blend_mix,depth_draw_alpha_prepass,cull_back,diffuse_burley,specular_schlick_ggx,unshaded;
 uniform vec4 albedo : hint_color;
@@ -37,8 +37,8 @@ void fragment() {
 }
 "
 
-[sub_resource type="ShaderMaterial" id=4]
-shader = SubResource( 3 )
+[sub_resource type="ShaderMaterial" id=2]
+shader = SubResource( 1 )
 shader_param/albedo = Color( 1, 1, 1, 1 )
 shader_param/specular = 0.5
 shader_param/metallic = 0.0
@@ -49,16 +49,16 @@ shader_param/uv1_offset = Vector3( 0, 0, 0 )
 shader_param/uv2_scale = Vector3( 1, 1, 1 )
 shader_param/uv2_offset = Vector3( 0, 0, 0 )
 
-[sub_resource type="QuadMesh" id=2]
+[sub_resource type="QuadMesh" id=3]
 size = Vector2( 32, 32 )
 
 [node name="bean" type="Spatial"]
 
 [node name="career" type="MeshInstance" parent="."]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0.001 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0.01 )
 visible = false
-material_override = SubResource( 4 )
-mesh = SubResource( 2 )
+material_override = SubResource( 2 )
+mesh = SubResource( 3 )
 skeleton = NodePath("")
 material/0 = null
 script = ExtResource( 3 )
@@ -66,7 +66,7 @@ script = ExtResource( 3 )
 [node name="baby_quad" type="MeshInstance" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 0 )
 material_override = ExtResource( 1 )
-mesh = SubResource( 2 )
+mesh = SubResource( 3 )
 skeleton = NodePath("")
 material/0 = null
 script = ExtResource( 2 )

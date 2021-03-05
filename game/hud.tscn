@@ -87,6 +87,7 @@ __meta__ = {
 script = ExtResource( 18 )
 
 [node name="smoke" type="Control" parent="."]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 mouse_filter = 1
@@ -191,6 +192,7 @@ __meta__ = {
 layer = 10
 
 [node name="matrix" type="Control" parent="canvas"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = -0.235977
@@ -216,6 +218,7 @@ __meta__ = {
 layer = 20
 
 [node name="center" type="Control" parent="canvas/matrix/work/popup"]
+visible = false
 anchor_left = 0.5
 anchor_top = 0.82
 anchor_right = 0.5
@@ -226,6 +229,7 @@ __meta__ = {
 }
 
 [node name="storage" type="NinePatchRect" parent="canvas/matrix/work/popup/center"]
+visible = false
 self_modulate = Color( 0.65098, 0.521569, 0.623529, 1 )
 margin_top = -50.0
 margin_right = 44.0
@@ -269,6 +273,7 @@ __meta__ = {
 }
 
 [node name="recipe" type="Control" parent="canvas/matrix/work/popup"]
+visible = false
 anchor_top = 0.7
 anchor_bottom = 0.7
 __meta__ = {
@@ -286,6 +291,7 @@ __meta__ = {
 }
 
 [node name="zone" type="Panel" parent="canvas/matrix/work"]
+visible = false
 anchor_right = 1.0
 anchor_bottom = 1.0
 rect_clip_content = true
@@ -333,6 +339,7 @@ __meta__ = {
 }
 
 [node name="items" type="Control" parent="canvas/matrix/work/zone"]
+visible = false
 anchor_left = 0.5
 anchor_top = 0.4
 anchor_right = 0.5

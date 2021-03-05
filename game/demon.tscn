@@ -68,12 +68,12 @@ material/0 = null
 [node name="boid_repel" type="Spatial" parent="."]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.40227, 0 )
 script = ExtResource( 3 )
-radius = 8.0
-strength = 3000.0
+radius = 12.0
+strength = 5000.0
 curve = ExtResource( 1 )
 body = NodePath("..")
 behavior = 1
-affect_layers = 17
+affect_layers = 49
 
 [node name="resolver" type="Node" parent="."]
 script = ExtResource( 8 )

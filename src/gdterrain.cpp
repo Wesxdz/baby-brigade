@@ -313,7 +313,7 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
         //     coin->set_translation(vert);
         //     props.push_back(coin);
         // }
-        if (((int)(noise * 1.0)) % 100 == 0)
+        if (v > verts_per_layer && ((int)(noise * 1.0)) % 100 == 0)
         {
             // TODO: Render quads via MultiMeshInstance with tile based on INSTANCE_CUSTOM data
             auto spawn = Transform(Basis(), Vector3());
@@ -327,6 +327,7 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
             mm->set_instance_transform(index, spawn);
             // TODO: Only simulate foilage data for quads that are visible and affected by forces
             foilage_data[index] = {spawn.origin, Vector3(spawn.origin.x, 0.0, spawn.origin.z).normalized(), Quat(), Math_PI/2.0, 1.0};
+            mm->set_instance_custom_data(index, Color(((rand() % 3)/3.0), 0, 0));
             foilage_spawn_count++;
             // TODO: Despawn!
             // Spatial* tree = Object::cast_to<Spatial>(flower_prefab->instance());

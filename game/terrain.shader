@@ -35,7 +35,11 @@ void fragment()
 	float y_to_x = -world_pos.y/s - floor(-world_pos.y/s); // y_to_x + wrap
 	vec4 base = texture(base_UV, tile);
 	float together = y_to_x + (wrap - floor(wrap));
-	vec4 overlay = texture(trans_UV, vec2((wrap - floor(wrap)), 1.0 - ( UV.x * 4.0 - floor(UV.x * 4.0)) ));
+	float past = (wrap - floor(wrap));
+	// TODO Pixel perfect circle wrapping
+	// atan(-y_to_x, past)
+	// sin(past) * cos(y_to_x)
+	vec4 overlay = texture(trans_UV, vec2(past, 1.0 - UV.x ));
 	vec4 color = overlay * overlay.a + base * (1.0 - overlay.a);
 	ALBEDO = vec3(color.r, color.g, color.b);
 //	ALPHA = color.a;
