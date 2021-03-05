@@ -34,11 +34,6 @@ void GDArcProcHill::_register_methods()
 
 void GDArcProcHill::_init()
 {
-    noiseGen = FastNoiseLite();
-    srand(time(NULL));
-    noiseGen.SetSeed(rand());
-    noiseGen.SetNoiseType(FastNoiseLite::NoiseType::NoiseType_OpenSimplex2);
-    noiseGen.SetFrequency(0.005f);
     // You need to initialize properties or the game will crash
     amplitude = 10.0f;
     hill_radius = 50.0f;
@@ -59,6 +54,22 @@ GDArcProcHill::GDArcProcHill()
     biomeLine.biomes.push_back({GRASSLANDS, 500});
     biomeLine.startY.push_back(0.0f);
     biomeLine.startY.push_back(-500.0f - biomeLine.biomeTransition);
+
+    srand(time(NULL));
+    noiseGen.SetSeed(rand());
+    noiseGen.SetNoiseType(FastNoiseLite::NoiseType::NoiseType_OpenSimplex2);
+    noiseGen.SetFrequency(0.005f);
+
+    for (size_t i = 0; i < 3; i++)
+    {
+        foilageGen[i].SetSeed(rand());
+        noiseGen.SetNoiseType(FastNoiseLite::NoiseType::NoiseType_OpenSimplex2);
+        noiseGen.SetFrequency(0.005f);
+    }
+    
+    foilageEdgeGen.SetSeed(rand());
+    foilageEdgeGen.SetNoiseType(FastNoiseLite::NoiseType::NoiseType_Value);
+    foilageEdgeGen.SetFrequency(0.01f);
 }
 
 BiomeInterpolation BiomeLine::GetInterpolation(float y)
@@ -285,7 +296,8 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
         float x = x_circle * radius;
         float z = z_circle * radius;
         float y = -16.0f * layer;
-        float noise = noiseGen.GetNoise(pos.x + x, pos.y + y, pos.z + z);
+        Vector3 noisePos = Vector3(pos.x + x, pos.y + y, pos.z + z);
+        float noise = noiseGen.GetNoise(noisePos.x, noisePos.y, noisePos.z);
         noises.push_back(noise);
         noise *= amplitude;
         float start = 1.0f - interp;
@@ -313,22 +325,34 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
         //     coin->set_translation(vert);
         //     props.push_back(coin);
         // }
-        if (v > verts_per_layer && ((int)(noise * 1.0)) % 100 == 0)
+        if (v > verts_per_layer && noise > 0.5) // ((int)(noise * 1.0)) % 100 == 0
         {
-            // TODO: Render quads via MultiMeshInstance with tile based on INSTANCE_CUSTOM data
-            auto spawn = Transform(Basis(), Vector3());
-            spawn.rotate(Vector3(1.0, 0, 0), Math_PI/2.0); // + .3 - (rand() % 100 * 0.006)
-            spawn.rotate(Vector3(0.0, 1.0, 0.0), -radians + Math_PI/2.0); // + .3 - (rand() % 100 * 0.006)
-            spawn.origin = pos + vert; // 16.0 * Vector3(vert.x, 0.0, vert.z).normalized()
-            MultiMeshInstance* foilage = Object::cast_to<MultiMeshInstance>(get_node("/root/nodes/gameplay/hill/terrain/foilage"));
-            Ref<MultiMesh> mm = foilage->get_multimesh();
-            mm->set_visible_instance_count(foilage_spawn_count);
-            int index = foilage_spawn_count % mm->get_instance_count();
-            mm->set_instance_transform(index, spawn);
-            // TODO: Only simulate foilage data for quads that are visible and affected by forces
-            foilage_data[index] = {spawn.origin, Vector3(spawn.origin.x, 0.0, spawn.origin.z).normalized(), Quat(), Math_PI/2.0, 1.0};
-            mm->set_instance_custom_data(index, Color(((rand() % 3)/3.0), 0, 0));
-            foilage_spawn_count++;
+            int flower = -1;
+            for (size_t i = 0; i < 3; i++)
+            {
+                if (foilageGen[i].GetNoise(noisePos.x, noisePos.y, noisePos.z) + foilageEdgeGen.GetNoise(noisePos.x, noisePos.y, noisePos.z) > 0.8f)
+                {
+                    flower = i;
+                    break;
+                }
+            }
+            if (flower >= 0)
+            {
+                auto spawn = Transform(Basis(), Vector3());
+                spawn.rotate(Vector3(1.0, 0, 0), Math_PI/2.0 + .3 - (rand() % 100 * 0.006)); //
+                spawn.rotate(Vector3(0.0, 1.0, 0.0), -radians + Math_PI/2.0 + .3 - (rand() % 100 * 0.006)); // 
+                spawn.origin = pos + vert; // 16.0 * Vector3(vert.x, 0.0, vert.z).normalized()
+                // TODO: Offset randomly from vert
+                MultiMeshInstance* foilage = Object::cast_to<MultiMeshInstance>(get_node("/root/nodes/gameplay/hill/terrain/foilage"));
+                Ref<MultiMesh> mm = foilage->get_multimesh();
+                mm->set_visible_instance_count(foilage_spawn_count);
+                int index = foilage_spawn_count % mm->get_instance_count();
+                mm->set_instance_transform(index, spawn);
+                // TODO: Only simulate foilage data for quads that are visible and affected by forces
+                foilage_data[index] = {spawn.origin, Vector3(spawn.origin.x, 0.0, spawn.origin.z).normalized(), Quat(), Math_PI/2.0, 1.0};
+                mm->set_instance_custom_data(index, Color((flower/3.0f), (float)rand()/RAND_MAX, 0));
+                foilage_spawn_count++;
+            }
             // TODO: Despawn!
             // Spatial* tree = Object::cast_to<Spatial>(flower_prefab->instance());
             // // tree->rotate_z(-Math_PI/2.0);

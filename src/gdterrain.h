@@ -96,6 +96,8 @@ private:
 	float amplitude;
 	int arcsPerRing;
 	FastNoiseLite noiseGen;
+	FastNoiseLite foilageGen[3];
+	FastNoiseLite foilageEdgeGen;
 	Ref<ShaderMaterial> terrain_material;
 	Ref<PackedScene> demon_prefab;
 	Ref<PackedScene> enemy_banner_prefab;
