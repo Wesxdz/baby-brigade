@@ -1,9 +1,13 @@
-[gd_scene load_steps=10 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://pixel_scale.gd" type="Script" id=1]
 [ext_resource path="res://baby-template.png" type="Texture" id=2]
 [ext_resource path="res://baby_candy.gd" type="Script" id=3]
 [ext_resource path="res://play.png" type="Texture" id=4]
+[ext_resource path="res://shader_cache.gd" type="Script" id=5]
+[ext_resource path="res://fall_mat.tres" type="Material" id=6]
+[ext_resource path="res://item_drop_mat.tres" type="Material" id=7]
+[ext_resource path="res://fall_path.tscn" type="PackedScene" id=8]
 [ext_resource path="res://start_game.gd" type="Script" id=9]
 
 [sub_resource type="StyleBoxFlat" id=1]
@@ -17,6 +21,13 @@ bg_color = Color( 0.121569, 0.0627451, 0.164706, 1 )
 blend_mode = 1
 light_mode = 1
 
+[sub_resource type="QuadMesh" id=5]
+size = Vector2( 32, 32 )
+
+[sub_resource type="QuadMesh" id=6]
+material = ExtResource( 6 )
+size = Vector2( 8, 22 )
+
 [node name="menu" type="Control"]
 anchor_right = 1.0
 anchor_bottom = 1.0
@@ -29,9 +40,9 @@ __meta__ = {
 [node name="start" type="Panel" parent="."]
 anchor_right = 1.0
 anchor_bottom = 1.0
-margin_left = 0.529739
+margin_left = 0.609298
 margin_top = -0.529732
-margin_right = 0.529724
+margin_right = 0.609283
 margin_bottom = -0.529724
 custom_styles/panel = SubResource( 1 )
 __meta__ = {
@@ -39,9 +50,9 @@ __meta__ = {
 }
 
 [node name="foreground" type="Panel" parent="start"]
-anchor_left = 0.25
+anchor_left = 0.248437
 anchor_top = 0.2
-anchor_right = 0.75
+anchor_right = 0.748437
 anchor_bottom = 0.7
 margin_left = -16.2354
 margin_top = 0.720139
@@ -103,3 +114,17 @@ initial_velocity = 20.0
 color = Color( 0.819608, 0.0470588, 0.764706, 1 )
 hue_variation_random = 1.0
 script = ExtResource( 3 )
+
+[node name="shader_cache" type="Spatial" parent="."]
+script = ExtResource( 5 )
+
+[node name="drop" type="MeshInstance" parent="shader_cache"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 32, 0 )
+material_override = ExtResource( 7 )
+mesh = SubResource( 5 )
+material/0 = null
+
+[node name="fall_path" type="MeshInstance" parent="shader_cache/drop" instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -20, 0 )
+mesh = SubResource( 6 )
+material/0 = null

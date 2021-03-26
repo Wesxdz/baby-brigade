@@ -349,7 +349,7 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
                 int index = foilage_spawn_count % mm->get_instance_count();
                 mm->set_instance_transform(index, spawn);
                 // TODO: Only simulate foilage data for quads that are visible and affected by forces
-                foilage_data[index] = {spawn.origin, Vector3(spawn.origin.x, 0.0, spawn.origin.z).normalized(), Quat(), Math_PI/2.0, 1.0};
+                foilage_data[index] = {spawn.origin, Vector3(spawn.origin.x, 0.0, spawn.origin.z).normalized(), Quat(), Math_PI/2.0, 1.0, 0.0f};
                 mm->set_instance_custom_data(index, Color((flower/3.0f), (float)rand()/RAND_MAX, 0));
                 foilage_spawn_count++;
             }
@@ -441,12 +441,11 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
     return mesh;
 }
 
-// float GDArcProcHill::get_ground_pos(Vector3 pos)
-// {
-//     Vector3 ground;
-//     ground.y = pos.y;
-//     float radians = atan2(pos.z, pos.x);
-//     float x_circle = cos(radians);
-//     float z_circle = sin(radians);
-//     float noise = noiseGen.GetNoise(x_circle * hill_radius, pos.y, z_circle * hill_radius);
-// }
+Vector3 GDArcProcHill::get_ground_pos(Vector3 pos)
+{
+    float radians = atan2(-pos.z, pos.x);
+    float x_circle = cos(radians);
+    float z_circle = sin(radians);
+    float noise = noiseGen.GetNoise(x_circle * hill_radius, pos.y, z_circle * hill_radius);
+    return Vector3(x_circle * hill_radius + noise * amplitude, pos.y, z_circle * hill_radius + noise * amplitude);
+}

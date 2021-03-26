@@ -100,8 +100,10 @@ amplitude = 16.0
 multimesh = SubResource( 4 )
 
 [node name="banner" type="Spatial" parent="hill"]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -800, 0 )
 script = ExtResource( 1 )
 "Y Speed" = -100.0
+"Meter Conversion" = 0.01
 
 [node name="controller" type="Node" parent="hill/banner"]
 script = ExtResource( 8 )

@@ -130,9 +130,10 @@ public:
 	ArrayMesh* gen_arc_mesh(Vector3 pos, float degrees, float radius, float hole, size_t quads, PoolVector3Array& faces, int layers = 1);
 	// Arc normal is vector from y origin
 	ArrayMesh* gen_y_arc_mesh(Vector3 pos, float degrees, float radius, size_t quads, PoolVector3Array& faces, int layers = 1);
-	// float get_ground_pos(Vector3 pos);
+	Vector3 get_ground_pos(Vector3 pos);
 
 	void set_seed(float p_seed);
+
 };
 
 }

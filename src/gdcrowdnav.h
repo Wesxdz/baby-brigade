@@ -46,13 +46,16 @@ struct FoilageSpring
 {
 	godot::Vector3 origin;
 	godot::Vector3 up;
+	// The physical quaternion roation of the foilage displacement
 	godot::Quat displacement;
+
 	// Maximum displacement radians
 	float range;
 	// Spring constant
 	float rate; // 0 to not rise after being pushed down
 	// Hooke's law 2.0f * Math_PI * up.length() OR what is displacement.length()??
 	// Don't apply a force directly back to up, it should be perpendicular to displacement normal towards up
+	float torque = 0.0f;
 };
 
 typedef KDTreeSingleIndexAdaptor<

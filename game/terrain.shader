@@ -40,6 +40,7 @@ void fragment()
 	// atan(-y_to_x, past)
 	// sin(past) * cos(y_to_x)
 	vec4 overlay = texture(trans_UV, vec2(past, 1.0 - UV.x ));
+	overlay.a = 0.0; // TODO reimplement overlay once you have time!
 	vec4 color = overlay * overlay.a + base * (1.0 - overlay.a);
 	ALBEDO = vec3(color.r, color.g, color.b);
 //	ALPHA = color.a;
