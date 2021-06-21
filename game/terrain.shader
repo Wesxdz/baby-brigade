@@ -10,6 +10,11 @@ uniform sampler2D trans_UV;
 
 const float PI = 3.14159265358979323846264338327950288419716939937510;
 
+// https://github.com/godotengine/godot/issues/25142 GLES3 requires manual color change
+vec3 adjust_rgb(vec3 color){
+	return mix(pow((color + vec3(0.055)) * (1.0 / (1.0 + 0.055)),vec3(2.4)),color * (1.0 / 12.92),lessThan(color,vec3(0.04045)));
+}
+
 varying vec3 world_pos;
 //varying vec3 start_pos;
 
@@ -21,13 +26,14 @@ void vertex()
 
 void fragment()
 {
-//	ALBEDO = vec3(float((int(UV.r * 4.0) % 4))/4.0);
+	float numTiles = 4.0;
+//	ALBEDO = vec3(float((int(UV.r * 2.0) % 2))/2.0);
 //	float interp  = clamp((startY)/biomeTransitionSize, 0.0, 1.0);
 //	float interp = clamp(-(start_pos.y - world_pos.y)/biomeTransitionSize, 0.0, 1.0) * float(startTransitionY == 0.0);
 //	vec4 color = texture(ramp_start, UV) * (1.0 - interp) + texture(ramp_end, UV) * interp;
-	vec2 tile = vec2(UV2.x/4.0 + float(int(UV.x * 4.0))/4.0, UV2.y);
-//	vec4 color = texture(base_UV, tile);
-//	vec4 color = vec4(UV2.x, 0.0, UV2.y, 1.0); // debug
+	vec2 tile = vec2(UV2.x/numTiles + float(int(UV.x * numTiles))/numTiles, UV2.y);
+	vec4 color = texture(base_UV, tile);
+// vec4 color = vec4(UV2.x, 0.0, UV2.y, 1.0); // debug
 	float theta = atan(-world_pos.z, world_pos.x);
 	float t = 32.0; // wrapped tile count
 	float s = 16.0; // tile size
@@ -40,7 +46,8 @@ void fragment()
 	// atan(-y_to_x, past)
 	// sin(past) * cos(y_to_x)
 	vec4 overlay = texture(trans_UV, vec2(past, 1.0 - UV.x ));
-	vec4 color = overlay * overlay.a + base * (1.0 - overlay.a);
-	ALBEDO = vec3(color.r, color.g, color.b);
+	overlay.a = 0.0; // TODO reimplement overlay once you have time!
+//	vec4 color = overlay * overlay.a + base * (1.0 - overlay.a);
+	ALBEDO = adjust_rgb(color.rgb);
 //	ALPHA = color.a;
 }

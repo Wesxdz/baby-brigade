@@ -214,12 +214,11 @@ void GDBoidField::StepOptimized()
 {
     // Godot::print(std::to_string(crowdAgents.size()).c_str());
     accumulatedForces.clear();
-    PointCloud<float> agentSearch;
+    agentSearch.pts.clear();
     for (GDCrowdNav* agent : crowdAgents)
     {
         agentSearch.pts.push_back(agent->get_global_transform().origin);
     }
-    agent_kd_tree_t kdtree(3, agentSearch, KDTreeSingleIndexAdaptorParams(10));
     kdtree.buildIndex();
     // Godot::print(std::to_string(boids.size()).c_str());
     for (GDBoidAffector* boid : boids)
@@ -246,6 +245,25 @@ void GDBoidField::StepOptimized()
             }
         }
     }
+}
+
+Array GDBoidField::get_neighbors(Vector3 origin, float radius, uint32_t layers)
+{
+    Array neighbors;
+    std::vector<std::pair<size_t, float>> nearby;
+    SearchParams params;
+    const float queryOrigin[3] = {origin.x, origin.y, origin.z};
+    size_t found = kdtree.radiusSearch(&queryOrigin[0], radius * radius, nearby, params);
+    for (size_t i = 0; i < found; i++)
+    {
+        size_t agentIndex = nearby[i].first;
+        GDCrowdNav* agent = crowdAgents[agentIndex];
+        if (layers & affected[agent])
+        {
+            neighbors.push_back(agent);
+        }
+    }
+    return neighbors;
 }
 
 void GDBoidField::IntegrateFoilage(float delta)
@@ -319,6 +337,7 @@ void GDBoidField::_register_methods()
 {
     register_method("_physics_process", &GDBoidField::_physics_process);
     register_method("_enter_tree", &GDBoidField::_enter_tree);
+    register_method("get_neighbors", &GDBoidField::get_neighbors);
 }
 
 void GDBoidField::_init()

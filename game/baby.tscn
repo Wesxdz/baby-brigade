@@ -112,6 +112,7 @@ next/walk = "walk"
 
 [node name="resolver" type="Node" parent="."]
 script = ExtResource( 14 )
+
 [connection signal="area_entered" from="combat" to="combat" method="_on_combat_area_entered"]
 [connection signal="evaluate" from="combat" to="resolver" method="_on_combat_evaluate"]
 [connection signal="lost" from="combat" to="resolver" method="_on_combat_lost"]

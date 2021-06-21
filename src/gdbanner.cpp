@@ -12,6 +12,8 @@
 #include <PackedScene.hpp>
 #include <OS.hpp>
 
+#include "gdterrain.h"
+
 using namespace godot;
 
 float GDBanner::get_y_pos()
@@ -116,10 +118,16 @@ void GDBanner::_exit_tree()
 
 void GDBanner::_physics_process(float delta)
 {
+    // Godot::print(std::string("Banner!").c_str());
     yPos += ySpeed * delta;
     angle += rotateSpeed * delta;
     Vector3 rotation = Vector3(radius * cos(angle), yPos, radius * sin(angle));
     look_at(Vector3(0.0f, 1.0f, 1.0f), rotation);
+
+    auto terrain = Object::cast_to<GDArcProcHill>(get_node("/root/nodes/gameplay/hill/terrain"));
+    Vector3 origin = get_global_transform().origin;
+    // set_translation(terrain->get_ground_pos(rotation);
+
     int64_t terrainOnly = 0b00000001;
     Dictionary ground = get_world()->get_direct_space_state()->intersect_ray(rotation, Vector3(0.0f, yPos, 0.0f), Array(), terrainOnly);
     if (ground.size() > 0)

@@ -34,11 +34,6 @@ void GDArcProcHill::_register_methods()
 
 void GDArcProcHill::_init()
 {
-    noiseGen = FastNoiseLite();
-    srand(time(NULL));
-    noiseGen.SetSeed(rand());
-    noiseGen.SetNoiseType(FastNoiseLite::NoiseType::NoiseType_OpenSimplex2);
-    noiseGen.SetFrequency(0.005f);
     // You need to initialize properties or the game will crash
     amplitude = 10.0f;
     hill_radius = 50.0f;
@@ -59,6 +54,24 @@ GDArcProcHill::GDArcProcHill()
     biomeLine.biomes.push_back({GRASSLANDS, 500});
     biomeLine.startY.push_back(0.0f);
     biomeLine.startY.push_back(-500.0f - biomeLine.biomeTransition);
+
+    tree_prefab = res->load("res://tree.tscn");
+
+    srand(time(NULL));
+    noiseGen.SetSeed(rand());
+    noiseGen.SetNoiseType(FastNoiseLite::NoiseType::NoiseType_OpenSimplex2);
+    noiseGen.SetFrequency(0.005f);
+
+    for (size_t i = 0; i < 8; i++)
+    {
+        foilageGen[i].SetSeed(rand());
+        noiseGen.SetNoiseType(FastNoiseLite::NoiseType::NoiseType_OpenSimplex2);
+        noiseGen.SetFrequency(0.005f);
+    }
+    
+    foilageEdgeGen.SetSeed(rand());
+    foilageEdgeGen.SetNoiseType(FastNoiseLite::NoiseType::NoiseType_Value);
+    foilageEdgeGen.SetFrequency(0.01f);
 }
 
 BiomeInterpolation BiomeLine::GetInterpolation(float y)
@@ -285,7 +298,8 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
         float x = x_circle * radius;
         float z = z_circle * radius;
         float y = -16.0f * layer;
-        float noise = noiseGen.GetNoise(pos.x + x, pos.y + y, pos.z + z);
+        Vector3 noisePos = Vector3(pos.x + x, pos.y + y, pos.z + z);
+        float noise = noiseGen.GetNoise(noisePos.x, noisePos.y, noisePos.z);
         noises.push_back(noise);
         noise *= amplitude;
         float start = 1.0f - interp;
@@ -313,32 +327,49 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
         //     coin->set_translation(vert);
         //     props.push_back(coin);
         // }
-        if (v > verts_per_layer && ((int)(noise * 1.0)) % 100 == 0)
+        if (v > verts_per_layer && noise > 0.5) // ((int)(noise * 1.0)) % 100 == 0
         {
-            // TODO: Render quads via MultiMeshInstance with tile based on INSTANCE_CUSTOM data
-            auto spawn = Transform(Basis(), Vector3());
-            spawn.rotate(Vector3(1.0, 0, 0), Math_PI/2.0); // + .3 - (rand() % 100 * 0.006)
-            spawn.rotate(Vector3(0.0, 1.0, 0.0), -radians + Math_PI/2.0); // + .3 - (rand() % 100 * 0.006)
-            spawn.origin = pos + vert; // 16.0 * Vector3(vert.x, 0.0, vert.z).normalized()
-            MultiMeshInstance* foilage = Object::cast_to<MultiMeshInstance>(get_node("/root/nodes/gameplay/hill/terrain/foilage"));
-            Ref<MultiMesh> mm = foilage->get_multimesh();
-            mm->set_visible_instance_count(foilage_spawn_count);
-            int index = foilage_spawn_count % mm->get_instance_count();
-            mm->set_instance_transform(index, spawn);
-            // TODO: Only simulate foilage data for quads that are visible and affected by forces
-            foilage_data[index] = {spawn.origin, Vector3(spawn.origin.x, 0.0, spawn.origin.z).normalized(), Quat(), Math_PI/2.0, 1.0};
-            mm->set_instance_custom_data(index, Color(((rand() % 3)/3.0), 0, 0));
-            foilage_spawn_count++;
+            int flower = -1;
+            for (size_t i = 0; i < 8; i++)
+            {
+                if (foilageGen[i].GetNoise(noisePos.x, noisePos.y, noisePos.z) + foilageEdgeGen.GetNoise(noisePos.x, noisePos.y, noisePos.z) > 0.8f)
+                {
+                    flower = i;
+                    break;
+                }
+            }
+            if (flower >= 0)
+            {
+                auto spawn = Transform(Basis(), Vector3());
+                spawn.rotate(Vector3(1.0, 0, 0), Math_PI/2.0 + .3 - (rand() % 100 * 0.006)); //
+                spawn.rotate(Vector3(0.0, 1.0, 0.0), -radians + Math_PI/2.0 + .3 - (rand() % 100 * 0.006)); // 
+                spawn.origin = pos + vert; // 16.0 * Vector3(vert.x, 0.0, vert.z).normalized()
+                // TODO: Offset randomly from vert
+                MultiMeshInstance* foilage = Object::cast_to<MultiMeshInstance>(get_node("/root/nodes/gameplay/hill/terrain/foilage"));
+                Ref<MultiMesh> mm = foilage->get_multimesh();
+                mm->set_visible_instance_count(foilage_spawn_count);
+                int index = foilage_spawn_count % mm->get_instance_count();
+                mm->set_instance_transform(index, spawn);
+                // TODO: Only simulate foilage data for quads that are visible and affected by forces
+                foilage_data[index] = {spawn.origin, Vector3(spawn.origin.x, 0.0, spawn.origin.z).normalized(), Quat(), Math_PI/2.0, 1.0, 0.0f};
+                mm->set_instance_custom_data(index, Color((flower/8.0f), (float)rand()/RAND_MAX, 0));
+                foilage_spawn_count++;
+            }
             // TODO: Despawn!
-            // Spatial* tree = Object::cast_to<Spatial>(flower_prefab->instance());
-            // // tree->rotate_z(-Math_PI/2.0);
-            // // tree->rotate_y(-radians);
-            // // Object::cast_to<Spatial>(tree->get_child(0))->rotate_y(1.5708);
-            // // tree->translate(vert);
-            // tree->set_transform(spawn);
-            // // tree->look_at(tree->get_global_transform().origin + Vector3(0.0, -1.0, 0.0), Vector3(vert.x, 0.0, vert.z));
-            // // tree->get_transform().set_look_at(Vector3(0, 0, 0), Vector3(0, -100.0, 0), Vector3(vert.x, 0.0, vert.z));
-            // props.push_back(tree);
+            
+            if (noise > 0.9 && foilageGen[0].GetNoise(noisePos.x, noisePos.y, noisePos.z) > 0.8f && ((int)(noise * 10))%4 == 0)
+            {
+                Spatial* tree = Object::cast_to<Spatial>(tree_prefab->instance());
+                auto spawn = Transform(Basis(), Vector3());
+                spawn.rotate(Vector3(1.0, 0, 0), Math_PI/2.0); //  + .3 - (rand() % 100 * 0.006)
+                spawn.rotate(Vector3(0.0, 1.0, 0.0), -radians + Math_PI/2.0); // + .3 - (rand() % 100 * 0.006)) 
+                spawn.origin = vert;
+                tree->set_transform(spawn);
+                // tree->translate(vert);
+                // tree->look_at(tree->get_global_transform().origin + Vector3(0.0, -1.0, 0.0), Vector3(vert.x, 0.0, vert.z));
+                // tree->get_transform().set_look_at(Vector3(0, 0, 0), Vector3(0, -100.0, 0), Vector3(vert.x, 0.0, vert.z));
+                props.push_back(tree);
+            }
         }
         // if (((int)(noise * 15000)) % 800 == 1)
         // {
@@ -378,6 +409,7 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
         arc_progress += degrees_per_quad;
         if (arc_progress > degrees) arc_progress = 0.0f;
     }
+    std::vector<float> cells;
     for (size_t quad = 0; quad < quads * layers; quad++)
     {
         // int layer = quad/quads;
@@ -400,13 +432,20 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
         uv2.append({progress + inc, tile + tile_uv});
         indices.append(quad + 1);
         uv2.append({progress + inc, tile});
+        float avgCell = 0.0f;
+        for (size_t x = 0; x < 6; x++)
+        {
+            avgCell += (1.0f + noises[indices[indices.size() - 1 - x]])/2.0f;
+        }
+        avgCell /= 6;
+        cells.push_back(avgCell);
     }
     for (size_t x = 0; x < indices.size(); x++)
     {
         faces.append(vertices[indices[x]]);
         float cell = (1.0f + noises[indices[x]])/2.0f;
         // TODO: Use the v parameter for a winding path free of obstacles!
-        uvs.append(Vector2(cell, 0.0f));
+        uvs.append(Vector2(cells[x/6], 0.0f));
     }
     arrays[ArrayMesh::ARRAY_VERTEX] = faces;
     // arrays[ArrayMesh::ARRAY_NORMAL] = normals;
@@ -417,12 +456,11 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
     return mesh;
 }
 
-// float GDArcProcHill::get_ground_pos(Vector3 pos)
-// {
-//     Vector3 ground;
-//     ground.y = pos.y;
-//     float radians = atan2(pos.z, pos.x);
-//     float x_circle = cos(radians);
-//     float z_circle = sin(radians);
-//     float noise = noiseGen.GetNoise(x_circle * hill_radius, pos.y, z_circle * hill_radius);
-// }
+Vector3 GDArcProcHill::get_ground_pos(Vector3 pos)
+{
+    float radians = atan2(-pos.z, pos.x);
+    float x_circle = cos(radians);
+    float z_circle = sin(radians);
+    float noise = noiseGen.GetNoise(x_circle * hill_radius, pos.y, z_circle * hill_radius);
+    return Vector3(x_circle * hill_radius + noise * amplitude, pos.y, z_circle * hill_radius + noise * amplitude);
+}

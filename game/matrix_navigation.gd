@@ -20,7 +20,7 @@ func _enter_tree():
 
 func _input(event):
 	if event is InputEventMouseButton:
-		if placing and not event.pressed:
+		if placing and not event.pressed and ground.has("position"):
 				angle_offset = spawn_offset 
 				height_offset = spawn_height
 				var place = last_closest.item.spawn.instance()
