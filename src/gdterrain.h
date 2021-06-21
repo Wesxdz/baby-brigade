@@ -96,11 +96,12 @@ private:
 	float amplitude;
 	int arcsPerRing;
 	FastNoiseLite noiseGen;
-	FastNoiseLite foilageGen[3];
+	FastNoiseLite foilageGen[8];
 	FastNoiseLite foilageEdgeGen;
 	Ref<ShaderMaterial> terrain_material;
 	Ref<PackedScene> demon_prefab;
 	Ref<PackedScene> enemy_banner_prefab;
+	Ref<PackedScene> tree_prefab;
 	std::list<Arcsegment> arcs;
 	float nextArcY = -50.0f;
 	Spatial* target;

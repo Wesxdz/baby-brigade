@@ -149,10 +149,14 @@ public:
 	void StepOptimized();
 	void IntegrateFoilage(float delta);
 
+	PointCloud<float> agentSearch;
+	agent_kd_tree_t kdtree{3, agentSearch, KDTreeSingleIndexAdaptorParams(10)};
+
 public:
 	static void _register_methods();
 	void _init();
 	void _enter_tree();
+	Array get_neighbors(Vector3 origin, float radius, uint32_t layers);
 
 	void _physics_process(float delta);
 };

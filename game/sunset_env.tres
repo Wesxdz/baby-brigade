@@ -28,6 +28,3 @@ dof_blur_near_transition = 2.88
 dof_blur_near_amount = 0.06
 dof_blur_near_quality = 2
 glow_intensity = 6.72
-adjustment_brightness = 0.25
-adjustment_contrast = 1.42
-adjustment_saturation = 0.43

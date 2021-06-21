@@ -38,7 +38,7 @@ void vertex() {
 
 void fragment() {
 	vec2 base_uv = UV;
-	vec4 albedo_tex = texture(texture_albedo,vec2(foilage_u + ((0.5 - base_uv.y) * (sin((start_time + TIME) * wave_freq + (base_uv.y * vertical_waves))/3.0) * 1.0/8.0 * 1.5 + base_uv.x/3.0), base_uv.y));
+	vec4 albedo_tex = texture(texture_albedo,vec2(foilage_u + ((0.5 - base_uv.y) * (sin((start_time + TIME) * wave_freq + (base_uv.y * vertical_waves))/8.0) * 1.0/8.0 * 1.5 + base_uv.x/8.0), base_uv.y));
 	ALBEDO = albedo.rgb * albedo_tex.rgb;
 	METALLIC = metallic;
 	ROUGHNESS = roughness;
@@ -93,8 +93,8 @@ environment = ExtResource( 2 )
 script = ExtResource( 18 )
 amplitude = 16.0
 "Hill Radius" = 152.789
-"Spawn Distance" = 800.0
-"Despawn Distance" = 1000.0
+"Spawn Distance" = 1000.0
+"Despawn Distance" = 800.0
 
 [node name="foilage" type="MultiMeshInstance" parent="hill/terrain"]
 multimesh = SubResource( 4 )
@@ -126,10 +126,10 @@ banner = NodePath("../banner")
 script = ExtResource( 6 )
 
 [node name="cam" type="Camera" parent="hill/target/peak_rotator"]
-transform = Transform( 1, 0, 0, 0, 0.5, -0.866025, 0, 0.866025, 0.5, -0.071, -600, 400 )
+transform = Transform( 1, 0, 0, 0, 0.5, -0.866, 0, 0.866, 0.5, 0, -600, 400 )
 keep_aspect = 0
 projection = 1
-fov = 40.0
+fov = 32.2
 size = 280.0
 near = 0.01
 far = 8192.0

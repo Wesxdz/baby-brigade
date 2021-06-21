@@ -49,6 +49,7 @@ window/shading/force_vertex_shading.mobile=true
 [global]
 
 default_gravity=false
+postprocessing=false
 
 [importer_defaults]
 
@@ -119,4 +120,3 @@ roll_left={
 threads/thread_model=2
 vram_compression/import_etc=true
 environment/default_clear_color=Color( 0, 0, 0, 1 )
-quality/depth/hdr=false

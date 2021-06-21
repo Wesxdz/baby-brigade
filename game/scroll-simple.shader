@@ -11,6 +11,7 @@ varying vec2 tex_pos;
 
 void vertex()
 {
+	MODELVIEW_MATRIX = INV_CAMERA_MATRIX * mat4(CAMERA_MATRIX[0],CAMERA_MATRIX[1],CAMERA_MATRIX[2],WORLD_MATRIX[3]);
 	tex_pos = VERTEX.xy;
 }
 
