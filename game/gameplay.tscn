@@ -39,7 +39,10 @@ void vertex() {
 void fragment() {
 	vec2 base_uv = UV;
 	vec4 albedo_tex = texture(texture_albedo,vec2(foilage_u + ((0.5 - base_uv.y) * (sin((start_time + TIME) * wave_freq + (base_uv.y * vertical_waves))/8.0) * 1.0/8.0 * 1.5 + base_uv.x/8.0), base_uv.y));
+	vec3 color = albedo.rgb * albedo_tex.rgb;
 	ALBEDO = albedo.rgb * albedo_tex.rgb;
+	float avg = (color.r + color.g + color.b)/3.0;
+	ALBEDO = vec3(avg, avg, avg);
 	METALLIC = metallic;
 	ROUGHNESS = roughness;
 	SPECULAR = specular;

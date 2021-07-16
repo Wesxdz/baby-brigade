@@ -18,7 +18,12 @@ vec3 adjust_rgb(vec3 color){
 void fragment()
 {
 	vec4 original_color = texture(image, UV);
-	ALBEDO = adjust_rgb(original_color.xyz);
+	vec3 color = adjust_rgb(original_color.xyz);
+	ALBEDO = color;
+	
+	float avg = (color.r + color.g + color.b)/3.0;
+	ALBEDO = vec3(avg, avg, avg);
+	
 	ALPHA = original_color.w * trans;
 }"
 
