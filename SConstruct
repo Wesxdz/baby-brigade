@@ -129,7 +129,7 @@ opts.Add(
 opts.Add(PathVariable(
     'target_path', 
     'The path where the lib is installed.', 
-    'demo/bin/'
+    'game/bin/'
 ))
 opts.Add(PathVariable(
     'target_name', 
