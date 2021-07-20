@@ -7,6 +7,8 @@
 
 namespace godot {
 
+const Quat Quat::IDENTITY = Quat();
+
 // set_euler_xyz expects a vector containing the Euler angles in the format
 // (ax,ay,az), where ax is the angle of rotation around x axis,
 // and similar for other axes.
@@ -98,7 +100,6 @@ Quat Quat::inverse() const {
 }
 
 Quat Quat::slerp(const Quat &q, const real_t &t) const {
-
 	Quat to1;
 	real_t omega, cosom, sinom, scale0, scale1;
 
@@ -142,12 +143,12 @@ Quat Quat::slerp(const Quat &q, const real_t &t) const {
 }
 
 Quat Quat::slerpni(const Quat &q, const real_t &t) const {
-
 	const Quat &from = *this;
 
 	real_t dot = from.dot(q);
 
-	if (::fabs(dot) > 0.9999) return from;
+	if (::fabs(dot) > 0.9999)
+		return from;
 
 	real_t theta = ::acos(dot),
 		   sinT = 1.0 / ::sin(theta),
@@ -198,7 +199,6 @@ Quat Quat::operator*(const Vector3 &v) const {
 }
 
 Vector3 Quat::xform(const Vector3 &v) const {
-
 	Quat q = *this * v;
 	q *= this->inverse();
 	return Vector3(q.x, q.y, q.z);
@@ -232,7 +232,6 @@ Quat::Quat(const Vector3 &v0, const Vector3 &v1) // shortest arc
 		z = 0;
 		w = 0;
 	} else {
-
 		real_t s = ::sqrt((1.0 + d) * 2.0);
 		real_t rs = 1.0 / s;
 
@@ -280,7 +279,6 @@ void Quat::operator*=(const real_t &s) {
 }
 
 void Quat::operator/=(const real_t &s) {
-
 	*this *= 1.0 / s;
 }
 

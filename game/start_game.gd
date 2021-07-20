@@ -36,11 +36,13 @@ func begin_game():
 	indicate_start = false
 	gameplay_prefab = load("res://gameplay.tscn")
 	gameplay = gameplay_prefab.instance()
-	hud_prefab = load("res://hud.tscn")
-	hud = hud_prefab.instance()
+	# hud_prefab = load("res://hud.tscn")
+	# hud = hud_prefab.instance()
+#	$"/root/nodes/title".stop()
 	$"/root/nodes/menu/start".visible = false
 	$"/root/nodes".add_child(hud)
 	$"/root/nodes".add_child(gameplay)
+	$"/root/nodes/game_view".texture = $"/root/nodes/gameplay".get_texture()
 	
 func restart_menu():
 	$"../hill_name_gen".gen_random_mountain_name()

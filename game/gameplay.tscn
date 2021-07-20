@@ -1,8 +1,9 @@
-[gd_scene load_steps=15 format=2]
+[gd_scene load_steps=16 format=2]
 
 [ext_resource path="res://bin/banner.gdns" type="Script" id=1]
 [ext_resource path="res://sunset_env.tres" type="Environment" id=2]
 [ext_resource path="res://follow_hill.gd" type="Script" id=3]
+[ext_resource path="res://grasslands.wav" type="AudioStream" id=4]
 [ext_resource path="res://bin/boid_field.gdns" type="Script" id=5]
 [ext_resource path="res://peak_rotator.gd" type="Script" id=6]
 [ext_resource path="res://bin/boid_affector.gdns" type="Script" id=7]
@@ -24,7 +25,7 @@ uniform vec3 uv1_scale;
 uniform vec3 uv1_offset;
 uniform vec3 uv2_scale;
 uniform vec3 uv2_offset;
-uniform float vertical_waves = 8.0;
+uniform float vertical_waves = 16.0;
 uniform float wave_freq = 4.0;
 
 varying float foilage_u;
@@ -41,8 +42,6 @@ void fragment() {
 	vec4 albedo_tex = texture(texture_albedo,vec2(foilage_u + ((0.5 - base_uv.y) * (sin((start_time + TIME) * wave_freq + (base_uv.y * vertical_waves))/8.0) * 1.0/8.0 * 1.5 + base_uv.x/8.0), base_uv.y));
 	vec3 color = albedo.rgb * albedo_tex.rgb;
 	ALBEDO = albedo.rgb * albedo_tex.rgb;
-	float avg = (color.r + color.g + color.b)/3.0;
-	ALBEDO = vec3(avg, avg, avg);
 	METALLIC = metallic;
 	ROUGHNESS = roughness;
 	SPECULAR = specular;
@@ -63,7 +62,7 @@ shader_param/uv1_scale = Vector3( 1, 1, 1 )
 shader_param/uv1_offset = Vector3( 0, 0, 0 )
 shader_param/uv2_scale = Vector3( 1, 1, 1 )
 shader_param/uv2_offset = Vector3( 0, 0, 0 )
-shader_param/vertical_waves = 8.0
+shader_param/vertical_waves = 16.0
 shader_param/wave_freq = 4.0
 shader_param/texture_albedo = ExtResource( 9 )
 
@@ -82,7 +81,9 @@ custom_data_array = PoolColorArray( 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 [sub_resource type="Curve" id=5]
 _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 1, Vector2( 0.259036, 1 ), 0.0, 0.0, 0, 0, Vector2( 0.628866, 0.0454545 ), 0.0587878, 0.0587878, 0, 0, Vector2( 1, 0 ), 0.0801652, 0.0, 0, 0 ]
 
-[node name="gameplay" type="Spatial"]
+[node name="gameplay" type="Viewport"]
+size = Vector2( 320, 480 )
+transparent_bg = true
 
 [node name="boid_field" type="Node" parent="."]
 script = ExtResource( 5 )
@@ -94,18 +95,18 @@ environment = ExtResource( 2 )
 
 [node name="terrain" type="Spatial" parent="hill"]
 script = ExtResource( 18 )
-amplitude = 16.0
+amplitude = 32.0
+"Chunk Sections" = 16
 "Hill Radius" = 152.789
-"Spawn Distance" = 1000.0
-"Despawn Distance" = 800.0
+"Spawn Distance" = 700.0
+"Despawn Distance" = 1200.0
 
 [node name="foilage" type="MultiMeshInstance" parent="hill/terrain"]
 multimesh = SubResource( 4 )
 
 [node name="banner" type="Spatial" parent="hill"]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -800, 0 )
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -700, 0 )
 script = ExtResource( 1 )
-"Y Speed" = -100.0
 "Meter Conversion" = 0.01
 
 [node name="controller" type="Node" parent="hill/banner"]
@@ -133,6 +134,9 @@ transform = Transform( 1, 0, 0, 0, 0.5, -0.866, 0, 0.866, 0.5, 0, -600, 400 )
 keep_aspect = 0
 projection = 1
 fov = 32.2
-size = 280.0
+size = 390.0
 near = 0.01
 far = 8192.0
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 4 )

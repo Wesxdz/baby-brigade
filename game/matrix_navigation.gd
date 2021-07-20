@@ -65,8 +65,10 @@ func _input(event):
 			$items.rect_position = $items_target.rect_position
 			snap_inventory()
 		if placing:
+			# raycast from mouse screen position to terrain
+			# place item drop at xz displacement from intersection
 			angle_offset -= event.relative.x * 0.003
-			height_offset -= event.relative.y * 0.3
+			height_offset -= event.relative.y * 0.9
 			
 
 func snap_inventory():

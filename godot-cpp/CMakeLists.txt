@@ -37,6 +37,8 @@
 project(godot-cpp)
 cmake_minimum_required(VERSION 3.6)
 
+option(GENERATE_TEMPLATE_GET_NODE "Generate a template version of the Node class's get_node." ON)
+
 # Change the output directory to the bin directory
 set(BUILD_PATH ${CMAKE_SOURCE_DIR}/bin)
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${BUILD_PATH}")
@@ -66,8 +68,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Input from user for godot headers and the api file
-set(GODOT_HEADERS_DIR "godot_headers" CACHE STRING "")
-set(GODOT_CUSTOM_API_FILE "godot_headers/api.json" CACHE STRING "")
+set(GODOT_HEADERS_DIR "godot-headers" CACHE STRING "")
+set(GODOT_CUSTOM_API_FILE "godot-headers/api.json" CACHE STRING "")
 
 set(GODOT_COMPILE_FLAGS )
 set(GODOT_LINKER_FLAGS )
@@ -109,7 +111,7 @@ else()
 	set(GODOT_COMPILE_FLAGS "${GODOT_COMPILE_FLAGS} -Wchar-subscripts -Wcomment -Wdisabled-optimization")
 	set(GODOT_COMPILE_FLAGS "${GODOT_COMPILE_FLAGS} -Wformat -Wformat=2 -Wformat-security -Wformat-y2k")
 	set(GODOT_COMPILE_FLAGS "${GODOT_COMPILE_FLAGS} -Wimport -Winit-self -Winline -Winvalid-pch -Werror")
-	set(GODOT_COMPILE_FLAGS "${GODOT_COMPILE_FLAGS} -Wlong-long -Wmissing-braces -Wmissing-format-attribute")
+	set(GODOT_COMPILE_FLAGS "${GODOT_COMPILE_FLAGS} -Wmissing-braces -Wmissing-format-attribute")
 	set(GODOT_COMPILE_FLAGS "${GODOT_COMPILE_FLAGS} -Wmissing-include-dirs -Wmissing-noreturn -Wpacked -Wpointer-arith")
 	set(GODOT_COMPILE_FLAGS "${GODOT_COMPILE_FLAGS} -Wredundant-decls -Wreturn-type -Wsequence-point")
 	set(GODOT_COMPILE_FLAGS "${GODOT_COMPILE_FLAGS} -Wswitch -Wswitch-enum -Wtrigraphs")
@@ -131,24 +133,53 @@ else()
 endif()
 
 # Generate source from the bindings file
+find_package(PythonInterp REQUIRED)
+if(GENERATE_TEMPLATE_GET_NODE)
+	set(GENERATE_BINDING_PARAMETERS "True")
+else()
+	set(GENERATE_BINDING_PARAMETERS "False")
+endif()
+
 message(STATUS "Generating Bindings")
-execute_process(COMMAND "python" "-c" "import binding_generator; binding_generator.generate_bindings(\"${GODOT_CUSTOM_API_FILE}\")"
+execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c" "import binding_generator; binding_generator.print_file_list(\"${GODOT_CUSTOM_API_FILE}\", \"${CMAKE_CURRENT_BINARY_DIR}\", headers=True)"
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-	RESULT_VARIABLE GENERATION_RESULT
-	OUTPUT_VARIABLE GENERATION_OUTPUT)
-message(STATUS ${GENERATION_RESULT} ${GENERATION_OUTPUT})
+	RESULT_VARIABLE HEADERS_FILE_LIST_RESULT
+	OUTPUT_VARIABLE HEADERS_FILE_LIST
+)
+set(HEADERS_FILE_LIST ${HEADERS_FILE_LIST})
+
+execute_process(COMMAND "${PYTHON_EXECUTABLE}" "-c" "import binding_generator; binding_generator.print_file_list(\"${GODOT_CUSTOM_API_FILE}\", \"${CMAKE_CURRENT_BINARY_DIR}\", sources=True)"
+	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+	RESULT_VARIABLE SOURCES_FILE_LIST_RESULT
+	OUTPUT_VARIABLE SOURCES_FILE_LIST
+)
+set(SOURCES_FILE_LIST ${SOURCES_FILE_LIST})
+
+add_custom_command(OUTPUT ${HEADERS_FILE_LIST} ${SOURCES_FILE_LIST}
+		COMMAND "${PYTHON_EXECUTABLE}" "-c" "import binding_generator; binding_generator.generate_bindings(\"${GODOT_CUSTOM_API_FILE}\", \"${GENERATE_BINDING_PARAMETERS}\", \"${CMAKE_CURRENT_BINARY_DIR}\")"
+		VERBATIM
+		WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+		MAIN_DEPENDENCY ${GODOT_CUSTOM_API_FILE}
+		DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/binding_generator.py
+		COMMENT Generating Bindings
+)
 
 # Get Sources
 file(GLOB_RECURSE SOURCES src/*.c**)
 file(GLOB_RECURSE HEADERS include/*.h**)
 
 # Define our godot-cpp library
-add_library(${PROJECT_NAME} ${SOURCES} ${HEADERS})
+add_library(${PROJECT_NAME}
+		${SOURCES}
+		${SOURCES_FILE_LIST}
+		${HEADERS}
+		${HEADERS_FILE_LIST}
+)
 target_include_directories(${PROJECT_NAME}
 	PUBLIC
 	include
 	include/core
-	include/gen
+	${CMAKE_CURRENT_BINARY_DIR}/include/gen/
 )
 
 # Put godot headers as SYSTEM PUBLIC to exclude warnings from irrelevant headers

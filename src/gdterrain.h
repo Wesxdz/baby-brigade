@@ -94,6 +94,8 @@ private:
 	// Multiplier of noise points in world space
 	float density;
 	float amplitude;
+	float active_rotation;
+	int chunk_sections;
 	int arcsPerRing;
 	FastNoiseLite noiseGen;
 	FastNoiseLite foilageGen[8];
@@ -104,6 +106,7 @@ private:
 	Ref<PackedScene> tree_prefab;
 	std::list<Arcsegment> arcs;
 	float nextArcY = -50.0f;
+	int arc_section = 0;
 	Spatial* target;
 	float despawnDistance = 300.0f;
 	float spawnDistance = 200.0f;

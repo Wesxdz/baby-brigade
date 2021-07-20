@@ -20,17 +20,10 @@ LOCAL_CPPFLAGS := -std=c++14
 LOCAL_CPP_FEATURES := rtti exceptions
 LOCAL_LDLIBS := -llog
 
-LOCAL_SRC_FILES := \
-src/gdlibrary.cpp \
-src/gdexample.cpp \
-src/gdterrain.cpp \
-src/gdbanner.cpp \
-src/gdcrowdnav.cpp \
-src/gdinventory.cpp \
-src/gdbaby.cpp \
+LOCAL_SRC_FILES := $(wildcard $(LOCAL_PATH)/src/*.cpp)
 
 LOCAL_C_INCLUDES := \
-godot-cpp/godot_headers \
+godot-cpp/godot-headers \
 godot-cpp/include/ \
 godot-cpp/include/core \
 godot-cpp/include/gen \

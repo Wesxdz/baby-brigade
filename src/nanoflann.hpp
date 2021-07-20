@@ -112,8 +112,8 @@ resize(Container &c, const size_t nElements) {
 template <typename Container>
 inline typename std::enable_if<!has_resize<Container>::value, void>::type
 resize(Container &c, const size_t nElements) {
-  if (nElements != c.size())
-    throw std::logic_error("Try to change the size of a std::array.");
+  // if (nElements != c.size())
+  //   throw std::logic_error("Try to change the size of a std::array.");
 }
 
 /**
@@ -259,9 +259,9 @@ public:
    * Pre-conditions: size() > 0
    */
   std::pair<IndexType, DistanceType> worst_item() const {
-    if (m_indices_dists.empty())
-      throw std::runtime_error("Cannot invoke RadiusResultSet::worst_item() on "
-                               "an empty list of results.");
+    // if (m_indices_dists.empty())
+    //   throw std::runtime_error("Cannot invoke RadiusResultSet::worst_item() on "
+    //                            "an empty list of results.");
     typedef
         typename std::vector<std::pair<IndexType, DistanceType>>::const_iterator
             DistIt;
@@ -290,22 +290,22 @@ void save_value(FILE *stream, const std::vector<T> &value) {
 template <typename T>
 void load_value(FILE *stream, T &value, size_t count = 1) {
   size_t read_cnt = fread(&value, sizeof(value), count, stream);
-  if (read_cnt != count) {
-    throw std::runtime_error("Cannot read from file");
-  }
+  // if (read_cnt != count) {
+  //   throw std::runtime_error("Cannot read from file");
+  // }
 }
 
 template <typename T> void load_value(FILE *stream, std::vector<T> &value) {
   size_t size;
   size_t read_cnt = fread(&size, sizeof(size_t), 1, stream);
-  if (read_cnt != 1) {
-    throw std::runtime_error("Cannot read from file");
-  }
+  // if (read_cnt != 1) {
+  //   throw std::runtime_error("Cannot read from file");
+  // }
   value.resize(size);
   read_cnt = fread(&value[0], sizeof(T), size, stream);
-  if (read_cnt != size) {
-    throw std::runtime_error("Cannot read from file");
-  }
+  // if (read_cnt != size) {
+  //   throw std::runtime_error("Cannot read from file");
+  // }
 }
 /** @} */
 
@@ -670,7 +670,7 @@ public:
       void *m = ::malloc(blocksize);
       if (!m) {
         fprintf(stderr, "Failed to allocate memory.\n");
-        throw std::bad_alloc();
+        // throw std::bad_alloc();
       }
 
       /* Fill first word of new block with pointer to previous block. */
@@ -1224,9 +1224,9 @@ public:
     assert(vec);
     if (this->size(*this) == 0)
       return false;
-    if (!BaseClassRef::root_node)
-      throw std::runtime_error(
-          "[nanoflann] findNeighbors() called before building the index.");
+    // if (!BaseClassRef::root_node)
+    //   throw std::runtime_error(
+    //       "[nanoflann] findNeighbors() called before building the index.");
     float epsError = 1 + searchParams.eps;
 
     distance_vector_t
@@ -1320,9 +1320,9 @@ public:
       // Done! It was implemented in derived class
     } else {
       const size_t N = dataset.kdtree_get_point_count();
-      if (!N)
-        throw std::runtime_error("[nanoflann] computeBoundingBox() called but "
-                                 "no data points found.");
+      // if (!N)
+      //   throw std::runtime_error("[nanoflann] computeBoundingBox() called but "
+      //                            "no data points found.");
       for (int i = 0; i < (DIM > 0 ? DIM : BaseClassRef::dim); ++i) {
         bbox[i].low = bbox[i].high = this->dataset_get(*this, 0, i);
       }
@@ -1670,9 +1670,9 @@ public:
       // Done! It was implemented in derived class
     } else {
       const size_t N = BaseClassRef::m_size;
-      if (!N)
-        throw std::runtime_error("[nanoflann] computeBoundingBox() called but "
-                                 "no data points found.");
+      // if (!N)
+      //   throw std::runtime_error("[nanoflann] computeBoundingBox() called but "
+      //                            "no data points found.");
       for (int i = 0; i < (DIM > 0 ? DIM : BaseClassRef::dim); ++i) {
         bbox[i].low = bbox[i].high =
             this->dataset_get(*this, BaseClassRef::vind[0], i);
@@ -1973,12 +1973,12 @@ struct KDTreeEigenMatrixAdaptor {
                            const int leaf_max_size = 10)
       : m_data_matrix(mat) {
     const auto dims = row_major ? mat.get().cols() : mat.get().rows();
-    if (size_t(dims) != dimensionality)
-      throw std::runtime_error(
-          "Error: 'dimensionality' must match column count in data matrix");
-    if (DIM > 0 && int(dims) != DIM)
-      throw std::runtime_error(
-          "Data set dimensionality does not match the 'DIM' template argument");
+    // if (size_t(dims) != dimensionality)
+    //   throw std::runtime_error(
+    //       "Error: 'dimensionality' must match column count in data matrix");
+    // if (DIM > 0 && int(dims) != DIM)
+    //   throw std::runtime_error(
+    //       "Data set dimensionality does not match the 'DIM' template argument");
     index =
         new index_t(static_cast<int>(dims), *this /* adaptor */,
                     nanoflann::KDTreeSingleIndexAdaptorParams(leaf_max_size));

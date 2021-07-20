@@ -58,6 +58,8 @@ class Array {
 	godot_array _godot_array;
 
 	friend class Variant;
+	friend class Dictionary;
+	friend class String;
 	inline explicit Array(const godot_array &other) {
 		_godot_array = other;
 	}
@@ -88,7 +90,7 @@ public:
 
 	Variant &operator[](const int idx);
 
-	Variant operator[](const int idx) const;
+	const Variant &operator[](const int idx) const;
 
 	void append(const Variant &v);
 
@@ -104,9 +106,9 @@ public:
 
 	Variant back() const;
 
-	int find(const Variant &what, const int from = 0);
+	int find(const Variant &what, const int from = 0) const;
 
-	int find_last(const Variant &what);
+	int find_last(const Variant &what) const;
 
 	bool has(const Variant &what) const;
 
@@ -132,7 +134,7 @@ public:
 
 	void resize(const int size);
 
-	int rfind(const Variant &what, const int from = -1);
+	int rfind(const Variant &what, const int from = -1) const;
 
 	void sort();
 

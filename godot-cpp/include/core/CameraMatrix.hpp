@@ -2,6 +2,7 @@
 #define CAMERA_MATRIX_H
 
 #include "Defs.hpp"
+#include "Math.hpp"
 #include "Plane.hpp"
 #include "Rect2.hpp"
 #include "Transform.hpp"
@@ -13,7 +14,6 @@ using namespace godot;
 } // namespace
 
 struct CameraMatrix {
-
 	enum Planes {
 		PLANE_NEAR,
 		PLANE_FAR,
@@ -38,18 +38,10 @@ struct CameraMatrix {
 	void set_frustum(real_t p_size, real_t p_aspect, Vector2 p_offset, real_t p_near, real_t p_far, bool p_flip_fov = false);
 
 	static real_t get_fovy(real_t p_fovx, real_t p_aspect) {
-
-		return rad2deg(atan(p_aspect * tan(deg2rad(p_fovx) * 0.5)) * 2.0);
+		return Math::rad2deg(atan(p_aspect * tan(Math::deg2rad(p_fovx) * 0.5)) * 2.0);
 	}
 
-	static inline double deg2rad(double p_y) { return p_y * Math_PI / 180.0; }
-	static inline float deg2rad(float p_y) { return p_y * Math_PI / 180.0; }
-
-	static inline double rad2deg(double p_y) { return p_y * 180.0 / Math_PI; }
-	static inline float rad2deg(float p_y) { return p_y * 180.0 / Math_PI; }
-
 	static inline double absd(double g) {
-
 		union {
 			double d;
 			uint64_t i;
@@ -91,7 +83,6 @@ struct CameraMatrix {
 };
 
 Vector3 CameraMatrix::xform(const Vector3 &p_vec3) const {
-
 	Vector3 ret;
 	ret.x = matrix[0][0] * p_vec3.x + matrix[1][0] * p_vec3.y + matrix[2][0] * p_vec3.z + matrix[3][0];
 	ret.y = matrix[0][1] * p_vec3.x + matrix[1][1] * p_vec3.y + matrix[2][1] * p_vec3.z + matrix[3][1];

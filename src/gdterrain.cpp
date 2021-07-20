@@ -25,6 +25,7 @@ void GDArcProcHill::_register_methods()
     register_method("_process", &GDArcProcHill::_process);
     register_method("_enter_tree", &GDArcProcHill::_enter_tree);
 	register_property<GDArcProcHill, float>("amplitude", &GDArcProcHill::amplitude, 10.0f);
+    register_property<GDArcProcHill, int>("Chunk Sections", &GDArcProcHill::chunk_sections, 4);
     // Not using this functionality for now
     // register_property<GDArcProcHill, int>("arcsPerRing", &GDArcProcHill::arcsPerRing, 12);
     register_property<GDArcProcHill, float>("Hill Radius", &GDArcProcHill::hill_radius, 50.0f);
@@ -112,7 +113,7 @@ BiomeInterpolation BiomeLine::GetInterpolation(float y)
         {
             bi.startTransitionY = startY[closestTransitionIndex] + biomeTransition;
             // bi.interp = (std::abs(y - startY[closestTransitionIndex]) - biomes[closestTransitionIndex].size)/biomeTransition;
-            Godot::print(std::to_string(bi.startTransitionY).c_str());
+            // Godot::print(std::to_string(bi.startTransitionY).c_str());
         }
         bi.a = biomes[biomes.size() - 2].type;
     }
@@ -151,7 +152,13 @@ void GDArcProcHill::create_arc(Vector3 pos, float degrees, float radius, float h
 void GDArcProcHill::create_y_arc(Vector3 pos, float degrees, float radius)
 {
     auto vertices = PoolVector3Array();
-    auto arr_mesh = gen_y_arc_mesh(pos, degrees, radius, (size_t)degrees/6, vertices, 1);
+    size_t quads = (size_t)degrees/6;
+    if (arc_section % chunk_sections == 0)
+    {
+        // active_rotation = std::round(rand() * quads) * (360.0f/quads);
+        // active_rotation = (M_PI * 2)/quads * (arc_section/chunk_sections);
+    }
+    auto arr_mesh = gen_y_arc_mesh(pos, degrees, radius, quads, vertices, 1);
     auto m = MeshInstance::_new();
     // BiomeInterpolation bi = biomeLine.GetInterpolation(pos.y);
     // terrain_material->set_shader_param("ramp_start", biomeLine.spawner[bi.a].palette);
@@ -160,6 +167,7 @@ void GDArcProcHill::create_y_arc(Vector3 pos, float degrees, float radius)
     m->set_material_override(terrain_material->duplicate());
     m->set_mesh(arr_mesh);
     m->set_translation(pos);
+    m->rotate_y(active_rotation);
     auto physics = PhysicsServer::get_singleton();
     RID body = physics->body_create(PhysicsServer::BODY_MODE_STATIC);
     physics->body_set_space(body, get_world()->get_space());
@@ -207,8 +215,10 @@ void GDArcProcHill::_process(float delta)
         }
         if (abs(abs(target->get_translation().y) - abs(nextArcY)) < spawnDistance)
         {
+            
             create_y_arc(Vector3(0.0, nextArcY, 0.0), 360.0f, hill_radius);
             nextArcY -= 16.0f;
+            arc_section++;
         }
 
     }
@@ -285,6 +295,8 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
     auto uvs = PoolVector2Array();
     auto uv2 = PoolVector2Array();
     std::vector<float> noises;
+    std::vector<float> noises_above;
+    std::vector<float> noises_below;
     auto indices = PoolIntArray();
     float degrees_per_quad = degrees/quads;
     float arc_progress = 0.0f;
@@ -301,6 +313,8 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
         Vector3 noisePos = Vector3(pos.x + x, pos.y + y, pos.z + z);
         float noise = noiseGen.GetNoise(noisePos.x, noisePos.y, noisePos.z);
         noises.push_back(noise);
+        noises_above.push_back(noiseGen.GetNoise(noisePos.x, noisePos.y + 16, noisePos.z)); // TODO: Optimize by quad and precalc?
+        noises_below.push_back(noiseGen.GetNoise(noisePos.x, noisePos.y - 16, noisePos.z));
         noise *= amplitude;
         float start = 1.0f - interp;
         Vector3 vert = Vector3(x + noise * x_circle, y, z + noise * z_circle);
@@ -342,7 +356,8 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
             {
                 auto spawn = Transform(Basis(), Vector3());
                 spawn.rotate(Vector3(1.0, 0, 0), Math_PI/2.0 + .3 - (rand() % 100 * 0.006)); //
-                spawn.rotate(Vector3(0.0, 1.0, 0.0), -radians + Math_PI/2.0 + .3 - (rand() % 100 * 0.006)); // 
+                spawn.rotate(Vector3(0.0, 1.0, 0.0), active_rotation + -radians + Math_PI/2.0 + .3 - (rand() % 100 * 0.006)); //
+                
                 spawn.origin = pos + vert; // 16.0 * Vector3(vert.x, 0.0, vert.z).normalized()
                 // TODO: Offset randomly from vert
                 MultiMeshInstance* foilage = Object::cast_to<MultiMeshInstance>(get_node("/root/nodes/gameplay/hill/terrain/foilage"));
@@ -410,16 +425,19 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
         if (arc_progress > degrees) arc_progress = 0.0f;
     }
     std::vector<float> cells;
+    std::vector<float> cells_above;
+    std::vector<float> cells_below;
     for (size_t quad = 0; quad < quads * layers; quad++)
     {
         // int layer = quad/quads;
         // float progress = (float)layer/layers;
         // float inc = 1.0f/layers;
         float progress = 0.0f;
-        float inc = 1.0f;
-        int tiles = 4;
+        float inc = 1.0;
+        int tiles = 1;
         float tile_uv = 1.0/tiles;
-        float tile = (rand() % tiles)/((float)tiles);
+        // float tile = (rand() % tiles)/((float)tiles);
+        float tile = 0.0f;
         indices.append(quad + verts_per_layer);
         uv2.append({progress, tile + tile_uv});
         indices.append(quad + 1);
@@ -432,20 +450,52 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
         uv2.append({progress + inc, tile + tile_uv});
         indices.append(quad + 1);
         uv2.append({progress + inc, tile});
+        float avgAboveCell = 0.0f;
         float avgCell = 0.0f;
+        float avgBelowCell = 0.0f;
         for (size_t x = 0; x < 6; x++)
         {
+            avgAboveCell += (1.0f + noises_above[indices[indices.size() - 1 - x]])/2.0f;
+            avgBelowCell += (1.0f + noises_below[indices[indices.size() - 1 - x]])/2.0f;
             avgCell += (1.0f + noises[indices[indices.size() - 1 - x]])/2.0f;
         }
         avgCell /= 6;
+        avgAboveCell /= 6;
+        avgBelowCell /= 6;
         cells.push_back(avgCell);
+        cells_above.push_back(avgAboveCell);
+        cells_below.push_back(avgBelowCell);
     }
     for (size_t x = 0; x < indices.size(); x++)
     {
         faces.append(vertices[indices[x]]);
-        float cell = (1.0f + noises[indices[x]])/2.0f;
+        // float cell = (1.0f + noises[indices[x]])/2.0f;
+        float cell = cells[x/6];
+        auto IsDirt = [](float cell)
+        {
+            return cell < 0.5f;
+        };
+        float adjacent = 0;
+        if (IsDirt(cell))
+        {
+            adjacent = 16.0f;
+        }
+        else
+        {
+            // dirt above +1 dirt right +2 dirt below +4 dirt left +8
+            adjacent += IsDirt(cells_above[x/6]) * 1.0f;
+            int right = (x + 6)/6;
+            if (right >= cells.size()) right = 0;
+            adjacent += IsDirt(cells[right]) * 2.0f;
+            adjacent += IsDirt(cells_below[x/6]) * 4.0f;
+            int left = (x - 6)/6;
+            if (left < 0) left = cells.size() - 1;
+            adjacent += IsDirt(cells[left]) * 8.0f;
+            // Render as full or partial grass depending on adjacent tiles
+        }
+        adjacent/=16.0f;
         // TODO: Use the v parameter for a winding path free of obstacles!
-        uvs.append(Vector2(cells[x/6], 0.0f));
+        uvs.append(Vector2(adjacent, 0.0f));
     }
     arrays[ArrayMesh::ARRAY_VERTEX] = faces;
     // arrays[ArrayMesh::ARRAY_NORMAL] = normals;

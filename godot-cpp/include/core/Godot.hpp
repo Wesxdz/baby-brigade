@@ -149,7 +149,7 @@ struct _ArgCast<Variant> {
 // instance and destroy funcs
 
 template <class T>
-void *_godot_class_instance_func(godot_object *p, void *method_data) {
+void *_godot_class_instance_func(godot_object *p, void * /*method_data*/) {
 	T *d = new T();
 	d->_owner = p;
 	d->_type_tag = typeid(T).hash_code();
@@ -158,7 +158,7 @@ void *_godot_class_instance_func(godot_object *p, void *method_data) {
 }
 
 template <class T>
-void _godot_class_destroy_func(godot_object *p, void *method_data, void *data) {
+void _godot_class_destroy_func(godot_object * /*p*/, void * /*method_data*/, void *data) {
 	T *d = (T *)data;
 	delete d;
 }
@@ -212,12 +212,15 @@ typedef godot_variant (*__godot_wrapper_method)(godot_object *, void *, void *, 
 template <class T, class R, class... args>
 const char *___get_method_class_name(R (T::*p)(args... a)) {
 	static_assert(T::___CLASS_IS_SCRIPT, "This function must only be used on custom classes");
+	(void)p; // To avoid "unused parameter" warnings. `p` is required for template matching.
 	return T::___get_class_name();
 }
 
+// This second version is also required to match constant functions
 template <class T, class R, class... args>
 const char *___get_method_class_name(R (T::*p)(args... a) const) {
 	static_assert(T::___CLASS_IS_SCRIPT, "This function must only be used on custom classes");
+	(void)p; // To avoid "unused parameter" warnings. `p` is required for template matching.
 	return T::___get_class_name();
 }
 
@@ -256,13 +259,13 @@ struct _WrappedMethod<T, void, As...> {
 	void (T::*f)(As...);
 
 	template <int... I>
-	void apply(Variant *ret, T *obj, Variant **args, __Sequence<I...>) {
+	void apply(Variant * /*ret*/, T *obj, Variant **args, __Sequence<I...>) {
 		(obj->*f)(_ArgCast<As>::_arg_cast(*args[I])...);
 	}
 };
 
 template <class T, class R, class... As>
-godot_variant __wrapped_method(godot_object *, void *method_data, void *user_data, int num_args, godot_variant **args) {
+godot_variant __wrapped_method(godot_object *, void *method_data, void *user_data, int /*num_args*/, godot_variant **args) {
 	godot_variant v;
 	godot::api->godot_variant_new_nil(&v);
 
@@ -286,7 +289,7 @@ void *___make_wrapper_function(R (T::*f)(As...)) {
 }
 
 template <class T, class R, class... As>
-__godot_wrapper_method ___get_wrapper_function(R (T::*f)(As...)) {
+__godot_wrapper_method ___get_wrapper_function(R (T::* /*f*/)(As...)) {
 	return (__godot_wrapper_method)&__wrapped_method<T, R, As...>;
 }
 
@@ -318,7 +321,6 @@ void register_method(const char *name, M method_ptr, godot_method_rpc_mode rpc_t
 template <class D, class B, class R, class... As>
 void register_method_explicit(const char *name, R (B::*method_ptr)(As...),
 		godot_method_rpc_mode rpc_type = GODOT_METHOD_RPC_MODE_DISABLED) {
-
 	static_assert(std::is_base_of<B, D>::value, "Explicit class must derive from method class");
 	register_method(name, static_cast<R (D::*)(As...)>(method_ptr), rpc_type);
 }
@@ -326,7 +328,7 @@ void register_method_explicit(const char *name, R (B::*method_ptr)(As...),
 template <class T, class P>
 struct _PropertySetFunc {
 	void (T::*f)(P);
-	static void _wrapped_setter(godot_object *object, void *method_data, void *user_data, godot_variant *value) {
+	static void _wrapped_setter(godot_object * /*object*/, void *method_data, void *user_data, godot_variant *value) {
 		_PropertySetFunc<T, P> *set_func = (_PropertySetFunc<T, P> *)method_data;
 		T *obj = (T *)user_data;
 
@@ -340,7 +342,7 @@ template <class T, class P>
 struct _PropertyGetFunc {
 	P(T::*f)
 	();
-	static godot_variant _wrapped_getter(godot_object *object, void *method_data, void *user_data) {
+	static godot_variant _wrapped_getter(godot_object * /*object*/, void *method_data, void *user_data) {
 		_PropertyGetFunc<T, P> *get_func = (_PropertyGetFunc<T, P> *)method_data;
 		T *obj = (T *)user_data;
 
@@ -358,7 +360,7 @@ struct _PropertyGetFunc {
 template <class T, class P>
 struct _PropertyDefaultSetFunc {
 	P(T::*f);
-	static void _wrapped_setter(godot_object *object, void *method_data, void *user_data, godot_variant *value) {
+	static void _wrapped_setter(godot_object * /*object*/, void *method_data, void *user_data, godot_variant *value) {
 		_PropertyDefaultSetFunc<T, P> *set_func = (_PropertyDefaultSetFunc<T, P> *)method_data;
 		T *obj = (T *)user_data;
 
@@ -371,7 +373,7 @@ struct _PropertyDefaultSetFunc {
 template <class T, class P>
 struct _PropertyDefaultGetFunc {
 	P(T::*f);
-	static godot_variant _wrapped_getter(godot_object *object, void *method_data, void *user_data) {
+	static godot_variant _wrapped_getter(godot_object * /*object*/, void *method_data, void *user_data) {
 		_PropertyDefaultGetFunc<T, P> *get_func = (_PropertyDefaultGetFunc<T, P> *)method_data;
 		T *obj = (T *)user_data;
 
@@ -391,7 +393,6 @@ void register_property(const char *name, P(T::*var), P default_value,
 		godot_method_rpc_mode rpc_mode = GODOT_METHOD_RPC_MODE_DISABLED,
 		godot_property_usage_flags usage = GODOT_PROPERTY_USAGE_DEFAULT,
 		godot_property_hint hint = GODOT_PROPERTY_HINT_NONE, String hint_string = "") {
-
 	static_assert(T::___CLASS_IS_SCRIPT, "This function must only be used on custom classes");
 
 	Variant def_val = default_value;
@@ -448,7 +449,6 @@ void register_property(const char *name, void (T::*setter)(P), P (T::*getter)(),
 		godot_method_rpc_mode rpc_mode = GODOT_METHOD_RPC_MODE_DISABLED,
 		godot_property_usage_flags usage = GODOT_PROPERTY_USAGE_DEFAULT,
 		godot_property_hint hint = GODOT_PROPERTY_HINT_NONE, String hint_string = "") {
-
 	static_assert(T::___CLASS_IS_SCRIPT, "This function must only be used on custom classes");
 
 	Variant def_val = default_value;
@@ -492,7 +492,6 @@ void register_property(const char *name, void (T::*setter)(P), P (T::*getter)() 
 		godot_method_rpc_mode rpc_mode = GODOT_METHOD_RPC_MODE_DISABLED,
 		godot_property_usage_flags usage = GODOT_PROPERTY_USAGE_DEFAULT,
 		godot_property_hint hint = GODOT_PROPERTY_HINT_NONE, String hint_string = "") {
-
 	register_property(name, setter, (P(T::*)())getter, default_value, rpc_mode, usage, hint, hint_string);
 }
 

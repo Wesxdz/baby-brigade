@@ -14,12 +14,24 @@ namespace godot {
 class Basis;
 
 struct Vector3 {
-
 	enum Axis {
 		AXIS_X,
 		AXIS_Y,
 		AXIS_Z,
+		AXIS_COUNT
 	};
+
+	static const Vector3 ZERO;
+	static const Vector3 ONE;
+	static const Vector3 INF;
+
+	// Coordinate system of the 3D engine
+	static const Vector3 LEFT;
+	static const Vector3 RIGHT;
+	static const Vector3 UP;
+	static const Vector3 DOWN;
+	static const Vector3 FORWARD;
+	static const Vector3 BACK;
 
 	union {
 		struct {
@@ -292,7 +304,6 @@ inline Vector3 operator*(real_t p_scalar, const Vector3 &p_vec) {
 }
 
 inline Vector3 vec3_cross(const Vector3 &p_a, const Vector3 &p_b) {
-
 	return p_a.cross(p_b);
 }
 

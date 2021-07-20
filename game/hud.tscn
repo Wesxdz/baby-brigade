@@ -1,9 +1,10 @@
-[gd_scene load_steps=50 format=2]
+[gd_scene load_steps=51 format=2]
 
 [ext_resource path="res://TenStamps.ttf" type="DynamicFontData" id=1]
 [ext_resource path="res://hide_on_load_gameplay.gd" type="Script" id=2]
 [ext_resource path="res://babybox.png" type="Texture" id=3]
 [ext_resource path="res://asmrcoin.png" type="Texture" id=4]
+[ext_resource path="res://overtext.png" type="Texture" id=5]
 [ext_resource path="res://pinewood.png" type="Texture" id=9]
 [ext_resource path="res://moonstone.png" type="Texture" id=10]
 [ext_resource path="res://hud.gd" type="Script" id=13]
@@ -494,6 +495,13 @@ __meta__ = {
 stream = SubResource( 10 )
 volume_db = 10.0
 pitch_scale = 1.3
+
+[node name="TextureRect" type="TextureRect" parent="canvas"]
+visible = false
+texture = ExtResource( 5 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
 
 [node name="load" type="CanvasLayer" parent="."]
 layer = 50

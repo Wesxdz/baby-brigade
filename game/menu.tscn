@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=2]
+[gd_scene load_steps=17 format=2]
 
 [ext_resource path="res://pixel_scale.gd" type="Script" id=1]
 [ext_resource path="res://baby-template.png" type="Texture" id=2]
@@ -10,57 +10,53 @@
 [ext_resource path="res://fall_path.tscn" type="PackedScene" id=8]
 [ext_resource path="res://start_game.gd" type="Script" id=9]
 
-[sub_resource type="StyleBoxFlat" id=1]
-bg_color = Color( 0.121569, 0.0627451, 0.164706, 1 )
+[sub_resource type="CanvasItemMaterial" id=1]
+render_priority = 10
 
-[sub_resource type="StyleBoxEmpty" id=2]
+[sub_resource type="StyleBoxFlat" id=2]
+bg_color = Color( 0.121569, 0.0627451, 0.164706, 0 )
 
-[sub_resource type="Theme" id=3]
+[sub_resource type="StyleBoxEmpty" id=3]
 
-[sub_resource type="CanvasItemMaterial" id=4]
-blend_mode = 1
+[sub_resource type="Theme" id=4]
+
+[sub_resource type="CanvasItemMaterial" id=5]
 light_mode = 1
 
-[sub_resource type="QuadMesh" id=5]
+[sub_resource type="QuadMesh" id=6]
 size = Vector2( 32, 32 )
 
-[sub_resource type="QuadMesh" id=6]
+[sub_resource type="QuadMesh" id=7]
 material = ExtResource( 6 )
 size = Vector2( 8, 22 )
 
-[node name="menu" type="Control"]
-anchor_right = 1.0
-anchor_bottom = 1.0
-margin_bottom = 6.10352e-05
-mouse_filter = 2
-__meta__ = {
-"_edit_use_anchors_": false
-}
+[node name="menu" type="CanvasLayer"]
+layer = 20
 
 [node name="start" type="Panel" parent="."]
+material = SubResource( 1 )
 anchor_right = 1.0
 anchor_bottom = 1.0
 margin_left = 0.609298
 margin_top = -0.529732
 margin_right = 0.609283
 margin_bottom = -0.529724
-custom_styles/panel = SubResource( 1 )
+custom_styles/panel = SubResource( 2 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="foreground" type="Panel" parent="start"]
 anchor_left = 0.248437
-anchor_top = 0.2
 anchor_right = 0.748437
-anchor_bottom = 0.7
+anchor_bottom = 0.3
 margin_left = -16.2354
 margin_top = 0.720139
 margin_right = 23.7646
 margin_bottom = 40.7202
 mouse_filter = 1
 mouse_default_cursor_shape = 2
-custom_styles/panel = SubResource( 2 )
+custom_styles/panel = SubResource( 3 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
@@ -91,17 +87,19 @@ margin_top = -280.0
 margin_right = -100.0
 margin_bottom = -280.0
 mouse_default_cursor_shape = 2
-theme = SubResource( 3 )
+theme = SubResource( 4 )
 script = ExtResource( 9 )
 __meta__ = {
 "_edit_use_anchors_": false
 }
 
 [node name="baby_candy" type="CPUParticles2D" parent="start"]
-material = SubResource( 4 )
+material = SubResource( 5 )
 position = Vector2( 0, -32 )
-amount = 16
+amount = 200
 lifetime = 60.0
+preprocess = 100.0
+speed_scale = 4.0
 local_coords = false
 texture = ExtResource( 2 )
 emission_shape = 2
@@ -111,7 +109,7 @@ direction = Vector2( -1, 0 )
 spread = 180.0
 gravity = Vector2( 0, 5 )
 initial_velocity = 20.0
-color = Color( 0.819608, 0.0470588, 0.764706, 1 )
+color = Color( 0, 0.133333, 1, 1 )
 hue_variation_random = 1.0
 script = ExtResource( 3 )
 
@@ -121,10 +119,9 @@ script = ExtResource( 5 )
 [node name="drop" type="MeshInstance" parent="shader_cache"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 32, 0 )
 material_override = ExtResource( 7 )
-mesh = SubResource( 5 )
-material/0 = null
-
-[node name="fall_path" type="MeshInstance" parent="shader_cache/drop" instance=ExtResource( 8 )]
-transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -20, 0 )
 mesh = SubResource( 6 )
 material/0 = null
+
+[node name="fall_path" parent="shader_cache/drop" instance=ExtResource( 8 )]
+transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -20, 0 )
+mesh = SubResource( 7 )

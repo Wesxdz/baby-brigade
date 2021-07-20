@@ -1,10 +1,12 @@
-[gd_scene load_steps=8 format=2]
+[gd_scene load_steps=10 format=2]
 
 [ext_resource path="res://menu.tscn" type="PackedScene" id=1]
 [ext_resource path="res://fall_path.tscn" type="PackedScene" id=2]
 [ext_resource path="res://item_drop_mat.tres" type="Material" id=3]
 [ext_resource path="res://fall_mat.tres" type="Material" id=4]
 [ext_resource path="res://shader_cache.gd" type="Script" id=5]
+[ext_resource path="res://title.wav" type="AudioStream" id=6]
+[ext_resource path="res://sky.tres" type="Texture" id=7]
 
 [sub_resource type="QuadMesh" id=1]
 size = Vector2( 32, 32 )
@@ -13,7 +15,7 @@ size = Vector2( 32, 32 )
 material = ExtResource( 4 )
 size = Vector2( 8, 22 )
 
-[node name="nodes" type="Spatial"]
+[node name="nodes" type="Node"]
 
 [node name="menu" parent="." instance=ExtResource( 1 )]
 
@@ -29,3 +31,20 @@ material/0 = null
 [node name="fall_path" parent="shader_cache/drop" instance=ExtResource( 2 )]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -20, 0 )
 mesh = SubResource( 2 )
+
+[node name="title" type="AudioStreamPlayer" parent="."]
+stream = ExtResource( 6 )
+autoplay = true
+
+[node name="Sprite" type="Sprite" parent="."]
+position = Vector2( 160, 240 )
+rotation = 1.5708
+scale = Vector2( 1, 320 )
+texture = ExtResource( 7 )
+
+[node name="game_view" type="Sprite" parent="."]
+centered = false
+flip_v = true
+
+[node name="cam2d" type="Camera2D" parent="."]
+anchor_mode = 0

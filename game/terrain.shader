@@ -26,7 +26,7 @@ void vertex()
 
 void fragment()
 {
-	float numTiles = 4.0;
+	float numTiles = 16.0;
 //	ALBEDO = vec3(float((int(UV.r * 2.0) % 2))/2.0);
 //	float interp  = clamp((startY)/biomeTransitionSize, 0.0, 1.0);
 //	float interp = clamp(-(start_pos.y - world_pos.y)/biomeTransitionSize, 0.0, 1.0) * float(startTransitionY == 0.0);

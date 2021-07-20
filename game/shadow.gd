@@ -4,7 +4,7 @@ export var shadows = []
 export var step = 0.0
 
 func height_to_opacity(var height):
-	return min(1.0, 0.5 + height * 0.01)
+	return min(1.0, 0.7 + height * 0.01)
 
 func _process(delta):
 	var height = get_parent().height
