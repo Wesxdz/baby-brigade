@@ -84,6 +84,7 @@ _data = [ Vector2( 0, 1 ), 0.0, 0.0, 0, 1, Vector2( 0.259036, 1 ), 0.0, 0.0, 0, 
 [node name="gameplay" type="Viewport"]
 size = Vector2( 320, 480 )
 transparent_bg = true
+render_target_v_flip = true
 
 [node name="boid_field" type="Node" parent="."]
 script = ExtResource( 5 )
@@ -107,6 +108,7 @@ multimesh = SubResource( 4 )
 [node name="banner" type="Spatial" parent="hill"]
 transform = Transform( 1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -700, 0 )
 script = ExtResource( 1 )
+"Y Speed" = -50.0
 "Meter Conversion" = 0.01
 
 [node name="controller" type="Node" parent="hill/banner"]
@@ -134,7 +136,7 @@ transform = Transform( 1, 0, 0, 0, 0.5, -0.866, 0, 0.866, 0.5, 0, -600, 400 )
 keep_aspect = 0
 projection = 1
 fov = 32.2
-size = 390.0
+size = 264.0
 near = 0.01
 far = 8192.0
 

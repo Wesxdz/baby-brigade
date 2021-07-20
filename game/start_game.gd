@@ -10,7 +10,7 @@ var hud
 var game_started = false
 
 func _ready():
-	pass
+	load_gameplay(null)
 #	thread = Thread.new()
 #	thread.start(self, "load_gameplay", "ok")
 #
@@ -42,7 +42,7 @@ func begin_game():
 	$"/root/nodes/menu/start".visible = false
 	$"/root/nodes".add_child(hud)
 	$"/root/nodes".add_child(gameplay)
-	$"/root/nodes/game_view".texture = $"/root/nodes/gameplay".get_texture()
+	$"/root/nodes/canvas/game_view".texture = $"/root/nodes/gameplay".get_texture()
 	
 func restart_menu():
 	$"../hill_name_gen".gen_random_mountain_name()
@@ -61,6 +61,7 @@ func load_gameplay(data):
 	
 func gameplay_loaded():
 	ready_to_start = true
+	start_game()
 
 #func _exit_tree():
 #	thread.wait_to_finish()

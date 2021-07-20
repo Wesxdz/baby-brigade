@@ -15,6 +15,7 @@
 #include "FastNoiseLite.h"
 #include <list>
 #include <vector>
+#include <random>
 
 #include "gdcrowdnav.h"
 
@@ -112,6 +113,10 @@ private:
 	float spawnDistance = 200.0f;
 	std::vector<Spatial*> props;
 	int enemySpawnGroup = 1;
+	std::default_random_engine generator;
+	std::discrete_distribution<int> dist_edge {100, 10};
+	std::discrete_distribution<int> dist_grass {500, 20, 20, 20, 3, 3, 3, 1};
+	std::discrete_distribution<int> dist_dirt {1000, 5, 5, 5, 5, 5, 5, 5};
 
 public:
 	int foilage_spawn_count = 0;

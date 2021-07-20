@@ -62,6 +62,7 @@ __meta__ = {
 }
 
 [node name="mother" type="TextureRect" parent="start/foreground"]
+visible = false
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
@@ -94,6 +95,7 @@ __meta__ = {
 }
 
 [node name="baby_candy" type="CPUParticles2D" parent="start"]
+visible = false
 material = SubResource( 5 )
 position = Vector2( 0, -32 )
 amount = 200

@@ -167,7 +167,7 @@ void GDArcProcHill::create_y_arc(Vector3 pos, float degrees, float radius)
     m->set_material_override(terrain_material->duplicate());
     m->set_mesh(arr_mesh);
     m->set_translation(pos);
-    m->rotate_y(active_rotation);
+    // m->rotate_y(active_rotation);
     auto physics = PhysicsServer::get_singleton();
     RID body = physics->body_create(PhysicsServer::BODY_MODE_STATIC);
     physics->body_set_space(body, get_world()->get_space());
@@ -356,7 +356,7 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
             {
                 auto spawn = Transform(Basis(), Vector3());
                 spawn.rotate(Vector3(1.0, 0, 0), Math_PI/2.0 + .3 - (rand() % 100 * 0.006)); //
-                spawn.rotate(Vector3(0.0, 1.0, 0.0), active_rotation + -radians + Math_PI/2.0 + .3 - (rand() % 100 * 0.006)); //
+                spawn.rotate(Vector3(0.0, 1.0, 0.0), /*active_rotation */+ -radians + Math_PI/2.0 + .3 - (rand() % 100 * 0.006)); //
                 
                 spawn.origin = pos + vert; // 16.0 * Vector3(vert.x, 0.0, vert.z).normalized()
                 // TODO: Offset randomly from vert
@@ -427,29 +427,23 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
     std::vector<float> cells;
     std::vector<float> cells_above;
     std::vector<float> cells_below;
+    float progress = 0.0f;
+    float inc = 1.0;
+    int tiles = 8;
+    float tile_uv = 1.0/tiles;
+    // float tile = (rand() % tiles)/((float)tiles);
+    float tile = tile_uv;
     for (size_t quad = 0; quad < quads * layers; quad++)
     {
         // int layer = quad/quads;
         // float progress = (float)layer/layers;
         // float inc = 1.0f/layers;
-        float progress = 0.0f;
-        float inc = 1.0;
-        int tiles = 1;
-        float tile_uv = 1.0/tiles;
-        // float tile = (rand() % tiles)/((float)tiles);
-        float tile = 0.0f;
         indices.append(quad + verts_per_layer);
-        uv2.append({progress, tile + tile_uv});
         indices.append(quad + 1);
-        uv2.append({progress + inc, tile});
         indices.append(quad);
-        uv2.append({progress, tile});
         indices.append(quad + verts_per_layer);
-        uv2.append({progress, tile + tile_uv});
         indices.append(quad + 1 + verts_per_layer);
-        uv2.append({progress + inc, tile + tile_uv});
         indices.append(quad + 1);
-        uv2.append({progress + inc, tile});
         float avgAboveCell = 0.0f;
         float avgCell = 0.0f;
         float avgBelowCell = 0.0f;
@@ -478,7 +472,7 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
         float adjacent = 0;
         if (IsDirt(cell))
         {
-            adjacent = 16.0f;
+            adjacent = 15.0f;
         }
         else
         {
@@ -496,6 +490,25 @@ ArrayMesh* GDArcProcHill::gen_y_arc_mesh(Vector3 pos, float degrees, float radiu
         adjacent/=16.0f;
         // TODO: Use the v parameter for a winding path free of obstacles!
         uvs.append(Vector2(adjacent, 0.0f));
+        if (x % 6 == 0)
+        {
+            if (adjacent == 0)
+            {
+                tile = tile_uv * dist_grass(generator);
+            } else if (IsDirt(cell))
+            {
+                tile = tile_uv * dist_dirt(generator);
+            } else
+            {
+                tile = tile_uv * dist_edge(generator);
+            }
+            uv2.append({progress, tile + tile_uv});
+            uv2.append({progress + inc, tile});
+            uv2.append({progress, tile});
+            uv2.append({progress, tile + tile_uv});
+            uv2.append({progress + inc, tile + tile_uv});
+            uv2.append({progress + inc, tile});
+        }
     }
     arrays[ArrayMesh::ARRAY_VERTEX] = faces;
     // arrays[ArrayMesh::ARRAY_NORMAL] = normals;
