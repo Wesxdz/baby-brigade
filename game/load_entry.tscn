@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=2]
+[gd_scene load_steps=13 format=2]
 
 [ext_resource path="res://menu.tscn" type="PackedScene" id=1]
 [ext_resource path="res://fall_path.tscn" type="PackedScene" id=2]
@@ -8,7 +8,6 @@
 [ext_resource path="res://title.wav" type="AudioStream" id=6]
 [ext_resource path="res://sky.tres" type="Texture" id=7]
 [ext_resource path="res://simple-overtext.png" type="Texture" id=8]
-[ext_resource path="res://creative.tres" type="DynamicFont" id=9]
 
 [sub_resource type="QuadMesh" id=1]
 size = Vector2( 32, 32 )
@@ -27,8 +26,8 @@ uniform sampler2D mask;
 
 void fragment(){
 	float black = float(int(UV.x * dither_x * scale) % 2 == 0) * float(int(UV.y * dither_y * scale) % 2 == 0); // * texture(mask, vec2(UV.x, UV.y * 480.0/33.0 - floor(UV.y * 480.0/33.0))).a;
-	COLOR = (1.0 - black) * texture(TEXTURE, UV) + (black * vec4(0.0, 0.0, 0.0, 1.0));
-//	COLOR = texture(TEXTURE, UV);
+//	COLOR = (1.0 - black) * texture(TEXTURE, UV) + (black * vec4(0.0, 0.0, 0.0, 1.0));
+	COLOR = texture(TEXTURE, UV);
 }"
 
 [sub_resource type="ShaderMaterial" id=4]
@@ -82,17 +81,6 @@ grow_horizontal = 2
 grow_vertical = 2
 rect_pivot_offset = Vector2( 0.5, 0.5 )
 stretch_mode = 6
-__meta__ = {
-"_edit_use_anchors_": false
-}
-
-[node name="RichTextLabel" type="RichTextLabel" parent="canvas"]
-margin_left = 29.6082
-margin_top = 77.1702
-margin_right = 268.608
-margin_bottom = 154.17
-custom_fonts/normal_font = ExtResource( 9 )
-text = "decaplets"
 __meta__ = {
 "_edit_use_anchors_": false
 }

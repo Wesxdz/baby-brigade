@@ -1,0 +1,55 @@
+[gd_scene load_steps=6 format=2]
+
+[ext_resource path="res://machine.png" type="Texture" id=1]
+[ext_resource path="res://machine.tscn" type="PackedScene" id=2]
+[ext_resource path="res://jukebox.gd" type="Script" id=3]
+[ext_resource path="res://play_trans.png" type="Texture" id=4]
+
+[sub_resource type="ViewportTexture" id=1]
+viewport_path = NodePath("view")
+
+[node name="jukebox" type="Control"]
+margin_left = 16.0
+margin_top = 394.819
+margin_right = 114.0
+margin_bottom = 462.819
+rect_pivot_offset = Vector2( 7.48927, 40.3039 )
+mouse_filter = 1
+script = ExtResource( 3 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="play_trans" type="Sprite" parent="."]
+position = Vector2( 49.3212, -53.5638 )
+z_index = 20
+texture = ExtResource( 4 )
+
+[node name="slots_view" type="TextureRect" parent="."]
+margin_left = 1.24445
+margin_top = 1.00113
+margin_right = 97.2445
+margin_bottom = 65.0011
+texture = SubResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="skin" type="TextureRect" parent="."]
+margin_left = -0.129311
+margin_top = 0.239288
+margin_right = 97.8707
+margin_bottom = 95.845
+texture = ExtResource( 1 )
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="view" type="Viewport" parent="."]
+size = Vector2( 96, 64 )
+render_target_v_flip = true
+
+[node name="machine" parent="view" instance=ExtResource( 2 )]
+[connection signal="gui_input" from="." to="." method="_on_jukebox_gui_input"]
+[connection signal="mouse_entered" from="." to="." method="_on_jukebox_mouse_entered"]
+[connection signal="mouse_exited" from="." to="." method="_on_jukebox_mouse_exited"]
